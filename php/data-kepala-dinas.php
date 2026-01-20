@@ -48,6 +48,10 @@ $result = mysqli_query($conn, $query);
                     <i class="fas fa-file-invoice"></i>
                     <span class="sidebar-text">SPJ UMPEG</span>
                 </a>
+                <a href="surat-cuti.php" class="nav-item" title="Surat Cuti">
+                    <i class="fas fa-calendar-check"></i>
+                    <span class="sidebar-text">Surat Cuti</span>
+                </a>
                 <a href="data-pengguna.php" class="nav-item" title="Data Pengguna">
                     <i class="fas fa-users"></i>
                     <span class="sidebar-text">Data Pengguna</span>

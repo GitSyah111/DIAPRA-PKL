@@ -2,75 +2,99 @@
 // Koneksi database
 include 'database.php';
 
-// Query untuk mengambil data surat masuk yang belum disposisi
-$query = "SELECT * FROM surat_masuk WHERE status_disposisi = 'Belum diproses' ORDER BY id DESC";
+// Query untuk mengambil data Surat Cuti dengan urutan terbaru
+$query = "SELECT * FROM `surat cuti` ORDER BY id DESC";
+// Eksekusi query ke database
 $result = mysqli_query($conn, $query);
 ?>
 <!DOCTYPE html>
 <html lang="id">
 
 <head>
+    <!-- Meta tag untuk karakter set -->
     <meta charset="UTF-8">
+    <!-- Meta tag untuk responsive design -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Surat Belum Disposisi - DPPKBPM</title>
+    <!-- Title halaman -->
+    <title>Surat Cuti - DPPKBPM</title>
+    <!-- Link CSS untuk dashboard -->
     <link rel="stylesheet" href="../css/dashboard.css">
+    <!-- Link CSS untuk kepala dinas -->
     <link rel="stylesheet" href="../css/kepala-dinas.css">
+    <!-- Link CSS untuk surat masuk -->
     <link rel="stylesheet" href="../css/surat-masuk.css">
+    <!-- Link Font Awesome untuk icon -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- DataTables CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <!-- DataTables Buttons CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css">
 </head>
 
 <body>
+    <!-- Container utama -->
     <div class="container">
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
+            <!-- Header sidebar -->
             <div class="sidebar-header">
+                <!-- Logo -->
                 <div class="logo">
                     <img src="../assets/img/LOGO.png" alt="Logo DPPKBPM" class="logo-img">
                 </div>
+                <!-- Nama instansi -->
                 <h2 class="sidebar-text">DPPKBPM</h2>
+                <!-- Subtitle instansi -->
                 <p class="subtitle sidebar-text">DIAPRA</p>
+                <!-- Username pengguna -->
                 <p class="username sidebar-text"><i class="fas fa-user-circle"></i> @Muhammad ibnu Riayath Syah</p>
             </div>
 
+            <!-- Navigasi sidebar -->
             <nav class="sidebar-nav">
+                <!-- Menu Dashboard -->
                 <a href="dashboard.php" class="nav-item" title="Dashboard">
                     <i class="fas fa-home"></i>
                     <span class="sidebar-text">Dashboard</span>
                 </a>
+                <!-- Menu Surat Masuk -->
                 <a href="surat-masuk.php" class="nav-item" title="Surat Masuk">
                     <i class="fas fa-inbox"></i>
                     <span class="sidebar-text">Surat Masuk</span>
                 </a>
+                <!-- Menu Surat Keluar -->
                 <a href="surat-keluar.php" class="nav-item" title="Surat Keluar">
                     <i class="fas fa-paper-plane"></i>
                     <span class="sidebar-text">Surat Keluar</span>
                 </a>
+                <!-- Menu SPJ UMPEG -->
                 <a href="spj-umpeg.php" class="nav-item" title="SPJ UMPEG">
                     <i class="fas fa-file-invoice"></i>
                     <span class="sidebar-text">SPJ UMPEG</span>
                 </a>
-                <a href="surat-cuti.php" class="nav-item" title="Surat Cuti">
+                <!-- Menu Surat Cuti -->
+                <a href="surat-cuti.php" class="nav-item active" title="Surat Cuti">
                     <i class="fas fa-calendar-check"></i>
                     <span class="sidebar-text">Surat Cuti</span>
                 </a>
+                <!-- Menu Data Pengguna -->
                 <a href="data-pengguna.php" class="nav-item" title="Data Pengguna">
                     <i class="fas fa-users"></i>
                     <span class="sidebar-text">Data Pengguna</span>
                 </a>
+                <!-- Menu Data Kepala Dinas -->
                 <a href="data-kepala-dinas.php" class="nav-item" title="Data Kepala Dinas">
                     <i class="fas fa-user-tie"></i>
                     <span class="sidebar-text">Data Kepala Dinas</span>
                 </a>
             </nav>
 
+            <!-- Footer sidebar -->
             <div class="sidebar-footer sidebar-text">
                 <p><i class="fas fa-info-circle"></i> Versi 1.0.0</p>
             </div>
 
-            <!-- Toggle Button -->
+            <!-- Toggle Button untuk sidebar -->
             <button class="sidebar-toggle" id="sidebarToggle" title="Toggle Sidebar">
                 <i class="fas fa-chevron-left"></i>
             </button>
@@ -80,17 +104,23 @@ $result = mysqli_query($conn, $query);
         <main class="main-content">
             <!-- Header -->
             <header class="header">
+                <!-- Bagian kiri header -->
                 <div class="header-left">
+                    <!-- Tombol menu toggle untuk mobile -->
                     <button class="menu-toggle" id="mobileMenuToggle">
                         <i class="fas fa-bars"></i>
                     </button>
-                    <h1 class="header-title">Surat Belum Disposisi</h1>
+                    <!-- Judul halaman -->
+                    <h1 class="header-title">Surat Cuti</h1>
                 </div>
+                <!-- Bagian kanan header -->
                 <div class="header-right">
+                    <!-- Info pengguna -->
                     <div class="user-info">
                         <span class="user-name">Admin</span>
                         <i class="fas fa-chevron-down"></i>
                     </div>
+                    <!-- Tombol logout -->
                     <button class="logout-btn">
                         <i class="fas fa-sign-out-alt"></i>
                         Logout
@@ -100,103 +130,98 @@ $result = mysqli_query($conn, $query);
 
             <!-- Content Area -->
             <div class="content">
-                <!-- Info Box -->
-                <div style="background: linear-gradient(135deg, #fff3cd 0%, #fff8e1 100%); padding: 15px 20px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #f59e0b; display: flex; align-items: center; gap: 15px;">
-                    <i class="fas fa-info-circle" style="font-size: 24px; color: #f59e0b;"></i>
-                    <div>
-                        <strong style="color: #1e3a5f; font-size: 16px;">Surat Menunggu Disposisi</strong>
-                        <p style="color: #6b7280; margin-top: 5px; font-size: 14px;">
-                            Halaman ini menampilkan surat masuk yang belum didisposisi. Silakan proses disposisi untuk setiap surat.
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Quick Actions -->
+                <!-- Action Buttons -->
                 <div class="action-buttons">
-                    <a href="surat-masuk.php" class="btn-secondary">
-                        <i class="fas fa-arrow-left"></i>
-                        Kembali ke Surat Masuk
+                    <!-- Tombol tambah surat cuti -->
+                    <a href="tambah-surat-cuti.php" class="btn-primary">
+                        <i class="fas fa-plus"></i>
+                        Tambah Surat Cuti
                     </a>
                 </div>
 
                 <!-- Data Table -->
                 <div class="content-box">
+                    <!-- Header box -->
                     <div class="box-header">
-                        <h2><i class="fas fa-clock"></i> Daftar Surat Belum Disposisi</h2>
-                        <span style="background: #fff3cd; color: #f59e0b; padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: 600;">
-                            <i class="fas fa-exclamation-triangle"></i> <?php echo mysqli_num_rows($result); ?> Surat
-                        </span>
+                        <h2><i class="fas fa-calendar-check"></i> Daftar Surat Cuti</h2>
                     </div>
 
+                    <!-- Container tabel -->
                     <div class="table-container">
-                        <table id="suratBelumDisposisiTable" class="data-table display" style="width:100%">
+                        <!-- Tabel DataTables -->
+                        <table id="suratCutiTable" class="data-table display" style="width:100%">
+                            <!-- Header tabel -->
                             <thead>
                                 <tr>
-                                    <th width="3%">No</th>
-                                    <th width="7%">Nomor Agenda</th>
-                                    <th width="10%">Tanggal Terima</th>
-                                    <th width="15%">Alamat Pengirim</th>
-                                    <th width="10%">Tanggal Surat</th>
-                                    <th width="12%">Nomor Surat</th>
-                                    <th width="23%">Perihal</th>
-                                    <th width="10%" class="no-export">Status</th>
+                                    <th width="5%">No</th>
+                                    <th width="12%">Nama/NIP</th>
+                                    <th width="10%">Pangkat/GOL RUANG</th>
+                                    <th width="12%">Jabatan</th>
+                                    <th width="10%">Jenis Cuti</th>
+                                    <th width="8%">Lamanya</th>
+                                    <th width="10%">Mulai Cuti</th>
+                                    <th width="10%">Sampai Dengan</th>
+                                    <th width="8%">Sisa Cuti</th>
                                     <th width="15%" class="no-export">Aksi</th>
                                 </tr>
                             </thead>
+                            <!-- Body tabel -->
                             <tbody>
                                 <?php
+                                // Cek apakah ada data
                                 if (mysqli_num_rows($result) > 0) {
+                                    // Inisialisasi nomor urut
                                     $no = 1;
+                                    // Loop untuk menampilkan data
                                     while ($row = mysqli_fetch_assoc($result)) {
-                                        // Format tanggal
-                                        $tgl_terima = date('d/m/Y', strtotime($row['tanggal_terima']));
-                                        $tgl_surat = date('d/m/Y', strtotime($row['tanggal_surat']));
+                                        // Konversi timestamp Mulai Cuti ke format tanggal
+                                        $mulai_cuti = $row['Mulai Cuti'] > 0 ? date('d/m/Y', $row['Mulai Cuti']) : '-';
+                                        // Konversi timestamp Sampai Dengan ke format tanggal
+                                        $sampai_dengan = $row['Sampai Dengan'] > 0 ? date('d/m/Y', $row['Sampai Dengan']) : '-';
                                 ?>
                                         <tr>
+                                            <!-- Kolom nomor -->
                                             <td class="text-center"><?php echo $no++; ?></td>
-                                            <td class="text-center"><?php echo htmlspecialchars($row['nomor_agenda']); ?></td>
-                                            <td><?php echo $tgl_terima; ?></td>
-                                            <td><?php echo htmlspecialchars($row['alamat_pengirim']); ?></td>
-                                            <td><?php echo $tgl_surat; ?></td>
-                                            <td><?php echo htmlspecialchars($row['nomor_surat']); ?></td>
-                                            <td><?php echo htmlspecialchars($row['perihal']); ?></td>
-                                            <td class="text-center no-export">
-                                                <span class="badge badge-warning">
-                                                    <i class="fas fa-clock"></i> Belum Diproses
-                                                </span>
-                                            </td>
+                                            <!-- Kolom Nama/NIP -->
+                                            <td><?php echo htmlspecialchars($row['Nama/NIP']); ?></td>
+                                            <!-- Kolom Pangkat/GOL RUANG -->
+                                            <td><?php echo htmlspecialchars($row['Pangkat/GOL RUANG']); ?></td>
+                                            <!-- Kolom Jabatan -->
+                                            <td><?php echo htmlspecialchars($row['Jabatan']); ?></td>
+                                            <!-- Kolom Jenis Cuti -->
+                                            <td><?php echo htmlspecialchars($row['Jenis Cuti']); ?></td>
+                                            <!-- Kolom Lamanya -->
+                                            <td><?php echo htmlspecialchars($row['Lamanya']); ?></td>
+                                            <!-- Kolom Mulai Cuti -->
+                                            <td><?php echo $mulai_cuti; ?></td>
+                                            <!-- Kolom Sampai Dengan -->
+                                            <td><?php echo $sampai_dengan; ?></td>
+                                            <!-- Kolom Sisa Cuti -->
+                                            <td><?php echo htmlspecialchars($row['Sisa Cuti']); ?></td>
+                                            <!-- Kolom Aksi -->
                                             <td class="text-center action-buttons-cell no-export">
-                                                <?php if (!empty($row['file_surat'])): ?>
-                                                    <a href="view-surat.php?id=<?php echo $row['id']; ?>" class="btn-action btn-view" title="Lihat Surat">
-                                                        <i class="fas fa-file-pdf"></i>
-                                                    </a>
-                                                <?php else: ?>
-                                                    <button class="btn-action btn-disabled" title="Belum ada file" disabled>
-                                                        <i class="fas fa-file-pdf"></i>
-                                                    </button>
-                                                <?php endif; ?>
-
-                                                <a href="disposisi-surat.php?id=<?php echo $row['id']; ?>" class="btn-action btn-disposisi" title="Disposisi" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
-                                                    <i class="fas fa-share-square"></i>
+                                                <!-- Tombol lihat detail -->
+                                                <a href="detail-surat-cuti.php?id=<?php echo $row['id']; ?>"
+                                                    class="btn-action btn-view" title="Lihat Detail"
+                                                    style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                                                    <i class="fas fa-eye"></i>
                                                 </a>
 
-                                                <a href="edit-surat-masuk.php?id=<?php echo $row['id']; ?>" class="btn-action btn-edit" title="Edit">
+                                                <!-- Tombol edit -->
+                                                <a href="edit-surat-cuti.php?id=<?php echo $row['id']; ?>"
+                                                    class="btn-action btn-edit" title="Edit">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
 
-                                                <button class="btn-action btn-delete" onclick="confirmDelete(<?php echo $row['id']; ?>)" title="Hapus">
+                                                <!-- Tombol hapus -->
+                                                <button class="btn-action btn-delete"
+                                                    onclick="confirmDelete(<?php echo $row['id']; ?>)" title="Hapus">
                                                     <i class="fas fa-trash"></i>
                                                 </button>
                                             </td>
                                         </tr>
                                 <?php
                                     }
-                                } else {
-                                    echo '<tr><td colspan="9" class="text-center" style="padding: 40px;">
-                                            <i class="fas fa-check-circle" style="font-size: 48px; color: #10b981; margin-bottom: 15px;"></i>
-                                            <p style="font-size: 16px; color: #6b7280;"><strong>Tidak ada surat yang menunggu disposisi</strong></p>
-                                            <p style="font-size: 14px; color: #9ca3af; margin-top: 5px;">Semua surat masuk sudah didisposisi</p>
-                                          </td></tr>';
                                 }
                                 ?>
                             </tbody>
@@ -216,68 +241,67 @@ $result = mysqli_query($conn, $query);
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <!-- DataTables JS -->
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <!-- DataTables Buttons JS -->
     <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+    <!-- JSZip untuk export Excel -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <!-- PDFMake untuk export PDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <!-- PDFMake fonts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <!-- DataTables HTML5 buttons -->
     <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+    <!-- DataTables Print button -->
     <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
 
+    <!-- JavaScript dashboard -->
     <script src="../js/dashboard.js"></script>
+
     <script>
-        // DataTables Initialization
+        // Inisialisasi ketika dokumen siap
         $(document).ready(function() {
-            $('#suratBelumDisposisiTable').DataTable({
+            // Initialize DataTable
+            $('#suratCutiTable').DataTable({
+                // Layout DataTables dengan buttons
                 dom: 'Bfrtip',
+                // Konfigurasi tombol export
                 buttons: [{
-                        extend: 'copy',
-                        text: '<i class="fas fa-copy"></i> Copy',
-                        className: 'btn-datatable',
-                        exportOptions: {
-                            columns: ':not(.no-export)'
-                        }
-                    },
-                    {
-                        extend: 'csv',
-                        text: '<i class="fas fa-file-csv"></i> CSV',
-                        className: 'btn-datatable',
-                        exportOptions: {
-                            columns: ':not(.no-export)'
-                        }
-                    },
-                    {
+                        // Tombol export Excel
                         extend: 'excel',
                         text: '<i class="fas fa-file-excel"></i> Excel',
-                        className: 'btn-datatable',
-                        title: 'Surat Belum Disposisi',
+                        className: 'dt-button',
+                        // Opsi export, exclude kolom no-export
                         exportOptions: {
                             columns: ':not(.no-export)'
                         }
                     },
                     {
+                        // Tombol export PDF
                         extend: 'pdf',
                         text: '<i class="fas fa-file-pdf"></i> PDF',
-                        className: 'btn-datatable',
-                        title: 'Surat Belum Disposisi',
+                        className: 'dt-button',
+                        // Opsi export, exclude kolom no-export
                         exportOptions: {
                             columns: ':not(.no-export)'
                         }
                     },
                     {
+                        // Tombol print
                         extend: 'print',
                         text: '<i class="fas fa-print"></i> Print',
-                        className: 'btn-datatable',
-                        title: 'Surat Belum Disposisi',
+                        className: 'dt-button',
+                        // Opsi export, exclude kolom no-export
                         exportOptions: {
                             columns: ':not(.no-export)'
                         }
                     }
                 ],
+                // Konfigurasi bahasa Indonesia
                 language: {
                     search: "Cari:",
                     lengthMenu: "Tampilkan _MENU_ data per halaman",
                     zeroRecords: "Data tidak ditemukan",
-                    info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
+                    info: "Menampilkan halaman _PAGE_ dari _PAGES_",
                     infoEmpty: "Tidak ada data yang tersedia",
                     infoFiltered: "(difilter dari _MAX_ total data)",
                     paginate: {
@@ -287,39 +311,21 @@ $result = mysqli_query($conn, $query);
                         previous: "Sebelumnya"
                     }
                 },
+                // Jumlah data per halaman
                 pageLength: 10,
-                lengthMenu: [
-                    [10, 25, 50, -1],
-                    [10, 25, 50, "Semua"]
-                ],
+                // Urutan default berdasarkan kolom pertama ascending
                 order: [
-                    [0, 'desc']
-                ],
-                responsive: true
+                    [0, 'asc']
+                ]
             });
         });
 
-        // Konfirmasi hapus
+        // Fungsi konfirmasi hapus data
         function confirmDelete(id) {
-            if (confirm('Apakah Anda yakin ingin menghapus surat ini?')) {
-                const form = document.createElement('form');
-                form.method = 'POST';
-                form.action = 'proses-surat-masuk.php';
-
-                const inputAction = document.createElement('input');
-                inputAction.type = 'hidden';
-                inputAction.name = 'action';
-                inputAction.value = 'hapus';
-
-                const inputId = document.createElement('input');
-                inputId.type = 'hidden';
-                inputId.name = 'id';
-                inputId.value = id;
-
-                form.appendChild(inputAction);
-                form.appendChild(inputId);
-                document.body.appendChild(form);
-                form.submit();
+            // Tampilkan dialog konfirmasi
+            if (confirm('Apakah Anda yakin ingin menghapus data Surat Cuti ini?')) {
+                // Redirect ke proses-surat-cuti.php dengan action delete
+                window.location.href = 'proses-surat-cuti.php?action=delete&id=' + id;
             }
         }
     </script>

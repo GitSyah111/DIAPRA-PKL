@@ -5,29 +5,46 @@ include 'database.php';
 // Ambil ID dari URL
 $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
-// Ambil data SPJ UMPEG berdasarkan ID
-$query = "SELECT * FROM spj_umpeg WHERE id = $id";
+// Query untuk mengambil data Surat Cuti berdasarkan ID
+$query = "SELECT * FROM `surat cuti` WHERE id = $id";
+// Eksekusi query
 $result = mysqli_query($conn, $query);
 
+// Cek apakah data ditemukan
 if (mysqli_num_rows($result) == 0) {
-    echo "<script>alert('Data tidak ditemukan!'); window.location.href='spj-umpeg.php';</script>";
+    // Jika data tidak ditemukan, redirect dengan alert
+    echo "<script>alert('Data tidak ditemukan!'); window.location.href='surat-cuti.php';</script>";
     exit;
 }
 
+// Ambil data dari hasil query
 $data = mysqli_fetch_assoc($result);
+
+// Konversi timestamp Mulai Cuti ke format tanggal
+$mulai_cuti = $data['Mulai Cuti'] > 0 ? date('d F Y', $data['Mulai Cuti']) : '-';
+// Konversi timestamp Sampai Dengan ke format tanggal
+$sampai_dengan = $data['Sampai Dengan'] > 0 ? date('d F Y', $data['Sampai Dengan']) : '-';
 ?>
 <!DOCTYPE html>
 <html lang="id">
 
 <head>
+    <!-- Meta tag untuk karakter set -->
     <meta charset="UTF-8">
+    <!-- Meta tag untuk responsive design -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detail SPJ UMPEG - DPPKBPM</title>
+    <!-- Title halaman -->
+    <title>Detail Surat Cuti - DPPKBPM</title>
+    <!-- Link CSS untuk dashboard -->
     <link rel="stylesheet" href="../css/dashboard.css">
+    <!-- Link CSS untuk kepala dinas -->
     <link rel="stylesheet" href="../css/kepala-dinas.css">
+    <!-- Link CSS untuk surat masuk -->
     <link rel="stylesheet" href="../css/surat-masuk.css">
+    <!-- Link Font Awesome untuk icon -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* Style untuk detail card */
         .detail-card {
             background: white;
             border-radius: 12px;
@@ -35,12 +52,14 @@ $data = mysqli_fetch_assoc($result);
             box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
         }
 
+        /* Style untuk detail header */
         .detail-header {
             border-bottom: 2px solid #e5e7eb;
             padding-bottom: 20px;
             margin-bottom: 30px;
         }
 
+        /* Style untuk detail header h2 */
         .detail-header h2 {
             color: #1e3a5f;
             font-size: 24px;
@@ -50,6 +69,7 @@ $data = mysqli_fetch_assoc($result);
             gap: 12px;
         }
 
+        /* Style untuk detail row */
         .detail-row {
             display: grid;
             grid-template-columns: 200px 1fr;
@@ -58,10 +78,12 @@ $data = mysqli_fetch_assoc($result);
             border-bottom: 1px solid #f0f2f5;
         }
 
+        /* Style untuk detail row terakhir */
         .detail-row:last-child {
             border-bottom: none;
         }
 
+        /* Style untuk detail label */
         .detail-label {
             font-weight: 600;
             color: #6b7280;
@@ -70,65 +92,20 @@ $data = mysqli_fetch_assoc($result);
             gap: 8px;
         }
 
+        /* Style untuk icon pada detail label */
         .detail-label i {
             color: #3b82f6;
             width: 20px;
         }
 
+        /* Style untuk detail value */
         .detail-value {
             color: #1f2937;
             font-size: 15px;
             line-height: 1.6;
         }
 
-        .file-preview {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 12px 16px;
-            background: #eff6ff;
-            border: 1px solid #bfdbfe;
-            border-radius: 8px;
-            margin-top: 10px;
-        }
-
-        .file-preview i {
-            color: #3b82f6;
-            font-size: 24px;
-        }
-
-        .file-info {
-            flex: 1;
-        }
-
-        .file-info strong {
-            display: block;
-            color: #1e3a5f;
-            margin-bottom: 4px;
-        }
-
-        .file-info small {
-            color: #6b7280;
-        }
-
-        .btn-view-pdf {
-            padding: 8px 16px;
-            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
-            color: white;
-            border-radius: 6px;
-            text-decoration: none;
-            font-size: 14px;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .btn-view-pdf:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
-        }
-
+        /* Style untuk action buttons detail */
         .action-buttons-detail {
             display: flex;
             gap: 10px;
@@ -137,21 +114,23 @@ $data = mysqli_fetch_assoc($result);
             border-top: 1px solid #e5e7eb;
         }
 
+        /* Style untuk print */
         @media print {
-
+            /* Sembunyikan elemen saat print */
             .sidebar,
             .header,
             .breadcrumb,
             .action-buttons-detail,
-            .main-footer,
-            .file-preview {
+            .main-footer {
                 display: none !important;
             }
 
+            /* Set margin untuk main content */
             .main-content {
                 margin-left: 0 !important;
             }
 
+            /* Hilangkan shadow saat print */
             .detail-card {
                 box-shadow: none;
                 padding: 0;
@@ -161,54 +140,69 @@ $data = mysqli_fetch_assoc($result);
 </head>
 
 <body>
+    <!-- Container utama -->
     <div class="container">
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
+            <!-- Header sidebar -->
             <div class="sidebar-header">
+                <!-- Logo -->
                 <div class="logo">
                     <img src="../assets/img/LOGO.png" alt="Logo DPPKBPM" class="logo-img">
                 </div>
+                <!-- Nama instansi -->
                 <h2 class="sidebar-text">DPPKBPM</h2>
+                <!-- Subtitle instansi -->
                 <p class="subtitle sidebar-text">DIAPRA</p>
+                <!-- Username pengguna -->
                 <p class="username sidebar-text"><i class="fas fa-user-circle"></i> @Muhammad ibnu Riayath Syah</p>
             </div>
 
+            <!-- Navigasi sidebar -->
             <nav class="sidebar-nav">
+                <!-- Menu Dashboard -->
                 <a href="dashboard.php" class="nav-item" title="Dashboard">
                     <i class="fas fa-home"></i>
                     <span class="sidebar-text">Dashboard</span>
                 </a>
+                <!-- Menu Surat Masuk -->
                 <a href="surat-masuk.php" class="nav-item" title="Surat Masuk">
                     <i class="fas fa-inbox"></i>
                     <span class="sidebar-text">Surat Masuk</span>
                 </a>
+                <!-- Menu Surat Keluar -->
                 <a href="surat-keluar.php" class="nav-item" title="Surat Keluar">
                     <i class="fas fa-paper-plane"></i>
                     <span class="sidebar-text">Surat Keluar</span>
                 </a>
-                <a href="spj-umpeg.php" class="nav-item active" title="SPJ UMPEG">
+                <!-- Menu SPJ UMPEG -->
+                <a href="spj-umpeg.php" class="nav-item" title="SPJ UMPEG">
                     <i class="fas fa-file-invoice"></i>
                     <span class="sidebar-text">SPJ UMPEG</span>
                 </a>
-                <a href="surat-cuti.php" class="nav-item" title="Surat Cuti">
+                <!-- Menu Surat Cuti -->
+                <a href="surat-cuti.php" class="nav-item active" title="Surat Cuti">
                     <i class="fas fa-calendar-check"></i>
                     <span class="sidebar-text">Surat Cuti</span>
                 </a>
+                <!-- Menu Data Pengguna -->
                 <a href="data-pengguna.php" class="nav-item" title="Data Pengguna">
                     <i class="fas fa-users"></i>
                     <span class="sidebar-text">Data Pengguna</span>
                 </a>
+                <!-- Menu Data Kepala Dinas -->
                 <a href="data-kepala-dinas.php" class="nav-item" title="Data Kepala Dinas">
                     <i class="fas fa-user-tie"></i>
                     <span class="sidebar-text">Data Kepala Dinas</span>
                 </a>
             </nav>
 
+            <!-- Footer sidebar -->
             <div class="sidebar-footer sidebar-text">
                 <p><i class="fas fa-info-circle"></i> Versi 1.0.0</p>
             </div>
 
-            <!-- Toggle Button -->
+            <!-- Toggle Button untuk sidebar -->
             <button class="sidebar-toggle" id="sidebarToggle" title="Toggle Sidebar">
                 <i class="fas fa-chevron-left"></i>
             </button>
@@ -218,17 +212,23 @@ $data = mysqli_fetch_assoc($result);
         <main class="main-content">
             <!-- Header -->
             <header class="header">
+                <!-- Bagian kiri header -->
                 <div class="header-left">
+                    <!-- Tombol menu toggle untuk mobile -->
                     <button class="menu-toggle" id="mobileMenuToggle">
                         <i class="fas fa-bars"></i>
                     </button>
-                    <h1 class="header-title">Detail SPJ UMPEG</h1>
+                    <!-- Judul halaman -->
+                    <h1 class="header-title">Detail Surat Cuti</h1>
                 </div>
+                <!-- Bagian kanan header -->
                 <div class="header-right">
+                    <!-- Info pengguna -->
                     <div class="user-info">
                         <span class="user-name">Admin</span>
                         <i class="fas fa-chevron-down"></i>
                     </div>
+                    <!-- Tombol logout -->
                     <button class="logout-btn">
                         <i class="fas fa-sign-out-alt"></i>
                         Logout
@@ -240,105 +240,156 @@ $data = mysqli_fetch_assoc($result);
             <div class="content">
                 <!-- Breadcrumb -->
                 <div class="breadcrumb">
+                    <!-- Link ke dashboard -->
                     <a href="dashboard.php"><i class="fas fa-home"></i> Dashboard</a>
                     <span class="separator">/</span>
-                    <a href="spj-umpeg.php">SPJ UMPEG</a>
+                    <!-- Link ke surat cuti -->
+                    <a href="surat-cuti.php">Surat Cuti</a>
                     <span class="separator">/</span>
-                    <span class="current">Detail SPJ UMPEG</span>
+                    <!-- Halaman saat ini -->
+                    <span class="current">Detail Surat Cuti</span>
                 </div>
 
                 <!-- Detail Card -->
                 <div class="detail-card">
+                    <!-- Header detail -->
                     <div class="detail-header">
                         <h2>
-                            <i class="fas fa-file-invoice"></i>
-                            Informasi SPJ UMPEG
+                            <i class="fas fa-calendar-check"></i>
+                            Informasi Surat Cuti
                         </h2>
                     </div>
 
+                    <!-- Detail row Nama/NIP -->
                     <div class="detail-row">
+                        <!-- Label Nama/NIP -->
                         <div class="detail-label">
-                            <i class="fas fa-sort-numeric-up"></i>
-                            Nomor Urut
+                            <i class="fas fa-user"></i>
+                            Nama/NIP
                         </div>
+                        <!-- Value Nama/NIP -->
                         <div class="detail-value">
-                            <?php echo htmlspecialchars($data['nomor_urut']); ?>
+                            <?php echo htmlspecialchars($data['Nama/NIP']); ?>
                         </div>
                     </div>
 
+                    <!-- Detail row Pangkat/GOL RUANG -->
                     <div class="detail-row">
+                        <!-- Label Pangkat/GOL RUANG -->
                         <div class="detail-label">
-                            <i class="fas fa-file-alt"></i>
-                            Nomor SPJ
+                            <i class="fas fa-id-badge"></i>
+                            Pangkat/GOL RUANG
                         </div>
+                        <!-- Value Pangkat/GOL RUANG -->
                         <div class="detail-value">
-                            <?php echo htmlspecialchars($data['nomor_spj']); ?>
+                            <?php echo htmlspecialchars($data['Pangkat/GOL RUANG']); ?>
                         </div>
                     </div>
 
+                    <!-- Detail row Jabatan -->
                     <div class="detail-row">
+                        <!-- Label Jabatan -->
+                        <div class="detail-label">
+                            <i class="fas fa-briefcase"></i>
+                            Jabatan
+                        </div>
+                        <!-- Value Jabatan -->
+                        <div class="detail-value">
+                            <?php echo htmlspecialchars($data['Jabatan']); ?>
+                        </div>
+                    </div>
+
+                    <!-- Detail row Jenis Cuti -->
+                    <div class="detail-row">
+                        <!-- Label Jenis Cuti -->
                         <div class="detail-label">
                             <i class="fas fa-calendar-alt"></i>
-                            Tanggal
+                            Jenis Cuti
                         </div>
+                        <!-- Value Jenis Cuti -->
                         <div class="detail-value">
-                            <?php echo date('d F Y', strtotime($data['tanggal'])); ?>
+                            <?php echo htmlspecialchars($data['Jenis Cuti']); ?>
                         </div>
                     </div>
 
+                    <!-- Detail row Lamanya -->
                     <div class="detail-row">
+                        <!-- Label Lamanya -->
                         <div class="detail-label">
-                            <i class="fas fa-tasks"></i>
-                            Nama Kegiatan
+                            <i class="fas fa-clock"></i>
+                            Lamanya
                         </div>
+                        <!-- Value Lamanya -->
                         <div class="detail-value">
-                            <?php echo nl2br(htmlspecialchars($data['nama_kegiatan'])); ?>
+                            <?php echo htmlspecialchars($data['Lamanya']); ?>
                         </div>
                     </div>
 
+                    <!-- Detail row Dilaksanakan DI -->
                     <div class="detail-row">
+                        <!-- Label Dilaksanakan DI -->
                         <div class="detail-label">
-                            <i class="fas fa-user-edit"></i>
-                            Dibuat Oleh
+                            <i class="fas fa-map-marker-alt"></i>
+                            Dilaksanakan DI
                         </div>
+                        <!-- Value Dilaksanakan DI -->
                         <div class="detail-value">
-                            <?php echo htmlspecialchars($data['dibuat_oleh']); ?>
+                            <?php echo htmlspecialchars($data['Dilaksanakan DI']); ?>
                         </div>
                     </div>
 
+                    <!-- Detail row Mulai Cuti -->
                     <div class="detail-row">
+                        <!-- Label Mulai Cuti -->
                         <div class="detail-label">
-                            <i class="fas fa-file-pdf"></i>
-                            File SPJ
+                            <i class="fas fa-calendar-plus"></i>
+                            Mulai Cuti
                         </div>
+                        <!-- Value Mulai Cuti -->
                         <div class="detail-value">
-                            <?php if (!empty($data['file_spj'])): ?>
-                                <div class="file-preview">
-                                    <i class="fas fa-file-pdf"></i>
-                                    <div class="file-info">
-                                        <strong><?php echo htmlspecialchars($data['file_spj']); ?></strong>
-                                        <small>Format: PDF</small>
-                                    </div>
-                                    <a href="../uploads/spj_umpeg/<?php echo $data['file_spj']; ?>"
-                                        target="_blank" class="btn-view-pdf">
-                                        <i class="fas fa-eye"></i> Lihat PDF
-                                    </a>
-                                </div>
-                            <?php else: ?>
-                                <span style="color: #9ca3af; font-style: italic;">Tidak ada file terlampir</span>
-                            <?php endif; ?>
+                            <?php echo $mulai_cuti; ?>
                         </div>
                     </div>
 
+                    <!-- Detail row Sampai Dengan -->
+                    <div class="detail-row">
+                        <!-- Label Sampai Dengan -->
+                        <div class="detail-label">
+                            <i class="fas fa-calendar-minus"></i>
+                            Sampai Dengan
+                        </div>
+                        <!-- Value Sampai Dengan -->
+                        <div class="detail-value">
+                            <?php echo $sampai_dengan; ?>
+                        </div>
+                    </div>
+
+                    <!-- Detail row Sisa Cuti -->
+                    <div class="detail-row">
+                        <!-- Label Sisa Cuti -->
+                        <div class="detail-label">
+                            <i class="fas fa-hourglass-half"></i>
+                            Sisa Cuti
+                        </div>
+                        <!-- Value Sisa Cuti -->
+                        <div class="detail-value">
+                            <?php echo htmlspecialchars($data['Sisa Cuti']); ?>
+                        </div>
+                    </div>
+
+                    <!-- Action buttons detail -->
                     <div class="action-buttons-detail">
-                        <a href="spj-umpeg.php" class="btn-secondary">
+                        <!-- Tombol kembali -->
+                        <a href="surat-cuti.php" class="btn-secondary">
                             <i class="fas fa-arrow-left"></i>
                             Kembali
                         </a>
-                        <a href="edit-spj-umpeg.php?id=<?php echo $data['id']; ?>" class="btn-primary">
+                        <!-- Tombol edit -->
+                        <a href="edit-surat-cuti.php?id=<?php echo $data['id']; ?>" class="btn-primary">
                             <i class="fas fa-edit"></i>
                             Edit Data
                         </a>
+                        <!-- Tombol print -->
                         <button onclick="window.print()" class="btn-print">
                             <i class="fas fa-print"></i>
                             Cetak
@@ -354,7 +405,9 @@ $data = mysqli_fetch_assoc($result);
         </main>
     </div>
 
+    <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <!-- JavaScript dashboard -->
     <script src="../js/dashboard.js"></script>
 </body>
 
