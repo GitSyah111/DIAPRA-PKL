@@ -5,7 +5,7 @@
 // Initialize DataTables
 $(document).ready(function() {
     if ($('#suratMasukTable').length) {
-        $('#suratMasukTable').DataTable({
+        var tableSuratMasuk = $('#suratMasukTable').DataTable({
             "language": {
                 "lengthMenu": "Tampilkan _MENU_ data per halaman",
                 "zeroRecords": "Data tidak ditemukan",
@@ -26,22 +26,6 @@ $(document).ready(function() {
             "dom": 'Bfrtip',
             "buttons": [
                 {
-                    extend: 'copy',
-                    text: '<i class="fas fa-copy"></i> Copy',
-                    className: 'dt-button',
-                    exportOptions: {
-                        columns: ':not(.no-export)'
-                    }
-                },
-                {
-                    extend: 'csv',
-                    text: '<i class="fas fa-file-csv"></i> CSV',
-                    className: 'dt-button',
-                    exportOptions: {
-                        columns: ':not(.no-export)'
-                    }
-                },
-                {
                     extend: 'excel',
                     text: '<i class="fas fa-file-excel"></i> Excel',
                     className: 'dt-button',
@@ -60,26 +44,30 @@ $(document).ready(function() {
                     exportOptions: {
                         columns: ':not(.no-export)'
                     }
-                },
-                {
-                    extend: 'print',
-                    text: '<i class="fas fa-print"></i> Print',
-                    className: 'dt-button',
-                    title: 'Data Surat Masuk',
-                    exportOptions: {
-                        columns: ':not(.no-export)'
-                    },
-                    customize: function(win) {
-                        $(win.document.body).css('font-size', '10pt');
-                        $(win.document.body).find('table')
-                            .addClass('compact')
-                            .css('font-size', 'inherit');
-                    }
                 }
             ],
             "columnDefs": [
                 { "orderable": false, "targets": -1 } // Disable sorting on action column
             ]
+        });
+        // Filter tanggal (Tanggal Terima = kolom index 2)
+        $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+            if (settings.nTable.id !== 'suratMasukTable') return true;
+            var dari = $('#filterDari').val();
+            var sampai = $('#filterSampai').val();
+            if (!dari && !sampai) return true;
+            var row = $(tableSuratMasuk.row(dataIndex).node());
+            var dateVal = row.find('td:eq(2)').attr('data-date');
+            if (!dateVal) return false;
+            if (dari && dateVal < dari) return false;
+            if (sampai && dateVal > sampai) return false;
+            return true;
+        });
+        $('#btnFilterTanggal').on('click', function() { tableSuratMasuk.draw(); });
+        $('#btnResetTanggal').on('click', function() {
+            $('#filterDari').val('');
+            $('#filterSampai').val('');
+            tableSuratMasuk.draw();
         });
     }
 });

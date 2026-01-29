@@ -1,6 +1,7 @@
 <?php
 // Koneksi database
 include 'database.php';
+require_once 'auth_check.php';
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -38,7 +39,7 @@ include 'database.php';
                 <!-- Subtitle instansi -->
                 <p class="subtitle sidebar-text">DIAPRA</p>
                 <!-- Username pengguna -->
-                <p class="username sidebar-text"><i class="fas fa-user-circle"></i> @Muhammad ibnu Riayath Syah</p>
+                <p class="username sidebar-text"><i class="fas fa-user-circle"></i> <?= htmlspecialchars($nama) ?></p>
             </div>
 
             <!-- Navigasi sidebar -->
@@ -68,6 +69,7 @@ include 'database.php';
                     <i class="fas fa-calendar-check"></i>
                     <span class="sidebar-text">Surat Cuti</span>
                 </a>
+                <?php if ($role !== 'user'): ?>
                 <!-- Menu Data Pengguna -->
                 <a href="data-pengguna.php" class="nav-item" title="Data Pengguna">
                     <i class="fas fa-users"></i>
@@ -78,6 +80,7 @@ include 'database.php';
                     <i class="fas fa-user-tie"></i>
                     <span class="sidebar-text">Data Kepala Dinas</span>
                 </a>
+                <?php endif; ?>
             </nav>
 
             <!-- Footer sidebar -->
@@ -108,7 +111,7 @@ include 'database.php';
                 <div class="header-right">
                     <!-- Info pengguna -->
                     <div class="user-info">
-                        <span class="user-name">Admin</span>
+                        <span class="user-name"><?= htmlspecialchars($nama) ?></span>
                         <i class="fas fa-chevron-down"></i>
                     </div>
                     <!-- Tombol logout -->

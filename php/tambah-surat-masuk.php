@@ -1,6 +1,7 @@
 <?php
 // Koneksi database
 include 'database.php';
+require_once 'auth_check.php';
 
 // Generate nomor agenda otomatis
 $query_last = "SELECT nomor_agenda FROM surat_masuk ORDER BY id DESC LIMIT 1";
@@ -40,7 +41,7 @@ $result_users = mysqli_query($conn, $query_users);
                 </div>
                 <h2 class="sidebar-text">DPPKBPM</h2>
                 <p class="subtitle sidebar-text">Sistem Manajemen Surat</p>
-                <p class="username sidebar-text"><i class="fas fa-user-circle"></i> @Muhammad ibnu Riayath Syah</p>
+                <p class="username sidebar-text"><i class="fas fa-user-circle"></i> <?= htmlspecialchars($nama) ?></p>
             </div>
 
             <nav class="sidebar-nav">
@@ -64,6 +65,7 @@ $result_users = mysqli_query($conn, $query_users);
                     <i class="fas fa-calendar-check"></i>
                     <span class="sidebar-text">Surat Cuti</span>
                 </a>
+                <?php if ($role !== 'user'): ?>
                 <a href="data-pengguna.php" class="nav-item" title="Data Pengguna">
                     <i class="fas fa-users"></i>
                     <span class="sidebar-text">Data Pengguna</span>
@@ -72,6 +74,7 @@ $result_users = mysqli_query($conn, $query_users);
                     <i class="fas fa-user-tie"></i>
                     <span class="sidebar-text">Data Kepala Dinas</span>
                 </a>
+                <?php endif; ?>
             </nav>
 
             <div class="sidebar-footer sidebar-text">
@@ -96,7 +99,7 @@ $result_users = mysqli_query($conn, $query_users);
                 </div>
                 <div class="header-right">
                     <div class="user-info">
-                        <span class="user-name">Admin</span>
+                        <span class="user-name"><?= htmlspecialchars($nama) ?></span>
                         <i class="fas fa-chevron-down"></i>
                     </div>
                     <button class="logout-btn">

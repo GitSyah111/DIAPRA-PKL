@@ -1,6 +1,7 @@
 <?php
 // Koneksi database
 include 'database.php';
+require_once 'auth_check.php';
 
 // Query untuk mengambil data surat masuk yang belum disposisi
 $query = "SELECT * FROM surat_masuk WHERE status_disposisi = 'Belum diproses' ORDER BY id DESC";
@@ -32,7 +33,7 @@ $result = mysqli_query($conn, $query);
                 </div>
                 <h2 class="sidebar-text">DPPKBPM</h2>
                 <p class="subtitle sidebar-text">DIAPRA</p>
-                <p class="username sidebar-text"><i class="fas fa-user-circle"></i> @Muhammad ibnu Riayath Syah</p>
+                <p class="username sidebar-text"><i class="fas fa-user-circle"></i> <?= htmlspecialchars($nama) ?></p>
             </div>
 
             <nav class="sidebar-nav">
@@ -88,7 +89,7 @@ $result = mysqli_query($conn, $query);
                 </div>
                 <div class="header-right">
                     <div class="user-info">
-                        <span class="user-name">Admin</span>
+                        <span class="user-name"><?= htmlspecialchars($nama) ?></span>
                         <i class="fas fa-chevron-down"></i>
                     </div>
                     <button class="logout-btn">
@@ -257,15 +258,6 @@ $result = mysqli_query($conn, $query);
                     {
                         extend: 'pdf',
                         text: '<i class="fas fa-file-pdf"></i> PDF',
-                        className: 'btn-datatable',
-                        title: 'Surat Belum Disposisi',
-                        exportOptions: {
-                            columns: ':not(.no-export)'
-                        }
-                    },
-                    {
-                        extend: 'print',
-                        text: '<i class="fas fa-print"></i> Print',
                         className: 'btn-datatable',
                         title: 'Surat Belum Disposisi',
                         exportOptions: {

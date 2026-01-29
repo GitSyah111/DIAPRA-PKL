@@ -1,5 +1,6 @@
 <?php
 include 'database.php';
+require_once 'auth_check.php';
 
 // Hitung total surat masuk
 $query_masuk = "SELECT COUNT(*) as total FROM surat_masuk";
@@ -92,7 +93,7 @@ function time_elapsed_string($datetime)
                 </div>
                 <h2 class="sidebar-text">DPPKBPM</h2>
                 <p class="subtitle sidebar-text">DIAPRA</p>
-                <p class="username sidebar-text"><i class="fas fa-user-circle"></i> @Muhammad Ibnu Riayath Syah</p>
+                <p class="username sidebar-text"><i class="fas fa-user-circle"></i> <?= htmlspecialchars($nama) ?></p>
             </div>
 
             <nav class="sidebar-nav">
@@ -116,6 +117,7 @@ function time_elapsed_string($datetime)
                     <i class="fas fa-calendar-check"></i>
                     <span class="sidebar-text">Surat Cuti</span>
                 </a>
+                <?php if ($role !== 'user'): ?>
                 <a href="data-pengguna.php" class="nav-item" title="Data Pengguna">
                     <i class="fas fa-users"></i>
                     <span class="sidebar-text">Data Pengguna</span>
@@ -124,6 +126,7 @@ function time_elapsed_string($datetime)
                     <i class="fas fa-user-tie"></i>
                     <span class="sidebar-text">Data Kepala Dinas</span>
                 </a>
+                <?php endif; ?>
             </nav>
 
             <div class="sidebar-footer sidebar-text">
@@ -148,7 +151,7 @@ function time_elapsed_string($datetime)
                 </div>
                 <div class="header-right">
                     <div class="user-info">
-                        <span class="user-name">Admin</span>
+                        <span class="user-name"><?= htmlspecialchars($nama) ?></span>
                         <i class="fas fa-chevron-down"></i>
                     </div>
                     <button class="logout-btn">
@@ -195,6 +198,7 @@ function time_elapsed_string($datetime)
                         </div>
                     </a>
 
+                    <?php if ($role !== 'user'): ?>
                     <a href="data-pengguna.php" class="stat-card purple" style="text-decoration: none; color: inherit;">
                         <div class="stat-icon">
                             <i class="fas fa-users"></i>
@@ -205,6 +209,7 @@ function time_elapsed_string($datetime)
                             <span class="stat-label">Pengguna aktif</span>
                         </div>
                     </a>
+                    <?php endif; ?>
                 </div>
 
                 <!-- Recent Activity -->

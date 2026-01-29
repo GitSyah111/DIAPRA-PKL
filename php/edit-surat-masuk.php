@@ -1,6 +1,7 @@
 <?php
 // Koneksi database
 include 'database.php';
+require_once 'auth_check.php';
 
 // Cek apakah ada ID
 if (!isset($_GET['id'])) {
@@ -81,6 +82,7 @@ if (!empty($surat['dilihat_oleh'])) {
                     <i class="fas fa-calendar-check"></i>
                     <span class="sidebar-text">Surat Cuti</span>
                 </a>
+                <?php if ($role !== 'user'): ?>
                 <a href="data-pengguna.php" class="nav-item" title="Data Pengguna">
                     <i class="fas fa-users"></i>
                     <span class="sidebar-text">Data Pengguna</span>
@@ -89,6 +91,7 @@ if (!empty($surat['dilihat_oleh'])) {
                     <i class="fas fa-user-tie"></i>
                     <span class="sidebar-text">Data Kepala Dinas</span>
                 </a>
+                <?php endif; ?>
             </nav>
 
             <div class="sidebar-footer sidebar-text">
@@ -113,7 +116,7 @@ if (!empty($surat['dilihat_oleh'])) {
                 </div>
                 <div class="header-right">
                     <div class="user-info">
-                        <span class="user-name">Admin</span>
+                        <span class="user-name"><?= htmlspecialchars($nama) ?></span>
                         <i class="fas fa-chevron-down"></i>
                     </div>
                     <button class="logout-btn">

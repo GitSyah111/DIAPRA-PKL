@@ -1,6 +1,13 @@
 <?php
 // Koneksi database
 include 'database.php';
+require_once 'auth_check.php';
+
+if ($role === 'user') {
+    header('Location: dashboard.php');
+    exit;
+}
+$can_edit = ($role === 'super_admin');
 
 // Query untuk mengambil data pengguna
 $query = "SELECT * FROM user ORDER BY no ASC";
@@ -28,7 +35,7 @@ $result = mysqli_query($conn, $query);
                 </div>
                 <h2 class="sidebar-text">DPPKBPM</h2>
                 <p class="subtitle sidebar-text">DIAPRAt</p>
-                <p class="username sidebar-text"><i class="fas fa-user-circle"></i> @Muhammad ibnu Riayath Syah</p>
+                <p class="username sidebar-text"><i class="fas fa-user-circle"></i> <?= htmlspecialchars($nama) ?></p>
             </div>
 
             <nav class="sidebar-nav">
@@ -52,6 +59,7 @@ $result = mysqli_query($conn, $query);
                     <i class="fas fa-calendar-check"></i>
                     <span class="sidebar-text">Surat Cuti</span>
                 </a>
+                <?php if ($role !== 'user'): ?>
                 <a href="data-pengguna.php" class="nav-item active" title="Data Pengguna">
                     <i class="fas fa-users"></i>
                     <span class="sidebar-text">Data Pengguna</span>
@@ -60,6 +68,7 @@ $result = mysqli_query($conn, $query);
                     <i class="fas fa-user-tie"></i>
                     <span class="sidebar-text">Data Kepala Dinas</span>
                 </a>
+                <?php endif; ?>
             </nav>
 
             <div class="sidebar-footer sidebar-text">
@@ -84,7 +93,7 @@ $result = mysqli_query($conn, $query);
                 </div>
                 <div class="header-right">
                     <div class="user-info">
-                        <span class="user-name">Admin</span>
+                        <span class="user-name"><?= htmlspecialchars($nama) ?></span>
                         <i class="fas fa-chevron-down"></i>
                     </div>
                     <button class="logout-btn">
@@ -96,13 +105,14 @@ $result = mysqli_query($conn, $query);
 
             <!-- Content Area -->
             <div class="content">
-                <!-- Action Buttons -->
+                <?php if ($can_edit): ?>
                 <div class="action-buttons">
                     <button class="btn-primary" onclick="openAddModal()">
                         <i class="fas fa-plus"></i>
                         Tambah Pengguna
                     </button>
                 </div>
+                <?php endif; ?>
 
                 <!-- Data Table -->
                 <div class="content-box">
@@ -123,7 +133,7 @@ $result = mysqli_query($conn, $query);
                                     <th width="25%">Username</th>
                                     <th width="20%">Password</th>
                                     <th width="15%">Role</th>
-                                    <th width="10%">Aksi</th>
+                                    <?php if ($can_edit): ?><th width="10%">Aksi</th><?php endif; ?>
                                 </tr>
                             </thead>
                             <tbody id="tableBody">
@@ -149,9 +159,10 @@ $result = mysqli_query($conn, $query);
                                             </td>
                                             <td>
                                                 <span class="badge badge-<?php echo $row['role']; ?>">
-                                                    <?php echo ucfirst($row['role']); ?>
+                                                    <?php echo $row['role'] === 'super_admin' ? 'Super Admin' : ucfirst($row['role']); ?>
                                                 </span>
                                             </td>
+                                            <?php if ($can_edit): ?>
                                             <td class="text-center">
                                                 <button class="btn-action btn-edit" onclick="openEditModal(<?php echo $row['no']; ?>, '<?php echo addslashes($row['nama']); ?>', '<?php echo addslashes($row['username']); ?>', '<?php echo $row['password']; ?>', '<?php echo $row['role']; ?>')" title="Edit">
                                                     <i class="fas fa-edit"></i>
@@ -160,13 +171,14 @@ $result = mysqli_query($conn, $query);
                                                     <i class="fas fa-trash"></i>
                                                 </button>
                                             </td>
+                                            <?php endif; ?>
                                         </tr>
                                     <?php
                                     }
                                 } else {
                                     ?>
                                     <tr>
-                                        <td colspan="6" class="text-center empty-data">
+                                        <td colspan="<?= $can_edit ? 6 : 5 ?>" class="text-center empty-data">
                                             <i class="fas fa-users"></i>
                                             <p>Belum ada data pengguna</p>
                                         </td>
@@ -218,6 +230,7 @@ $result = mysqli_query($conn, $query);
                     <label for="role"><i class="fas fa-user-tag"></i> Role</label>
                     <select id="role" name="role" required>
                         <option value="">Pilih Role</option>
+                        <option value="super_admin">Super Admin</option>
                         <option value="admin">Admin</option>
                         <option value="user">User</option>
                     </select>
@@ -272,6 +285,10 @@ $result = mysqli_query($conn, $query);
             letter-spacing: 0.5px;
         }
 
+        .badge-super_admin {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
         .badge-admin {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;

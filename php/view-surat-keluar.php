@@ -1,6 +1,7 @@
 <?php
 // Koneksi database
 include 'database.php';
+require_once 'auth_check.php';
 
 // Cek apakah ada ID
 if (!isset($_GET['id'])) {

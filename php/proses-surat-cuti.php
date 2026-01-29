@@ -1,6 +1,7 @@
 <?php
 // File untuk memproses CRUD Surat Cuti
 include 'database.php';
+require_once 'auth_check.php';
 
 // Cek action dari POST atau GET
 if (isset($_POST['action']) || isset($_GET['action'])) {

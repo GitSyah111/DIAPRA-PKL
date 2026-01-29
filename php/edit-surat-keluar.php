@@ -1,6 +1,7 @@
 <?php
 // Koneksi database
 include 'database.php';
+require_once 'auth_check.php';
 
 // Cek apakah ada ID
 if (!isset($_GET['id'])) {
@@ -47,7 +48,7 @@ $surat = mysqli_fetch_assoc($result);
                 </div>
                 <h2 class="sidebar-text">DPPKBPM</h2>
                 <p class="subtitle sidebar-text">Sistem Manajemen Surat</p>
-                <p class="username sidebar-text"><i class="fas fa-user-circle"></i> @Muhammad ibnu Riayath Syah</p>
+                <p class="username sidebar-text"><i class="fas fa-user-circle"></i> <?= htmlspecialchars($nama) ?></p>
             </div>
 
             <nav class="sidebar-nav">
@@ -103,7 +104,7 @@ $surat = mysqli_fetch_assoc($result);
                 </div>
                 <div class="header-right">
                     <div class="user-info">
-                        <span class="user-name">Admin</span>
+                        <span class="user-name"><?= htmlspecialchars($nama) ?></span>
                         <i class="fas fa-chevron-down"></i>
                     </div>
                     <button class="logout-btn">

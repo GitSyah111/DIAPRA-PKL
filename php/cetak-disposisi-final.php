@@ -16,6 +16,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 // 2. Sertakan koneksi Database
 include 'database.php';
+require_once 'auth_check.php';
 
 // 3. Ambil data
 if (!isset($_GET['id'])) {

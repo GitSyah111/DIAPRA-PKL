@@ -2,6 +2,7 @@
 // File hapus SPJ UMPEG - redirect ke proses-spj-umpeg.php
 // Koneksi database
 include 'database.php';
+require_once 'auth_check.php';
 
 // Ambil ID dari URL
 $id = isset($_GET['id']) ? intval($_GET['id']) : 0;

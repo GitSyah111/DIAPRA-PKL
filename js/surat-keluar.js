@@ -1,24 +1,9 @@
 // DataTables Initialization
 $(document).ready(function() {
-    $('#suratKeluarTable').DataTable({
+    if ($('#suratKeluarTable').length) {
+    var tableSuratKeluar = $('#suratKeluarTable').DataTable({
         dom: 'Bfrtip',
         buttons: [
-            {
-                extend: 'copy',
-                text: '<i class="fas fa-copy"></i> Copy',
-                className: 'btn-datatable',
-                exportOptions: {
-                    columns: ':not(.no-export)'
-                }
-            },
-            {
-                extend: 'csv',
-                text: '<i class="fas fa-file-csv"></i> CSV',
-                className: 'btn-datatable',
-                exportOptions: {
-                    columns: ':not(.no-export)'
-                }
-            },
             {
                 extend: 'excel',
                 text: '<i class="fas fa-file-excel"></i> Excel',
@@ -45,30 +30,6 @@ $(document).ready(function() {
                         bold: true
                     };
                 }
-            },
-            {
-                extend: 'print',
-                text: '<i class="fas fa-print"></i> Print',
-                className: 'btn-datatable',
-                title: 'Data Surat Keluar',
-                exportOptions: {
-                    columns: ':not(.no-export)'
-                },
-                customize: function(win) {
-                    $(win.document.body)
-                        .css('font-size', '10pt')
-                        .prepend(
-                            '<div style="text-align:center; margin-bottom: 20px;">' +
-                            '<h2>DPPKBPM</h2>' +
-                            '<h3>Dinas Pengendalian Penduduk dan Keluarga Berencana Pemberdayaan Masyarakat</h3>' +
-                            '<h4>Data Surat Keluar</h4>' +
-                            '</div>'
-                        );
-
-                    $(win.document.body).find('table')
-                        .addClass('compact')
-                        .css('font-size', 'inherit');
-                }
             }
         ],
         language: {
@@ -93,6 +54,26 @@ $(document).ready(function() {
             { orderable: false, targets: -1 } // Kolom aksi tidak bisa di-sort
         ]
     });
+    // Filter tanggal (Tanggal Surat = kolom index 4)
+    $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+        if (settings.nTable.id !== 'suratKeluarTable') return true;
+        var dari = $('#filterDari').val();
+        var sampai = $('#filterSampai').val();
+        if (!dari && !sampai) return true;
+        var row = $(tableSuratKeluar.row(dataIndex).node());
+        var dateVal = row.find('td:eq(4)').attr('data-date');
+        if (!dateVal) return false;
+        if (dari && dateVal < dari) return false;
+        if (sampai && dateVal > sampai) return false;
+        return true;
+    });
+    $('#btnFilterTanggal').on('click', function() { tableSuratKeluar.draw(); });
+    $('#btnResetTanggal').on('click', function() {
+        $('#filterDari').val('');
+        $('#filterSampai').val('');
+        tableSuratKeluar.draw();
+    });
+    }
 });
 
 // Konfirmasi hapus

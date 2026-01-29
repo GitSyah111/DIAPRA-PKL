@@ -1,6 +1,7 @@
 <?php
 // Koneksi database
 include 'database.php';
+require_once 'auth_check.php';
 
 // Query untuk mengambil data SPJ UMPEG
 $query = "SELECT * FROM spj_umpeg ORDER BY id DESC";
@@ -32,7 +33,7 @@ $result = mysqli_query($conn, $query);
                 </div>
                 <h2 class="sidebar-text">DPPKBPM</h2>
                 <p class="subtitle sidebar-text">DIAPRA</p>
-                <p class="username sidebar-text"><i class="fas fa-user-circle"></i> @Muhammad ibnu Riayath Syah</p>
+                <p class="username sidebar-text"><i class="fas fa-user-circle"></i> <?= htmlspecialchars($nama) ?></p>
             </div>
 
             <nav class="sidebar-nav">
@@ -56,6 +57,7 @@ $result = mysqli_query($conn, $query);
                     <i class="fas fa-calendar-check"></i>
                     <span class="sidebar-text">Surat Cuti</span>
                 </a>
+                <?php if ($role !== 'user'): ?>
                 <a href="data-pengguna.php" class="nav-item" title="Data Pengguna">
                     <i class="fas fa-users"></i>
                     <span class="sidebar-text">Data Pengguna</span>
@@ -64,6 +66,7 @@ $result = mysqli_query($conn, $query);
                     <i class="fas fa-user-tie"></i>
                     <span class="sidebar-text">Data Kepala Dinas</span>
                 </a>
+                <?php endif; ?>
             </nav>
 
             <div class="sidebar-footer sidebar-text">
@@ -88,7 +91,7 @@ $result = mysqli_query($conn, $query);
                 </div>
                 <div class="header-right">
                     <div class="user-info">
-                        <span class="user-name">Admin</span>
+                        <span class="user-name"><?= htmlspecialchars($nama) ?></span>
                         <i class="fas fa-chevron-down"></i>
                     </div>
                     <button class="logout-btn">
@@ -112,6 +115,13 @@ $result = mysqli_query($conn, $query);
                 <div class="content-box">
                     <div class="box-header">
                         <h2><i class="fas fa-file-invoice"></i> Daftar SPJ UMPEG</h2>
+                        <div class="date-filter" style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:10px;">
+                            <label>Filter Tanggal:</label>
+                            <input type="date" id="filterDari" placeholder="Dari">
+                            <input type="date" id="filterSampai" placeholder="Sampai">
+                            <button type="button" class="btn-primary" id="btnFilterTanggal" style="padding:6px 12px;"><i class="fas fa-filter"></i> Filter</button>
+                            <button type="button" class="btn-secondary" id="btnResetTanggal" style="padding:6px 12px;"><i class="fas fa-times"></i> Reset</button>
+                        </div>
                     </div>
 
                     <div class="table-container">
@@ -139,7 +149,7 @@ $result = mysqli_query($conn, $query);
                                             <td class="text-center"><?php echo $no++; ?></td>
                                             <td class="text-center"><?php echo htmlspecialchars($row['nomor_urut']); ?></td>
                                             <td><?php echo htmlspecialchars($row['nomor_spj']); ?></td>
-                                            <td><?php echo $tanggal; ?></td>
+                                            <td data-date="<?= date('Y-m-d', strtotime($row['tanggal'])) ?>"><?php echo $tanggal; ?></td>
                                             <td><?php echo htmlspecialchars($row['nama_kegiatan']); ?></td>
                                             <td><?php echo htmlspecialchars($row['dibuat_oleh']); ?></td>
                                             <td class="text-center action-buttons-cell no-export">
@@ -204,7 +214,7 @@ $result = mysqli_query($conn, $query);
     <script>
         $(document).ready(function() {
             // Initialize DataTable
-            $('#spjUmpegTable').DataTable({
+            var tableSpj = $('#spjUmpegTable').DataTable({
                 dom: 'Bfrtip',
                 buttons: [{
                         extend: 'excel',
@@ -217,14 +227,6 @@ $result = mysqli_query($conn, $query);
                     {
                         extend: 'pdf',
                         text: '<i class="fas fa-file-pdf"></i> PDF',
-                        className: 'dt-button',
-                        exportOptions: {
-                            columns: ':not(.no-export)'
-                        }
-                    },
-                    {
-                        extend: 'print',
-                        text: '<i class="fas fa-print"></i> Print',
                         className: 'dt-button',
                         exportOptions: {
                             columns: ':not(.no-export)'
@@ -249,6 +251,25 @@ $result = mysqli_query($conn, $query);
                 order: [
                     [0, 'asc']
                 ]
+            });
+            // Filter tanggal (Tanggal = kolom index 3)
+            $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+                if (settings.nTable.id !== 'spjUmpegTable') return true;
+                var dari = $('#filterDari').val();
+                var sampai = $('#filterSampai').val();
+                if (!dari && !sampai) return true;
+                var row = $(tableSpj.row(dataIndex).node());
+                var dateVal = row.find('td:eq(3)').attr('data-date');
+                if (!dateVal) return false;
+                if (dari && dateVal < dari) return false;
+                if (sampai && dateVal > sampai) return false;
+                return true;
+            });
+            $('#btnFilterTanggal').on('click', function() { tableSpj.draw(); });
+            $('#btnResetTanggal').on('click', function() {
+                $('#filterDari').val('');
+                $('#filterSampai').val('');
+                tableSpj.draw();
             });
         });
 

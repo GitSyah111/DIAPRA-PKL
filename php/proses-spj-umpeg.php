@@ -1,6 +1,7 @@
 <?php
 // File untuk memproses CRUD SPJ UMPEG
 include 'database.php';
+require_once 'auth_check.php';
 
 // Cek action
 if (isset($_POST['action']) || isset($_GET['action'])) {

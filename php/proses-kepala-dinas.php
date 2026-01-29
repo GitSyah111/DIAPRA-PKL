@@ -1,10 +1,17 @@
 <?php
 // File untuk memproses CRUD Data Kepala Dinas
 include 'database.php';
+require_once 'auth_check.php';
 
 // Cek action
 if (isset($_POST['action']) || isset($_GET['action'])) {
     $action = isset($_POST['action']) ? $_POST['action'] : $_GET['action'];
+
+    // Admin hanya boleh melihat, tidak boleh CUD
+    if ($role === 'admin' && in_array($action, ['add', 'edit', 'delete'])) {
+        echo "<script>alert('Anda tidak memiliki hak untuk mengubah data kepala dinas.'); window.location.href = 'data-kepala-dinas.php';</script>";
+        exit;
+    }
 
     // TAMBAH DATA
     if ($action == 'add') {

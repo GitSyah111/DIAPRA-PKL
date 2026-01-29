@@ -1,6 +1,7 @@
 <?php
 // Koneksi database
 include 'database.php';
+require_once 'auth_check.php';
 
 // Query untuk mengambil data Surat Cuti dengan urutan terbaru
 $query = "SELECT * FROM `surat cuti` ORDER BY id DESC";
@@ -47,7 +48,7 @@ $result = mysqli_query($conn, $query);
                 <!-- Subtitle instansi -->
                 <p class="subtitle sidebar-text">DIAPRA</p>
                 <!-- Username pengguna -->
-                <p class="username sidebar-text"><i class="fas fa-user-circle"></i> @Muhammad ibnu Riayath Syah</p>
+                <p class="username sidebar-text"><i class="fas fa-user-circle"></i> <?= htmlspecialchars($nama) ?></p>
             </div>
 
             <!-- Navigasi sidebar -->
@@ -117,7 +118,7 @@ $result = mysqli_query($conn, $query);
                 <div class="header-right">
                     <!-- Info pengguna -->
                     <div class="user-info">
-                        <span class="user-name">Admin</span>
+                        <span class="user-name"><?= htmlspecialchars($nama) ?></span>
                         <i class="fas fa-chevron-down"></i>
                     </div>
                     <!-- Tombol logout -->
@@ -193,7 +194,7 @@ $result = mysqli_query($conn, $query);
                                             <!-- Kolom Lamanya -->
                                             <td><?php echo htmlspecialchars($row['Lamanya']); ?></td>
                                             <!-- Kolom Mulai Cuti -->
-                                            <td><?php echo $mulai_cuti; ?></td>
+                                            <td data-date="<?= $row['Mulai Cuti'] > 0 ? date('Y-m-d', $row['Mulai Cuti']) : '' ?>"><?php echo $mulai_cuti; ?></td>
                                             <!-- Kolom Sampai Dengan -->
                                             <td><?php echo $sampai_dengan; ?></td>
                                             <!-- Kolom Sisa Cuti -->
@@ -261,7 +262,7 @@ $result = mysqli_query($conn, $query);
         // Inisialisasi ketika dokumen siap
         $(document).ready(function() {
             // Initialize DataTable
-            $('#suratCutiTable').DataTable({
+            var tableCuti = $('#suratCutiTable').DataTable({
                 // Layout DataTables dengan buttons
                 dom: 'Bfrtip',
                 // Konfigurasi tombol export
@@ -279,16 +280,6 @@ $result = mysqli_query($conn, $query);
                         // Tombol export PDF
                         extend: 'pdf',
                         text: '<i class="fas fa-file-pdf"></i> PDF',
-                        className: 'dt-button',
-                        // Opsi export, exclude kolom no-export
-                        exportOptions: {
-                            columns: ':not(.no-export)'
-                        }
-                    },
-                    {
-                        // Tombol print
-                        extend: 'print',
-                        text: '<i class="fas fa-print"></i> Print',
                         className: 'dt-button',
                         // Opsi export, exclude kolom no-export
                         exportOptions: {
@@ -317,6 +308,25 @@ $result = mysqli_query($conn, $query);
                 order: [
                     [0, 'asc']
                 ]
+            });
+            // Filter tanggal (Mulai Cuti = kolom index 6)
+            $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+                if (settings.nTable.id !== 'suratCutiTable') return true;
+                var dari = $('#filterDari').val();
+                var sampai = $('#filterSampai').val();
+                if (!dari && !sampai) return true;
+                var row = $(tableCuti.row(dataIndex).node());
+                var dateVal = row.find('td:eq(6)').attr('data-date');
+                if (!dateVal) return false;
+                if (dari && dateVal < dari) return false;
+                if (sampai && dateVal > sampai) return false;
+                return true;
+            });
+            $('#btnFilterTanggal').on('click', function() { tableCuti.draw(); });
+            $('#btnResetTanggal').on('click', function() {
+                $('#filterDari').val('');
+                $('#filterSampai').val('');
+                tableCuti.draw();
             });
         });
 

@@ -1,6 +1,7 @@
 <?php
 // Koneksi database
 include 'database.php';
+require_once 'auth_check.php';
 
 // Query untuk mengambil data surat masuk
 $query = "SELECT * FROM surat_masuk ORDER BY id DESC";
@@ -32,7 +33,7 @@ $result = mysqli_query($conn, $query);
                 </div>
                 <h2 class="sidebar-text">DPPKBPM</h2>
                 <p class="subtitle sidebar-text">DIAPRA</p>
-                <p class="username sidebar-text"><i class="fas fa-user-circle"></i> @Muhammad ibnu Riayath Syah</p>
+                <p class="username sidebar-text"><i class="fas fa-user-circle"></i> <?= htmlspecialchars($nama) ?></p>
             </div>
 
             <nav class="sidebar-nav">
@@ -56,6 +57,7 @@ $result = mysqli_query($conn, $query);
                     <i class="fas fa-calendar-check"></i>
                     <span class="sidebar-text">Surat Cuti</span>
                 </a>
+                <?php if ($role !== 'user'): ?>
                 <a href="data-pengguna.php" class="nav-item" title="Data Pengguna">
                     <i class="fas fa-users"></i>
                     <span class="sidebar-text">Data Pengguna</span>
@@ -64,6 +66,7 @@ $result = mysqli_query($conn, $query);
                     <i class="fas fa-user-tie"></i>
                     <span class="sidebar-text">Data Kepala Dinas</span>
                 </a>
+                <?php endif; ?>
             </nav>
 
             <div class="sidebar-footer sidebar-text">
@@ -88,7 +91,7 @@ $result = mysqli_query($conn, $query);
                 </div>
                 <div class="header-right">
                     <div class="user-info">
-                        <span class="user-name">Admin</span>
+                        <span class="user-name"><?= htmlspecialchars($nama) ?></span>
                         <i class="fas fa-chevron-down"></i>
                     </div>
                     <button class="logout-btn">
@@ -159,7 +162,7 @@ $result = mysqli_query($conn, $query);
                                         <tr>
                                             <td class="text-center"><?php echo $no++; ?></td>
                                             <td class="text-center"><?php echo htmlspecialchars($row['nomor_agenda']); ?></td>
-                                            <td><?php echo $tgl_terima; ?></td>
+                                            <td data-date="<?= date('Y-m-d', strtotime($row['tanggal_terima'])) ?>"><?php echo $tgl_terima; ?></td>
                                             <td><?php echo htmlspecialchars($row['alamat_pengirim']); ?></td>
                                             <td><?php echo $tgl_surat; ?></td>
                                             <td><?php echo htmlspecialchars($row['nomor_surat']); ?></td>
