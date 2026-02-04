@@ -83,10 +83,12 @@ $sampai_dengan_date = $data['Sampai Dengan'] > 0 ? date('Y-m-d', $data['Sampai D
                     <span class="sidebar-text">Surat Keluar</span>
                 </a>
                 <!-- Menu SPJ UMPEG -->
+                <?php if ($role !== 'user'): ?>
                 <a href="spj-umpeg.php" class="nav-item" title="SPJ UMPEG">
                     <i class="fas fa-file-invoice"></i>
                     <span class="sidebar-text">SPJ UMPEG</span>
                 </a>
+                <?php endif; ?>
                 <!-- Menu Surat Cuti -->
                 <a href="surat-cuti.php" class="nav-item active" title="Surat Cuti">
                     <i class="fas fa-calendar-check"></i>

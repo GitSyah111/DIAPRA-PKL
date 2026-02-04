@@ -68,16 +68,19 @@ $result = mysqli_query($conn, $query);
                     <i class="fas fa-paper-plane"></i>
                     <span class="sidebar-text">Surat Keluar</span>
                 </a>
+                <?php if ($role !== 'user'): ?>
                 <!-- Menu SPJ UMPEG -->
                 <a href="spj-umpeg.php" class="nav-item" title="SPJ UMPEG">
                     <i class="fas fa-file-invoice"></i>
                     <span class="sidebar-text">SPJ UMPEG</span>
                 </a>
+                <?php endif; ?>
                 <!-- Menu Surat Cuti -->
                 <a href="surat-cuti.php" class="nav-item active" title="Surat Cuti">
                     <i class="fas fa-calendar-check"></i>
                     <span class="sidebar-text">Surat Cuti</span>
                 </a>
+                <?php if ($role !== 'user'): ?>
                 <!-- Menu Data Pengguna -->
                 <a href="data-pengguna.php" class="nav-item" title="Data Pengguna">
                     <i class="fas fa-users"></i>
@@ -88,6 +91,7 @@ $result = mysqli_query($conn, $query);
                     <i class="fas fa-user-tie"></i>
                     <span class="sidebar-text">Data Kepala Dinas</span>
                 </a>
+                <?php endif; ?>
             </nav>
 
             <!-- Footer sidebar -->

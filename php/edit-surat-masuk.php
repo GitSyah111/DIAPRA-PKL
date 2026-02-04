@@ -74,10 +74,12 @@ if (!empty($surat['dilihat_oleh'])) {
                     <i class="fas fa-paper-plane"></i>
                     <span class="sidebar-text">Surat Keluar</span>
                 </a>
+                <?php if ($role !== 'user'): ?>
                 <a href="spj-umpeg.php" class="nav-item" title="SPJ UMPEG">
                     <i class="fas fa-file-invoice"></i>
                     <span class="sidebar-text">SPJ UMPEG</span>
                 </a>
+                <?php endif; ?>
                 <a href="surat-cuti.php" class="nav-item" title="Surat Cuti">
                     <i class="fas fa-calendar-check"></i>
                     <span class="sidebar-text">Surat Cuti</span>

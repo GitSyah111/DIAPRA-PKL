@@ -359,6 +359,12 @@ if (!file_exists($file_path)) {
                 <i class="fas fa-arrow-left"></i>
                 <span>Kembali</span>
             </a>
+                <?php if ($role !== 'user'): ?>
+                <a href="spj-umpeg.php" class="nav-item" title="SPJ UMPEG">
+                    <i class="fas fa-file-invoice"></i>
+                    <span class="sidebar-text">SPJ UMPEG</span>
+                </a>
+                <?php endif; ?>
             <a href="<?php echo $file_path; ?>" download class="btn-header btn-primary">
                 <i class="fas fa-download"></i>
                 <span>Download</span>
