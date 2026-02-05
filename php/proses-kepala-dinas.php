@@ -9,7 +9,30 @@ if (isset($_POST['action']) || isset($_GET['action'])) {
 
     // Admin hanya boleh melihat, tidak boleh CUD
     if ($role === 'admin' && in_array($action, ['add', 'edit', 'delete'])) {
-        echo "<script>alert('Anda tidak memiliki hak untuk mengubah data kepala dinas.'); window.location.href = 'data-kepala-dinas.php';</script>";
+        echo "<!DOCTYPE html>
+        <html lang='id'>
+        <head>
+            <meta charset='UTF-8'>
+            <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+            <title>Processing...</title>
+            <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css'>
+            <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
+            <style>body { font-family: 'Poppins', sans-serif; background-color: #f3f4f6; }</style>
+        </head>
+        <body>
+            <script>
+                Swal.fire({
+                    title: 'Akses Ditolak!',
+                    text: 'Anda tidak memiliki hak untuk mengubah data kepala dinas.',
+                    icon: 'error',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#d33'
+                }).then((result) => {
+                    window.location.href = 'data-kepala-dinas.php';
+                });
+            </script>
+        </body>
+        </html>";
         exit;
     }
 
@@ -22,15 +45,55 @@ if (isset($_POST['action']) || isset($_GET['action'])) {
         $query = "INSERT INTO kadis (nama, pangkat, NIP) VALUES ('$nama', '$pangkat', '$NIP')";
 
         if (mysqli_query($conn, $query)) {
-            echo "<script>
-                alert('Data berhasil ditambahkan!');
-                window.location.href = 'data-kepala-dinas.php';
-            </script>";
+            echo "<!DOCTYPE html>
+            <html lang='id'>
+            <head>
+                <meta charset='UTF-8'>
+                <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+                <title>Processing...</title>
+                <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css'>
+                <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
+                <style>body { font-family: 'Poppins', sans-serif; background-color: #f3f4f6; }</style>
+            </head>
+            <body>
+                <script>
+                    Swal.fire({
+                        title: 'Berhasil!',
+                        text: 'Data berhasil ditambahkan!',
+                        icon: 'success',
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: '#3085d6'
+                    }).then((result) => {
+                        window.location.href = 'data-kepala-dinas.php';
+                    });
+                </script>
+            </body>
+            </html>";
         } else {
-            echo "<script>
-                alert('Error: " . mysqli_error($conn) . "');
-                window.location.href = 'data-kepala-dinas.php';
-            </script>";
+            echo "<!DOCTYPE html>
+            <html lang='id'>
+            <head>
+                <meta charset='UTF-8'>
+                <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+                <title>Processing...</title>
+                <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css'>
+                <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
+                <style>body { font-family: 'Poppins', sans-serif; background-color: #f3f4f6; }</style>
+            </head>
+            <body>
+                <script>
+                    Swal.fire({
+                        title: 'Gagal!',
+                        text: 'Error: " . mysqli_error($conn) . "',
+                        icon: 'error',
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: '#d33'
+                    }).then((result) => {
+                        window.location.href = 'data-kepala-dinas.php';
+                    });
+                </script>
+            </body>
+            </html>";
         }
     }
 
@@ -48,15 +111,55 @@ if (isset($_POST['action']) || isset($_GET['action'])) {
                   WHERE no = '$no'";
 
         if (mysqli_query($conn, $query)) {
-            echo "<script>
-                alert('Data berhasil diupdate!');
-                window.location.href = 'data-kepala-dinas.php';
-            </script>";
+            echo "<!DOCTYPE html>
+            <html lang='id'>
+            <head>
+                <meta charset='UTF-8'>
+                <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+                <title>Processing...</title>
+                <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css'>
+                <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
+                <style>body { font-family: 'Poppins', sans-serif; background-color: #f3f4f6; }</style>
+            </head>
+            <body>
+                <script>
+                    Swal.fire({
+                        title: 'Berhasil!',
+                        text: 'Data berhasil diupdate!',
+                        icon: 'success',
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: '#3085d6'
+                    }).then((result) => {
+                        window.location.href = 'data-kepala-dinas.php';
+                    });
+                </script>
+            </body>
+            </html>";
         } else {
-            echo "<script>
-                alert('Error: " . mysqli_error($conn) . "');
-                window.location.href = 'data-kepala-dinas.php';
-            </script>";
+            echo "<!DOCTYPE html>
+            <html lang='id'>
+            <head>
+                <meta charset='UTF-8'>
+                <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+                <title>Processing...</title>
+                <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css'>
+                <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
+                <style>body { font-family: 'Poppins', sans-serif; background-color: #f3f4f6; }</style>
+            </head>
+            <body>
+                <script>
+                    Swal.fire({
+                        title: 'Gagal!',
+                        text: 'Error: " . mysqli_error($conn) . "',
+                        icon: 'error',
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: '#d33'
+                    }).then((result) => {
+                        window.location.href = 'data-kepala-dinas.php';
+                    });
+                </script>
+            </body>
+            </html>";
         }
     }
 
@@ -67,15 +170,55 @@ if (isset($_POST['action']) || isset($_GET['action'])) {
         $query = "DELETE FROM kadis WHERE no = '$no'";
 
         if (mysqli_query($conn, $query)) {
-            echo "<script>
-                alert('Data berhasil dihapus!');
-                window.location.href = 'data-kepala-dinas.php';
-            </script>";
+            echo "<!DOCTYPE html>
+            <html lang='id'>
+            <head>
+                <meta charset='UTF-8'>
+                <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+                <title>Processing...</title>
+                <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css'>
+                <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
+                <style>body { font-family: 'Poppins', sans-serif; background-color: #f3f4f6; }</style>
+            </head>
+            <body>
+                <script>
+                    Swal.fire({
+                        title: 'Berhasil!',
+                        text: 'Data berhasil dihapus!',
+                        icon: 'success',
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: '#3085d6'
+                    }).then((result) => {
+                        window.location.href = 'data-kepala-dinas.php';
+                    });
+                </script>
+            </body>
+            </html>";
         } else {
-            echo "<script>
-                alert('Error: " . mysqli_error($conn) . "');
-                window.location.href = 'data-kepala-dinas.php';
-            </script>";
+            echo "<!DOCTYPE html>
+            <html lang='id'>
+            <head>
+                <meta charset='UTF-8'>
+                <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+                <title>Processing...</title>
+                <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css'>
+                <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
+                <style>body { font-family: 'Poppins', sans-serif; background-color: #f3f4f6; }</style>
+            </head>
+            <body>
+                <script>
+                    Swal.fire({
+                        title: 'Gagal!',
+                        text: 'Error: " . mysqli_error($conn) . "',
+                        icon: 'error',
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: '#d33'
+                    }).then((result) => {
+                        window.location.href = 'data-kepala-dinas.php';
+                    });
+                </script>
+            </body>
+            </html>";
         }
     }
 } else {

@@ -72,15 +72,55 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                   VALUES ('$nomor_urut', '$nomor_surat', '$tujuan_surat', '$tanggal_surat', '$perihal', '$dibuat_oleh', '$file_surat')";
 
         if (mysqli_query($conn, $query)) {
-            echo "<script>
-                alert('Surat keluar berhasil ditambahkan!');
-                window.location.href = 'surat-keluar.php';
-            </script>";
+            echo "<!DOCTYPE html>
+            <html lang='id'>
+            <head>
+                <meta charset='UTF-8'>
+                <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+                <title>Processing...</title>
+                <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css'>
+                <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
+                <style>body { font-family: 'Poppins', sans-serif; background-color: #f3f4f6; }</style>
+            </head>
+            <body>
+                <script>
+                    Swal.fire({
+                        title: 'Berhasil!',
+                        text: 'Surat keluar berhasil ditambahkan!',
+                        icon: 'success',
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: '#3085d6'
+                    }).then((result) => {
+                        window.location.href = 'surat-keluar.php';
+                    });
+                </script>
+            </body>
+            </html>";
         } else {
-            echo "<script>
-                alert('Gagal menambahkan surat keluar!');
-                window.history.back();
-            </script>";
+             echo "<!DOCTYPE html>
+            <html lang='id'>
+            <head>
+                <meta charset='UTF-8'>
+                <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+                <title>Processing...</title>
+                <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css'>
+                <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
+                <style>body { font-family: 'Poppins', sans-serif; background-color: #f3f4f6; }</style>
+            </head>
+            <body>
+                <script>
+                    Swal.fire({
+                        title: 'Gagal!',
+                        text: 'Gagal menambahkan surat keluar!',
+                        icon: 'error',
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: '#d33'
+                    }).then((result) => {
+                        window.history.back();
+                    });
+                </script>
+            </body>
+            </html>";
         }
     } elseif ($action == 'edit') {
         // Ambil data dari form
@@ -127,15 +167,55 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                   WHERE id = '$id'";
 
         if (mysqli_query($conn, $query)) {
-            echo "<script>
-                alert('Surat keluar berhasil diupdate!');
-                window.location.href = 'surat-keluar.php';
-            </script>";
+            echo "<!DOCTYPE html>
+            <html lang='id'>
+            <head>
+                <meta charset='UTF-8'>
+                <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+                <title>Processing...</title>
+                <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css'>
+                <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
+                <style>body { font-family: 'Poppins', sans-serif; background-color: #f3f4f6; }</style>
+            </head>
+            <body>
+                <script>
+                    Swal.fire({
+                        title: 'Berhasil!',
+                        text: 'Surat keluar berhasil diupdate!',
+                        icon: 'success',
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: '#3085d6'
+                    }).then((result) => {
+                        window.location.href = 'surat-keluar.php';
+                    });
+                </script>
+            </body>
+            </html>";
         } else {
-            echo "<script>
-                alert('Gagal mengupdate surat keluar!');
-                window.history.back();
-            </script>";
+             echo "<!DOCTYPE html>
+            <html lang='id'>
+            <head>
+                <meta charset='UTF-8'>
+                <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+                <title>Processing...</title>
+                <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css'>
+                <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
+                <style>body { font-family: 'Poppins', sans-serif; background-color: #f3f4f6; }</style>
+            </head>
+            <body>
+                <script>
+                    Swal.fire({
+                        title: 'Gagal!',
+                        text: 'Gagal mengupdate surat keluar!',
+                        icon: 'error',
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: '#d33'
+                    }).then((result) => {
+                        window.history.back();
+                    });
+                </script>
+            </body>
+            </html>";
         }
     } elseif ($action == 'hapus') {
         $id = mysqli_real_escape_string($conn, $_POST['id']);
@@ -157,15 +237,55 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $query = "DELETE FROM surat_keluar WHERE id = '$id'";
 
         if (mysqli_query($conn, $query)) {
-            echo "<script>
-                alert('Surat keluar berhasil dihapus!');
-                window.location.href = 'surat-keluar.php';
-            </script>";
+            echo "<!DOCTYPE html>
+            <html lang='id'>
+            <head>
+                <meta charset='UTF-8'>
+                <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+                <title>Processing...</title>
+                <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css'>
+                <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
+                <style>body { font-family: 'Poppins', sans-serif; background-color: #f3f4f6; }</style>
+            </head>
+            <body>
+                <script>
+                    Swal.fire({
+                        title: 'Berhasil!',
+                        text: 'Surat keluar berhasil dihapus!',
+                        icon: 'success',
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: '#3085d6'
+                    }).then((result) => {
+                        window.location.href = 'surat-keluar.php';
+                    });
+                </script>
+            </body>
+            </html>";
         } else {
-            echo "<script>
-                alert('Gagal menghapus surat keluar!');
-                window.history.back();
-            </script>";
+             echo "<!DOCTYPE html>
+            <html lang='id'>
+            <head>
+                <meta charset='UTF-8'>
+                <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+                <title>Processing...</title>
+                <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css'>
+                <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
+                <style>body { font-family: 'Poppins', sans-serif; background-color: #f3f4f6; }</style>
+            </head>
+            <body>
+                <script>
+                    Swal.fire({
+                        title: 'Gagal!',
+                        text: 'Gagal menghapus surat keluar!',
+                        icon: 'error',
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: '#d33'
+                    }).then((result) => {
+                        window.history.back();
+                    });
+                </script>
+            </body>
+            </html>";
         }
     }
 } else {
