@@ -1,6 +1,6 @@
 <?php
-include 'database.php';
 require_once 'auth_check.php';
+include 'database.php';
 
 // Hitung total surat masuk
 $query_masuk = "SELECT COUNT(*) as total FROM surat_masuk";
