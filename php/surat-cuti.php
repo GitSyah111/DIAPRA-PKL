@@ -205,33 +205,35 @@ $result = mysqli_query($conn, $query);
                                             <td><?php echo htmlspecialchars($row['Sisa Cuti']); ?></td>
                                             <!-- Kolom Aksi -->
                                             <td class="text-center action-buttons-cell no-export">
-                                                <!-- Tombol lihat file -->
-                                                <?php if (!empty($row['file_surat'])): ?>
-                                                    <a href="../uploads/surat_cuti/<?php echo $row['file_surat']; ?>"
-                                                        target="_blank" class="btn-action btn-view-file" title="Lihat File"
-                                                        style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); margin-right: 5px;">
-                                                        <i class="fas fa-file-pdf"></i>
+                                                <div style="display: flex; justify-content: center; gap: 5px;">
+                                                    <!-- Tombol lihat file -->
+                                                    <?php if (!empty($row['file_surat'])): ?>
+                                                        <a href="../uploads/surat_cuti/<?php echo $row['file_surat']; ?>"
+                                                            target="_blank" class="btn-action btn-view-file" title="Lihat File"
+                                                            style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);">
+                                                            <i class="fas fa-file-pdf"></i>
+                                                        </a>
+                                                    <?php endif; ?>
+
+                                                    <!-- Tombol lihat detail -->
+                                                    <a href="detail-surat-cuti.php?id=<?php echo $row['id']; ?>"
+                                                        class="btn-action btn-view" title="Lihat Detail"
+                                                        style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                                                        <i class="fas fa-eye"></i>
                                                     </a>
-                                                <?php endif; ?>
 
-                                                <!-- Tombol lihat detail -->
-                                                <a href="detail-surat-cuti.php?id=<?php echo $row['id']; ?>"
-                                                    class="btn-action btn-view" title="Lihat Detail"
-                                                    style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
-                                                    <i class="fas fa-eye"></i>
-                                                </a>
+                                                    <!-- Tombol edit -->
+                                                    <a href="edit-surat-cuti.php?id=<?php echo $row['id']; ?>"
+                                                        class="btn-action btn-edit" title="Edit">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
 
-                                                <!-- Tombol edit -->
-                                                <a href="edit-surat-cuti.php?id=<?php echo $row['id']; ?>"
-                                                    class="btn-action btn-edit" title="Edit">
-                                                    <i class="fas fa-edit"></i>
-                                                </a>
-
-                                                <!-- Tombol hapus -->
-                                                <button class="btn-action btn-delete"
-                                                    onclick="confirmDelete(<?php echo $row['id']; ?>)" title="Hapus">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
+                                                    <!-- Tombol hapus -->
+                                                    <button class="btn-action btn-delete"
+                                                        onclick="confirmDelete(<?php echo $row['id']; ?>)" title="Hapus">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </div>
                                             </td>
                                         </tr>
                                 <?php
