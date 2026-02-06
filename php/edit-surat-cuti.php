@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 // Koneksi database
 include 'database.php';
 require_once 'auth_check.php';
@@ -135,9 +135,15 @@ $sampai_dengan_date = $data['Sampai Dengan'] > 0 ? date('Y-m-d', $data['Sampai D
                 <!-- Bagian kanan header -->
                 <div class="header-right">
                     <!-- Info pengguna -->
-                    <div class="user-info">
+                    <div class="user-info" id="userInfoToggle">
                         <span class="user-name"><?= htmlspecialchars($nama) ?></span>
+                        <span class="user-role"><?= ucfirst(htmlspecialchars($role)) ?></span>
                         <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="user-dropdown" id="userDropdown">
+                        <a href="edit-akun.php">
+                            <i class="fas fa-user-edit"></i> Edit Akun
+                        </a>
                     </div>
                     <!-- Tombol logout -->
                     <button class="logout-btn">

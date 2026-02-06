@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 // Koneksi database
 include 'database.php';
 require_once 'auth_check.php';
@@ -87,11 +87,6 @@ $surat = mysqli_fetch_assoc($result);
             <div class="sidebar-footer sidebar-text">
                 <p><i class="fas fa-info-circle"></i> Versi 1.0.0</p>
             </div>
-
-            <!-- Toggle Button -->
-            <button class="sidebar-toggle" id="sidebarToggle" title="Toggle Sidebar">
-                <i class="fas fa-chevron-left"></i>
-            </button>
         </aside>
 
         <!-- Main Content -->
@@ -102,12 +97,21 @@ $surat = mysqli_fetch_assoc($result);
                     <button class="menu-toggle" id="mobileMenuToggle">
                         <i class="fas fa-bars"></i>
                     </button>
-                    <h1 class="header-title">Edit Surat Keluar</h1>
+                    <h1 class="header-title"><button class="header-menu-btn" id="headerMenuBtn">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    Edit Surat Keluar</h1>
                 </div>
                 <div class="header-right">
-                    <div class="user-info">
+                    <div class="user-info" id="userInfoToggle">
                         <span class="user-name"><?= htmlspecialchars($nama) ?></span>
+                        <span class="user-role"><?= ucfirst(htmlspecialchars($role)) ?></span>
                         <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="user-dropdown" id="userDropdown">
+                        <a href="edit-akun.php">
+                            <i class="fas fa-user-edit"></i> Edit Akun
+                        </a>
                     </div>
                     <button class="logout-btn">
                         <i class="fas fa-sign-out-alt"></i>

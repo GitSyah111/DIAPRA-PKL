@@ -1,73 +1,72 @@
 // Dashboard JavaScript
-document.addEventListener('DOMContentLoaded', function() {
-    
+document.addEventListener('DOMContentLoaded', function () {
+
     // Elements
     const sidebar = document.getElementById('sidebar');
-    const sidebarToggle = document.getElementById('sidebarToggle');
     const mainContent = document.querySelector('.main-content');
     const mobileMenuToggle = document.getElementById('mobileMenuToggle');
-    
+    const userInfoToggle = document.getElementById('userInfoToggle');
+    const userDropdown = document.getElementById('userDropdown');
+
     // AUTO DETECT ACTIVE MENU BASED ON CURRENT PAGE
     setActiveMenu();
-    
-    // Sidebar Toggle untuk Desktop (Collapse/Expand)
-    if (sidebarToggle) {
-        sidebarToggle.addEventListener('click', function() {
-            sidebar.classList.toggle('collapsed');
-            mainContent.classList.toggle('expanded');
-            
-            // Simpan state di localStorage
-            const isCollapsed = sidebar.classList.contains('collapsed');
-            localStorage.setItem('sidebarCollapsed', isCollapsed);
+
+    // User Dropdown Toggle
+    if (userInfoToggle && userDropdown) {
+        userInfoToggle.addEventListener('click', function (e) {
+            e.stopPropagation();
+            userInfoToggle.classList.toggle('active');
+            userDropdown.classList.toggle('active');
         });
     }
-    
-    // Load saved sidebar state dari localStorage
-    const savedState = localStorage.getItem('sidebarCollapsed');
-    if (savedState === 'true') {
-        sidebar.classList.add('collapsed');
-        mainContent.classList.add('expanded');
-    }
-    
+
     // Mobile Menu Toggle
     if (mobileMenuToggle) {
-        mobileMenuToggle.addEventListener('click', function(e) {
+        mobileMenuToggle.addEventListener('click', function (e) {
             e.stopPropagation();
             sidebar.classList.toggle('active');
         });
     }
-    
-    // Close sidebar when clicking outside (Mobile only)
-    document.addEventListener('click', function(event) {
+
+    // Close dropdowns and sidebar when clicking outside
+    document.addEventListener('click', function (event) {
+        // Close user dropdown if clicking outside
+        if (userDropdown && userInfoToggle) {
+            const isClickInsideDropdown = userDropdown.contains(event.target);
+            const isClickOnToggle = userInfoToggle.contains(event.target);
+
+            if (!isClickInsideDropdown && !isClickOnToggle) {
+                userDropdown.classList.remove('active');
+                userInfoToggle.classList.remove('active');
+            }
+        }
+
+        // Close sidebar on mobile when clicking outside
         if (window.innerWidth <= 768) {
             const isClickInsideSidebar = sidebar.contains(event.target);
             const isClickOnToggle = mobileMenuToggle && mobileMenuToggle.contains(event.target);
-            
+
             if (!isClickInsideSidebar && !isClickOnToggle) {
                 sidebar.classList.remove('active');
             }
         }
     });
-    
+
     // Prevent sidebar close when clicking inside sidebar (Mobile)
-    sidebar.addEventListener('click', function(e) {
+    sidebar.addEventListener('click', function (e) {
         if (window.innerWidth <= 768) {
             e.stopPropagation();
         }
     });
-    
+
     // Handle window resize
-    window.addEventListener('resize', function() {
+    window.addEventListener('resize', function () {
         if (window.innerWidth > 768) {
             // Desktop mode: remove mobile active class
             sidebar.classList.remove('active');
-        } else {
-            // Mobile mode: remove collapsed class
-            sidebar.classList.remove('collapsed');
-            mainContent.classList.remove('expanded');
         }
     });
-    
+
     // Smooth scroll untuk anchor links (jika ada)
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
@@ -80,14 +79,14 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
-    
+
     // Add animation to stat cards on scroll (optional)
     const observerOptions = {
         threshold: 0.1,
         rootMargin: '0px 0px -50px 0px'
     };
-    
-    const observer = new IntersectionObserver(function(entries) {
+
+    const observer = new IntersectionObserver(function (entries) {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.style.opacity = '1';
@@ -95,7 +94,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }, observerOptions);
-    
+
     // Observe stat cards
     document.querySelectorAll('.stat-card').forEach(card => {
         card.style.opacity = '0';
@@ -103,19 +102,19 @@ document.addEventListener('DOMContentLoaded', function() {
         card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
         observer.observe(card);
     });
-    
+
 });
 
 // Function to set active menu based on current page
 function setActiveMenu() {
     // Get current page filename
     const currentPage = window.location.pathname.split('/').pop();
-    
+
     // Remove all active classes first
     document.querySelectorAll('.nav-item').forEach(item => {
         item.classList.remove('active');
     });
-    
+
     // Map of pages to their menu items
     const pageMenuMap = {
         'dashboard.php': 'dashboard.php',
@@ -137,10 +136,10 @@ function setActiveMenu() {
         'tambah-kepala-dinas.php': 'data-kepala-dinas.php',
         'edit-kepala-dinas.php': 'data-kepala-dinas.php'
     };
-    
+
     // Get the menu page for current page
     const menuPage = pageMenuMap[currentPage];
-    
+
     if (menuPage) {
         // Find and activate the corresponding menu item
         document.querySelectorAll('.nav-item').forEach(item => {
@@ -174,9 +173,9 @@ function showCustomConfirm(message, onConfirm) {
             </div>
         </div>
     `;
-    
+
     document.body.appendChild(modal);
-    
+
     // Add styles
     if (!document.getElementById('customConfirmStyles')) {
         const style = document.createElement('style');
@@ -291,20 +290,20 @@ function showCustomConfirm(message, onConfirm) {
         `;
         document.head.appendChild(style);
     }
-    
+
     // Handle confirm button
     setTimeout(() => {
         const confirmBtn = document.getElementById('confirmBtn');
         if (confirmBtn) {
-            confirmBtn.addEventListener('click', function() {
+            confirmBtn.addEventListener('click', function () {
                 modal.remove();
                 onConfirm();
             });
         }
     }, 100);
-    
+
     // Close on overlay click
-    modal.addEventListener('click', function(e) {
+    modal.addEventListener('click', function (e) {
         if (e.target === modal) {
             modal.remove();
         }
@@ -313,7 +312,7 @@ function showCustomConfirm(message, onConfirm) {
 
 // Fungsi untuk konfirmasi logout
 function confirmLogout() {
-    showCustomConfirm('Apakah Anda yakin ingin keluar?', function() {
+    showCustomConfirm('Apakah Anda yakin ingin keluar?', function () {
         window.location.href = 'logout.php';
     });
 }
@@ -321,7 +320,7 @@ function confirmLogout() {
 // Attach logout confirmation ke button logout
 const logoutBtn = document.querySelector('.logout-btn');
 if (logoutBtn) {
-    logoutBtn.addEventListener('click', function(e) {
+    logoutBtn.addEventListener('click', function (e) {
         e.preventDefault();
         confirmLogout();
     });
