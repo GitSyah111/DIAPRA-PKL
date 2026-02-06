@@ -186,6 +186,12 @@ $result = mysqli_query($conn, $query);
                                                     </button>
                                                 <?php endif; ?>
 
+                                                <?php if (!empty($row['file_disposisi'])): ?>
+                                                    <a href="../uploads/disposisi/<?php echo $row['file_disposisi']; ?>" target="_blank" class="btn-action btn-view-disposisi" title="Lihat File Disposisi" style="background-color: #17a2b8; color: white;">
+                                                        <i class="fas fa-file-invoice"></i>
+                                                    </a>
+                                                <?php endif; ?>
+
                                                 <a href="disposisi-surat.php?id=<?php echo $row['id']; ?>" class="btn-action btn-disposisi" title="Disposisi">
                                                     <i class="fas fa-share-square"></i>
                                                 </a>

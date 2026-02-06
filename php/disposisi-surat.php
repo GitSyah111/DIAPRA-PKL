@@ -475,6 +475,39 @@ if (!empty($surat['dilihat_oleh'])) {
                                     placeholder="Masukkan catatan disposisi (opsional)"><?php echo htmlspecialchars($surat['catatan_disposisi'] ?? ''); ?></textarea>
                             </div>
 
+                            <!-- FILE DISPOSISI FIELD -->
+                            <div class="form-group">
+                                <label for="file_disposisi">
+                                    <i class="fas fa-file-pdf"></i> Upload File Disposisi (PDF)
+                                </label>
+                                
+                                <?php if (!empty($surat['file_disposisi'])): ?>
+                                    <div class="current-file" style="margin-bottom: 10px; padding: 10px; background: #eeffee; border: 1px solid #ccffcc; border-radius: 6px;">
+                                        <div style="display: flex; align-items: center; justify-content: space-between;">
+                                            <div>
+                                                <i class="fas fa-check-circle" style="color: green;"></i> File saat ini: 
+                                                <strong><?php echo htmlspecialchars($surat['file_disposisi']); ?></strong>
+                                            </div>
+                                            <div>
+                                                <a href="../uploads/disposisi/<?php echo $surat['file_disposisi']; ?>" target="_blank" class="btn-primary" style="padding: 4px 8px; font-size: 12px; text-decoration: none;">
+                                                    <i class="fas fa-eye"></i> Preview
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div style="margin-top: 8px;">
+                                            <label style="font-weight: normal; cursor: pointer; color: #d33;">
+                                                <input type="checkbox" name="delete_file_disposisi" value="1"> Hapus file ini (Centang untuk menghapus/mengganti tanpa upload baru)
+                                            </label>
+                                        </div>
+                                    </div>
+                                <?php endif; ?>
+
+                                <input type="file" id="file_disposisi" name="file_disposisi" accept=".pdf" class="form-control" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px;">
+                                <small class="form-help">
+                                    <i class="fas fa-info-circle"></i> Maksimal ukuran: 10MB. Format: PDF.
+                                </small>
+                            </div>
+
                             <div class="form-group">
                                 <label for="dilihat_oleh">
                                     <i class="fas fa-users"></i> Dapat Dilihat Oleh
