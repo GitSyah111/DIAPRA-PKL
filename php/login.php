@@ -43,7 +43,7 @@ unset($_SESSION['login_error'], $_SESSION['register_success']);
 
         <div class="register-link">
             Belum punya akun? <a href="register.php">Daftar di sini</a>
-            Lupa password? <a href="reset_password.php">Reset password</a>
+            Lupa password? <a href="lupa-password.php">Reset password</a>
         </div>
     </div>
 </body>
