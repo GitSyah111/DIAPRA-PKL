@@ -5,7 +5,7 @@
 $host = "localhost"; // Host database Anda, biasanya localhost
 $username = "root"; // Username database Anda
 $password = ""; // Password database Anda (kosong jika tidak ada)
-$database = "si_surat"; // Nama database yang Anda buat sebelumnya
+$database = "db_diapra"; // Nama database yang Anda buat sebelumnya
 
 // Buat koneksi ke database
 $conn = new mysqli($host, $username, $password, $database);
