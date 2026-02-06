@@ -151,7 +151,15 @@ if (isset($_POST['action']) || isset($_GET['action'])) {
         $old_data = mysqli_fetch_assoc($result_old);
         $file_surat = $old_data['file_surat'];
 
-        // Cek apakah ada file baru
+        // Cek jika ada request hapus file
+        if (isset($_POST['delete_file_surat']) && $_POST['delete_file_surat'] == '1') {
+            if (!empty($file_surat) && file_exists('../uploads/surat_masuk/' . $file_surat)) {
+                unlink('../uploads/surat_masuk/' . $file_surat);
+            }
+            $file_surat = NULL; // Set null di database
+        }
+
+        // Cek apakah ada file baru yang diupload
         if (isset($_FILES['file_surat']) && $_FILES['file_surat']['error'] == 0) {
             $allowed_ext = array('pdf');
             $file_name = $_FILES['file_surat']['name'];
@@ -177,8 +185,12 @@ if (isset($_POST['action']) || isset($_GET['action'])) {
                 exit();
             }
 
-            // Hapus file lama
+            // Hapus file lama jika ada (dan bukan null karena sudah dihapus di step delete sebelumnya)
+            // Jika user tidak delete tapi replace file, maka file lama harus dihapus agar tidak numpuk
             if (!empty($old_data['file_surat']) && file_exists('../uploads/surat_masuk/' . $old_data['file_surat'])) {
+                 // Cek apakah file lama itu sama dengan yang di variable $file_surat sekarang?
+                 // Jika user centang delete, $file_surat sudah NULL, jadi aman.
+                 // Jika user upload baru, kita harus hapus yang lama.
                 unlink('../uploads/surat_masuk/' . $old_data['file_surat']);
             }
 
@@ -192,6 +204,9 @@ if (isset($_POST['action']) || isset($_GET['action'])) {
         }
 
         // Update database
+        // Handle NULL value properly for file_surat
+        $file_update_str = $file_surat ? "'$file_surat'" : "NULL";
+
         $query = "UPDATE surat_masuk SET 
                   nomor_agenda = '$nomor_agenda',
                   tanggal_terima = '$tanggal_terima',
@@ -199,7 +214,7 @@ if (isset($_POST['action']) || isset($_GET['action'])) {
                   tanggal_surat = '$tanggal_surat',
                   nomor_surat = '$nomor_surat',
                   perihal = '$perihal',
-                  file_surat = '$file_surat',
+                  file_surat = $file_update_str,
                   dilihat_oleh = '$dilihat_oleh'
                   WHERE id = '$id'";
 

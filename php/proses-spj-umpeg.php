@@ -137,6 +137,14 @@ if (isset($_POST['action']) || isset($_GET['action'])) {
         $old_data = mysqli_fetch_assoc($result_old);
         $file_spj = $old_data['file_spj'];
 
+        // Cek jika ada request hapus file
+        if (isset($_POST['delete_file_spj']) && $_POST['delete_file_spj'] == '1') {
+            if (!empty($file_spj) && file_exists('../uploads/spj_umpeg/' . $file_spj)) {
+                unlink('../uploads/spj_umpeg/' . $file_spj);
+            }
+            $file_spj = NULL; // Set null di database
+        }
+
         // Cek apakah ada file baru
         if (isset($_FILES['file_spj']) && $_FILES['file_spj']['error'] == 0) {
             $allowed_ext = array('pdf');
@@ -163,8 +171,11 @@ if (isset($_POST['action']) || isset($_GET['action'])) {
                 exit();
             }
 
-            // Hapus file lama
+            // Hapus file lama jika ada (dan belum dihapus)
             if (!empty($old_data['file_spj']) && file_exists('../uploads/spj_umpeg/' . $old_data['file_spj'])) {
+                 // Cek apakah file lama itu sama dengan yang di variable $file_spj sekarang?
+                 // Jika user centang delete, $file_spj sudah NULL, jadi aman.
+                 // Jika user upload baru, kita harus hapus yang lama.
                 unlink('../uploads/spj_umpeg/' . $old_data['file_spj']);
             }
 
@@ -181,6 +192,9 @@ if (isset($_POST['action']) || isset($_GET['action'])) {
                 $file_spj = $new_file_name;
             }
         }
+        
+        // Handle NULL value properly for sql
+        $file_update_str = $file_spj ? "'$file_spj'" : "NULL";
 
         // Update database
         $query = "UPDATE spj_umpeg SET 
@@ -189,7 +203,7 @@ if (isset($_POST['action']) || isset($_GET['action'])) {
                   tanggal = '$tanggal',
                   nama_kegiatan = '$nama_kegiatan',
                   dibuat_oleh = '$dibuat_oleh',
-                  file_spj = '$file_spj'
+                  file_spj = $file_update_str
                   WHERE id = '$id'";
 
         if (mysqli_query($conn, $query)) {

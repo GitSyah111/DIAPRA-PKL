@@ -136,15 +136,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $old_data = mysqli_fetch_assoc($result_old);
         $file_surat = $old_data['file_surat'];
 
+        // Cek jika ada request hapus file
+        if (isset($_POST['delete_file_surat']) && $_POST['delete_file_surat'] == '1') {
+            if (!empty($file_surat)) {
+                $old_file = "../uploads/surat_keluar/" . $file_surat;
+                if (file_exists($old_file)) {
+                    unlink($old_file);
+                }
+            }
+            $file_surat = NULL; // Set null di database
+        }
+
         // Upload file baru jika ada
         if (isset($_FILES['file_surat']) && $_FILES['file_surat']['error'] == 0) {
             $upload = uploadFile($_FILES['file_surat']);
             if ($upload['status']) {
-                // Hapus file lama jika ada
+                // Hapus file lama jika ada (dan belum dihapus)
                 if (!empty($old_data['file_surat'])) {
-                    $old_file = "../uploads/surat_keluar/" . $old_data['file_surat'];
-                    if (file_exists($old_file)) {
-                        unlink($old_file);
+                    $old_file_path = "../uploads/surat_keluar/" . $old_data['file_surat'];
+                    if (file_exists($old_file_path)) {
+                        unlink($old_file_path);
                     }
                 }
                 $file_surat = $upload['file_name'];
@@ -158,12 +169,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
         // Update database
+        $file_update_str = $file_surat ? "'$file_surat'" : "NULL";
+        
         $query = "UPDATE surat_keluar SET 
                   tanggal_surat = '$tanggal_surat',
                   nomor_surat = '$nomor_surat',
                   tujuan_surat = '$tujuan_surat',
                   perihal = '$perihal',
-                  file_surat = '$file_surat'
+                  file_surat = $file_update_str
                   WHERE id = '$id'";
 
         if (mysqli_query($conn, $query)) {

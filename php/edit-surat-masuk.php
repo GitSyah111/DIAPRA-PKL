@@ -215,13 +215,24 @@ if (!empty($surat['dilihat_oleh'])) {
                                 </label>
 
                                 <?php if (!empty($surat['file_surat'])): ?>
-                                    <div class="current-file">
-                                        <i class="fas fa-file-pdf"></i>
-                                        <span>File saat ini: <strong><?php echo htmlspecialchars($surat['file_surat']); ?></strong></span>
-                                        <a href="../uploads/surat_masuk/<?php echo $surat['file_surat']; ?>"
-                                            target="_blank" class="btn-view-file">
-                                            <i class="fas fa-eye"></i> Lihat
-                                        </a>
+                                    <div class="current-file" style="margin-bottom: 10px; padding: 10px; background: #eeffee; border: 1px solid #ccffcc; border-radius: 6px;">
+                                        <div style="display: flex; align-items: center; justify-content: space-between;">
+                                            <div>
+                                                <i class="fas fa-file-pdf"></i>
+                                                <span>File saat ini: <strong><?php echo htmlspecialchars($surat['file_surat']); ?></strong></span>
+                                            </div>
+                                            <div>
+                                                <a href="../uploads/surat_masuk/<?php echo $surat['file_surat']; ?>"
+                                                    target="_blank" class="btn-view-file" style="padding: 4px 8px; font-size: 12px; text-decoration: none; margin-right: 5px;">
+                                                    <i class="fas fa-eye"></i> Lihat
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div style="margin-top: 8px;">
+                                            <label style="font-weight: normal; cursor: pointer; color: #d33;">
+                                                <input type="checkbox" name="delete_file_surat" value="1"> Hapus file ini (Centang untuk menghapus/mengganti tanpa upload baru)
+                                            </label>
+                                        </div>
                                     </div>
                                 <?php endif; ?>
 
