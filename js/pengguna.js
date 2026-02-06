@@ -6,17 +6,29 @@ function openAddModal() {
     document.getElementById('actionType').value = 'add';
     document.getElementById('dataForm').reset();
     document.getElementById('dataId').value = '';
+
+    // Password required for add
+    const pwdInput = document.getElementById('password');
+    pwdInput.required = true;
+    pwdInput.placeholder = 'Masukkan password';
+
     document.getElementById('dataModal').classList.add('show');
 }
 
-function openEditModal(no, nama, username, password, role) {
+function openEditModal(no, nama, username, role) {
     document.getElementById('modalTitle').innerHTML = '<i class="fas fa-user-edit"></i> Edit Data Pengguna';
     document.getElementById('actionType').value = 'edit';
     document.getElementById('dataId').value = no;
     document.getElementById('nama').value = nama;
     document.getElementById('username').value = username;
-    document.getElementById('password').value = password;
     document.getElementById('role').value = role;
+
+    // Password optional for edit
+    const pwdInput = document.getElementById('password');
+    pwdInput.value = '';
+    pwdInput.required = false;
+    pwdInput.placeholder = 'Kosongkan jika tidak ingin mengganti password';
+
     document.getElementById('dataModal').classList.add('show');
 }
 
@@ -30,7 +42,7 @@ function togglePassword(id) {
     const hiddenPwd = document.getElementById('pwd-' + id);
     const shownPwd = document.getElementById('pwd-show-' + id);
     const icon = document.getElementById('icon-' + id);
-    
+
     if (hiddenPwd.style.display === 'none') {
         hiddenPwd.style.display = 'inline';
         shownPwd.style.display = 'none';
@@ -65,9 +77,9 @@ function showDeleteConfirm(message, onConfirm) {
             </div>
         </div>
     `;
-    
+
     document.body.appendChild(modal);
-    
+
     // Add styles if not exists
     if (!document.getElementById('customConfirmStyles')) {
         const style = document.createElement('style');
@@ -186,20 +198,20 @@ function showDeleteConfirm(message, onConfirm) {
         `;
         document.head.appendChild(style);
     }
-    
+
     // Handle confirm button
     setTimeout(() => {
         const confirmBtn = document.getElementById('confirmDeleteBtn');
         if (confirmBtn) {
-            confirmBtn.addEventListener('click', function() {
+            confirmBtn.addEventListener('click', function () {
                 modal.remove();
                 onConfirm();
             });
         }
     }, 100);
-    
+
     // Close on overlay click
-    modal.addEventListener('click', function(e) {
+    modal.addEventListener('click', function (e) {
         if (e.target === modal) {
             modal.remove();
         }
@@ -208,13 +220,13 @@ function showDeleteConfirm(message, onConfirm) {
 
 // Delete Confirmation
 function confirmDelete(no) {
-    showDeleteConfirm('Apakah Anda yakin ingin menghapus pengguna ini?', function() {
+    showDeleteConfirm('Apakah Anda yakin ingin menghapus pengguna ini?', function () {
         window.location.href = 'proses-pengguna.php?action=delete&no=' + no;
     });
 }
 
 // Close modal when clicking outside
-window.onclick = function(event) {
+window.onclick = function (event) {
     const modal = document.getElementById('dataModal');
     if (event.target == modal) {
         closeModal();
@@ -222,21 +234,21 @@ window.onclick = function(event) {
 }
 
 // Search Functionality
-document.getElementById('searchInput').addEventListener('keyup', function() {
+document.getElementById('searchInput').addEventListener('keyup', function () {
     const searchValue = this.value.toLowerCase();
     const tableBody = document.getElementById('tableBody');
     const rows = tableBody.getElementsByTagName('tr');
-    
+
     for (let i = 0; i < rows.length; i++) {
         const row = rows[i];
         const cells = row.getElementsByTagName('td');
         let found = false;
-        
+
         // Skip empty data row
         if (cells.length === 1 && cells[0].classList.contains('empty-data')) {
             continue;
         }
-        
+
         // Search in nama, username, and role columns (index 1, 2, 4)
         const searchIndices = [1, 2, 4];
         for (let j = 0; j < searchIndices.length; j++) {
@@ -249,13 +261,13 @@ document.getElementById('searchInput').addEventListener('keyup', function() {
                 }
             }
         }
-        
+
         row.style.display = found ? '' : 'none';
     }
 });
 
 // Username validation (no spaces allowed)
-document.getElementById('username').addEventListener('input', function(e) {
+document.getElementById('username').addEventListener('input', function (e) {
     let value = e.target.value;
     // Remove spaces
     value = value.replace(/\s/g, '');
@@ -263,10 +275,11 @@ document.getElementById('username').addEventListener('input', function(e) {
 });
 
 // Password validation (max 10 characters)
-document.getElementById('password').addEventListener('input', function(e) {
+// Password validation (max 100 characters) - Updated from 10
+document.getElementById('password').addEventListener('input', function (e) {
     let value = e.target.value;
-    if (value.length > 10) {
-        value = value.substring(0, 10);
+    if (value.length > 100) {
+        value = value.substring(0, 100);
     }
     e.target.value = value;
 });
@@ -289,9 +302,9 @@ function showCustomAlert(message) {
             </div>
         </div>
     `;
-    
+
     document.body.appendChild(modal);
-    
+
     // Add alert icon style
     if (!document.getElementById('customAlertStyles')) {
         const style = document.createElement('style');
@@ -311,9 +324,9 @@ function showCustomAlert(message) {
         `;
         document.head.appendChild(style);
     }
-    
+
     // Close on overlay click
-    modal.addEventListener('click', function(e) {
+    modal.addEventListener('click', function (e) {
         if (e.target === modal) {
             modal.remove();
         }
@@ -321,35 +334,29 @@ function showCustomAlert(message) {
 }
 
 // Form Validation
-document.getElementById('dataForm').addEventListener('submit', function(e) {
+document.getElementById('dataForm').addEventListener('submit', function (e) {
     const nama = document.getElementById('nama').value.trim();
     const username = document.getElementById('username').value.trim();
     const password = document.getElementById('password').value.trim();
     const role = document.getElementById('role').value;
-    
-    if (nama === '' || username === '' || password === '' || role === '') {
+
+    if (actionType === 'add' && password === '') {
         e.preventDefault();
-        showCustomAlert('Semua field harus diisi!');
+        showCustomAlert('Password harus diisi!');
         return false;
     }
-    
-    if (username.length < 3) {
-        e.preventDefault();
-        showCustomAlert('Username minimal 3 karakter!');
-        return false;
-    }
-    
-    if (password.length < 3) {
+
+    if (password.length > 0 && password.length < 3) {
         e.preventDefault();
         showCustomAlert('Password minimal 3 karakter!');
         return false;
     }
-    
-    if (password.length > 10) {
+
+    if (password.length > 100) {
         e.preventDefault();
-        showCustomAlert('Password maksimal 10 karakter!');
+        showCustomAlert('Password maksimal 100 karakter!');
         return false;
     }
-    
+
     return true;
 });

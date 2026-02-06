@@ -23,8 +23,24 @@ if ($result->num_rows === 0) {
 }
 
 $row = $result->fetch_assoc();
-// Password disimpan plain text di DB
-if ($row['password'] !== $password) {
+// $row already fetched above
+$stored_password = $row['password'];
+
+// 1. Cek apakah password di DB sudah MD5 (dan cocok)
+if ($stored_password === md5($password)) {
+    // Password cocok (MD5)
+} 
+// 2. Cek apakah password di DB masih Plain Text (dan cocok)
+// Kita asumsikan jika belum MD5, mungkin masih plain text lama
+elseif ($stored_password === $password) {
+    // Password cocok (Plain Text) -> Migrasi ke MD5
+    $new_hash = md5($password);
+    $update_stmt = $conn->prepare("UPDATE user SET password = ? WHERE no = ?");
+    $update_stmt->bind_param('si', $new_hash, $row['no']);
+    $update_stmt->execute();
+} 
+// 3. Salah semua
+else {
     $_SESSION['login_error'] = 'Username atau password salah.';
     header('Location: login.php');
     exit;

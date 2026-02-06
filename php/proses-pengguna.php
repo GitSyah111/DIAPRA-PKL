@@ -40,7 +40,7 @@ if (isset($_POST['action']) || isset($_GET['action'])) {
     if ($action == 'add') {
         $nama = mysqli_real_escape_string($conn, $_POST['nama']);
         $username = mysqli_real_escape_string($conn, $_POST['username']);
-        $password = mysqli_real_escape_string($conn, $_POST['password']);
+        $password = md5(mysqli_real_escape_string($conn, $_POST['password']));
         $role = mysqli_real_escape_string($conn, $_POST['role']);
 
         // Cek apakah username sudah ada
@@ -167,12 +167,22 @@ if (isset($_POST['action']) || isset($_GET['action'])) {
             </body>
             </html>";
         } else {
+            // Logic update password hanya jika diisi
+        if (!empty($_POST['password'])) {
+            $password = md5(mysqli_real_escape_string($conn, $_POST['password']));
             $query = "UPDATE user SET 
                       nama = '$nama', 
                       username = '$username', 
                       password = '$password',
                       role = '$role'
                       WHERE no = '$no'";
+        } else {
+            $query = "UPDATE user SET 
+                      nama = '$nama', 
+                      username = '$username', 
+                      role = '$role'
+                      WHERE no = '$no'";
+        }
 
             if (mysqli_query($conn, $query)) {
                 echo "<!DOCTYPE html>

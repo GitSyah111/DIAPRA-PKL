@@ -166,7 +166,7 @@ $result = mysqli_query($conn, $query);
                                             </td>
                                             <?php if ($can_edit): ?>
                                             <td class="text-center">
-                                                <button class="btn-action btn-edit" onclick="openEditModal(<?php echo $row['no']; ?>, '<?php echo addslashes($row['nama']); ?>', '<?php echo addslashes($row['username']); ?>', '<?php echo $row['password']; ?>', '<?php echo $row['role']; ?>')" title="Edit">
+                                                <button class="btn-action btn-edit" onclick="openEditModal(<?php echo $row['no']; ?>, '<?php echo addslashes($row['nama']); ?>', '<?php echo addslashes($row['username']); ?>', '<?php echo $row['role']; ?>')" title="Edit">
                                                     <i class="fas fa-edit"></i>
                                                 </button>
                                                 <button class="btn-action btn-delete" onclick="confirmDelete(<?php echo $row['no']; ?>)" title="Hapus">
@@ -222,9 +222,9 @@ $result = mysqli_query($conn, $query);
 
                 <div class="form-group">
                     <label for="password"><i class="fas fa-lock"></i> Password</label>
-                    <input type="text" id="password" name="password" required placeholder="Masukkan password" maxlength="10">
+                    <input type="text" id="password" name="password" required placeholder="Masukkan password" maxlength="100">
                     <small style="color: #6b7280; font-size: 12px; display: block; margin-top: 5px;">
-                        <i class="fas fa-info-circle"></i> Maksimal 10 karakter
+                        <i class="fas fa-info-circle"></i> Maksimal 100 karakter
                     </small>
                 </div>
 
