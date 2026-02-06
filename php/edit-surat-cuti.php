@@ -169,7 +169,7 @@ $sampai_dengan_date = $data['Sampai Dengan'] > 0 ? date('Y-m-d', $data['Sampai D
                     </div>
 
                     <!-- Form edit surat cuti -->
-                    <form method="POST" action="proses-surat-cuti.php" class="form-container" id="formSuratCuti">
+                    <form method="POST" action="proses-surat-cuti.php" class="form-container" id="formSuratCuti" enctype="multipart/form-data">
                         <!-- Hidden input untuk action -->
                         <input type="hidden" name="action" value="edit">
                         <!-- Hidden input untuk ID -->
@@ -311,6 +311,41 @@ $sampai_dengan_date = $data['Sampai Dengan'] > 0 ? date('Y-m-d', $data['Sampai D
                                 placeholder="Masukkan sisa cuti (contoh: 10 hari)">
                             <small class="form-help">
                                 <i class="fas fa-info-circle"></i> Masukkan sisa cuti yang dimiliki
+                            </small>
+                        </div>
+
+                        <!-- Form group File Surat -->
+                        <div class="form-group">
+                            <label for="file_surat">
+                                <i class="fas fa-file-pdf"></i>
+                                File Surat Cuti (PDF)
+                            </label>
+
+                            <?php if (!empty($data['file_surat'])): ?>
+                                <div class="current-file" style="margin-bottom: 10px; padding: 10px; background: #eeffee; border: 1px solid #ccffcc; border-radius: 6px;">
+                                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                                        <div>
+                                            <i class="fas fa-file-pdf"></i>
+                                            <span>File saat ini: <strong><?php echo htmlspecialchars($data['file_surat']); ?></strong></span>
+                                        </div>
+                                        <div>
+                                            <a href="../uploads/surat_cuti/<?php echo $data['file_surat']; ?>"
+                                                target="_blank" class="btn-view-file" style="padding: 4px 8px; font-size: 12px; text-decoration: none; margin-right: 5px;">
+                                                <i class="fas fa-eye"></i> Lihat
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div style="margin-top: 8px;">
+                                        <label style="font-weight: normal; cursor: pointer; color: #d33;">
+                                            <input type="checkbox" name="delete_file_surat" value="1"> Hapus file ini (Centang untuk menghapus/mengganti tanpa upload baru)
+                                        </label>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
+
+                            <input type="file" id="file_surat" name="file_surat" accept=".pdf" class="file-input">
+                            <small class="form-help">
+                                <i class="fas fa-info-circle"></i> Format: PDF, Maksimal ukuran: 10MB. Kosongkan jika tidak ingin mengubah file.
                             </small>
                         </div>
 

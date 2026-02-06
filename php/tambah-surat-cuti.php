@@ -146,7 +146,7 @@ require_once 'auth_check.php';
                     </div>
 
                     <!-- Form tambah surat cuti -->
-                    <form method="POST" action="proses-surat-cuti.php" class="form-container" id="formSuratCuti">
+                    <form method="POST" action="proses-surat-cuti.php" class="form-container" id="formSuratCuti" enctype="multipart/form-data">
                         <!-- Hidden input untuk action -->
                         <input type="hidden" name="action" value="add">
 
@@ -278,6 +278,18 @@ require_once 'auth_check.php';
                                 placeholder="Masukkan sisa cuti (contoh: 10 hari)">
                             <small class="form-help">
                                 <i class="fas fa-info-circle"></i> Masukkan sisa cuti yang dimiliki
+                            </small>
+                        </div>
+
+                        <!-- Form group File Surat -->
+                        <div class="form-group">
+                            <label for="file_surat">
+                                <i class="fas fa-file-pdf"></i>
+                                File Surat Cuti (PDF)
+                            </label>
+                            <input type="file" id="file_surat" name="file_surat" accept=".pdf" class="file-input">
+                            <small class="form-help">
+                                <i class="fas fa-info-circle"></i> Format: PDF, Maksimal ukuran: 10MB
                             </small>
                         </div>
 

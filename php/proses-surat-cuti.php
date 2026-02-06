@@ -33,11 +33,59 @@ if (isset($_POST['action']) || isset($_GET['action'])) {
         // Escape string untuk keamanan input Sisa Cuti
         $sisa_cuti = mysqli_real_escape_string($conn, $_POST['sisa_cuti']);
 
+        // Upload file Surat Cuti
+        $file_surat = '';
+        if (isset($_FILES['file_surat']) && $_FILES['file_surat']['error'] == 0) {
+            $allowed_ext = array('pdf');
+            $file_name = $_FILES['file_surat']['name'];
+            $file_tmp = $_FILES['file_surat']['tmp_name'];
+            $file_size = $_FILES['file_surat']['size'];
+            $file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
+
+            // Validasi ekstensi
+            if (!in_array($file_ext, $allowed_ext)) {
+                echo "<script>
+                    alert('Error: Hanya file PDF yang diperbolehkan!');
+                    window.location.href = 'tambah-surat-cuti.php';
+                </script>";
+                exit();
+            }
+
+            // Validasi ukuran (max 10MB)
+            if ($file_size > 10485760) {
+                echo "<script>
+                    alert('Error: Ukuran file maksimal 10MB!');
+                    window.location.href = 'tambah-surat-cuti.php';
+                </script>";
+                exit();
+            }
+
+            // Generate nama file unik
+            $new_file_name = 'surat_cuti_' . time() . '_' . uniqid() . '.' . $file_ext;
+            $upload_path = '../uploads/surat_cuti/' . $new_file_name;
+
+            // Buat folder jika belum ada
+            if (!file_exists('../uploads/surat_cuti/')) {
+                mkdir('../uploads/surat_cuti/', 0777, true);
+            }
+
+            // Upload file
+            if (move_uploaded_file($file_tmp, $upload_path)) {
+                $file_surat = $new_file_name;
+            } else {
+                echo "<script>
+                    alert('Error: Gagal mengupload file!');
+                    window.location.href = 'tambah-surat-cuti.php';
+                </script>";
+                exit();
+            }
+        }
+
         // Query insert ke database dengan kolom menggunakan backticks
         $query = "INSERT INTO `surat cuti` 
-                  (`Nama/NIP`, `Pangkat/GOL RUANG`, `Jabatan`, `Jenis Cuti`, `Lamanya`, `Dilaksanakan DI`, `Mulai Cuti`, `Sampai Dengan`, `Sisa Cuti`) 
+                  (`Nama/NIP`, `Pangkat/GOL RUANG`, `Jabatan`, `Jenis Cuti`, `Lamanya`, `Dilaksanakan DI`, `Mulai Cuti`, `Sampai Dengan`, `Sisa Cuti`, `file_surat`) 
                   VALUES 
-                  ('$nama_nip', '$pangkat_gol', '$jabatan', '$jenis_cuti', '$lamanya', '$dilaksanakan_di', '$mulai_cuti', '$sampai_dengan', '$sisa_cuti')";
+                  ('$nama_nip', '$pangkat_gol', '$jabatan', '$jenis_cuti', '$lamanya', '$dilaksanakan_di', '$mulai_cuti', '$sampai_dengan', '$sisa_cuti', '$file_surat')";
 
         // Eksekusi query
         if (mysqli_query($conn, $query)) {
@@ -122,6 +170,68 @@ if (isset($_POST['action']) || isset($_GET['action'])) {
         // Escape string untuk keamanan input Sisa Cuti
         $sisa_cuti = mysqli_real_escape_string($conn, $_POST['sisa_cuti']);
 
+        // Ambil data file lama
+        $query_old = "SELECT file_surat FROM `surat cuti` WHERE id = '$id'";
+        $result_old = mysqli_query($conn, $query_old);
+        $old_data = mysqli_fetch_assoc($result_old);
+        $file_surat = $old_data['file_surat'];
+
+        // Cek jika ada request hapus file
+        if (isset($_POST['delete_file_surat']) && $_POST['delete_file_surat'] == '1') {
+            if (!empty($file_surat) && file_exists('../uploads/surat_cuti/' . $file_surat)) {
+                unlink('../uploads/surat_cuti/' . $file_surat);
+            }
+            $file_surat = NULL; // Set null di database
+        }
+
+        // Cek apakah ada file baru
+        if (isset($_FILES['file_surat']) && $_FILES['file_surat']['error'] == 0) {
+            $allowed_ext = array('pdf');
+            $file_name = $_FILES['file_surat']['name'];
+            $file_tmp = $_FILES['file_surat']['tmp_name'];
+            $file_size = $_FILES['file_surat']['size'];
+            $file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
+
+            // Validasi ekstensi
+            if (!in_array($file_ext, $allowed_ext)) {
+                echo "<script>
+                    alert('Error: Hanya file PDF yang diperbolehkan!');
+                    window.location.href = 'edit-surat-cuti.php?id=$id';
+                </script>";
+                exit();
+            }
+
+            // Validasi ukuran
+            if ($file_size > 10485760) {
+                echo "<script>
+                    alert('Error: Ukuran file maksimal 10MB!');
+                    window.location.href = 'edit-surat-cuti.php?id=$id';
+                </script>";
+                exit();
+            }
+
+            // Hapus file lama jika ada (dan belum dihapus)
+            if (!empty($old_data['file_surat']) && file_exists('../uploads/surat_cuti/' . $old_data['file_surat'])) {
+                unlink('../uploads/surat_cuti/' . $old_data['file_surat']);
+            }
+
+            // Upload file baru
+            $new_file_name = 'surat_cuti_' . time() . '_' . uniqid() . '.' . $file_ext;
+            $upload_path = '../uploads/surat_cuti/' . $new_file_name;
+
+            // Buat folder jika belum ada
+            if (!file_exists('../uploads/surat_cuti/')) {
+                mkdir('../uploads/surat_cuti/', 0777, true);
+            }
+
+            if (move_uploaded_file($file_tmp, $upload_path)) {
+                $file_surat = $new_file_name;
+            }
+        }
+
+        // Handle NULL value properly for sql
+        $file_update_str = $file_surat ? "'$file_surat'" : "NULL";
+
         // Query update ke database dengan kolom menggunakan backticks
         $query = "UPDATE `surat cuti` SET 
                   `Nama/NIP` = '$nama_nip',
@@ -132,7 +242,8 @@ if (isset($_POST['action']) || isset($_GET['action'])) {
                   `Dilaksanakan DI` = '$dilaksanakan_di',
                   `Mulai Cuti` = '$mulai_cuti',
                   `Sampai Dengan` = '$sampai_dengan',
-                  `Sisa Cuti` = '$sisa_cuti'
+                  `Sisa Cuti` = '$sisa_cuti',
+                  `file_surat` = $file_update_str
                   WHERE id = '$id'";
 
         // Eksekusi query
@@ -195,6 +306,16 @@ if (isset($_POST['action']) || isset($_GET['action'])) {
     elseif ($action == 'delete') {
         // Ambil ID dari GET
         $id = mysqli_real_escape_string($conn, $_GET['id']);
+
+        // Ambil data file untuk dihapus
+        $query_file = "SELECT file_surat FROM `surat cuti` WHERE id = '$id'";
+        $result_file = mysqli_query($conn, $query_file);
+        $file_data = mysqli_fetch_assoc($result_file);
+
+        // Hapus file jika ada
+        if (!empty($file_data['file_surat']) && file_exists('../uploads/surat_cuti/' . $file_data['file_surat'])) {
+            unlink('../uploads/surat_cuti/' . $file_data['file_surat']);
+        }
 
         // Query delete dari database
         $query = "DELETE FROM `surat cuti` WHERE id = '$id'";
