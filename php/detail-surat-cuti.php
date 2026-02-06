@@ -208,9 +208,6 @@ $sampai_dengan = $data['Sampai Dengan'] > 0 ? date('d F Y', $data['Sampai Dengan
             </div>
 
             <!-- Toggle Button untuk sidebar -->
-            <button class="sidebar-toggle" id="sidebarToggle" title="Toggle Sidebar">
-                <i class="fas fa-chevron-left"></i>
-            </button>
         </aside>
 
         <!-- Main Content -->

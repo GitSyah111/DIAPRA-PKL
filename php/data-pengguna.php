@@ -33,9 +33,7 @@ $result = mysqli_query($conn, $query);
                 <div class="logo">
                     <img src="../assets/img/LOGO.png" alt="Logo DPPKBPM" class="logo-img">
                 </div>
-                <h2 class="sidebar-text">DPPKBPM</h2>
-                <p class="subtitle sidebar-text">DIAPRAt</p>
-                <p class="username sidebar-text"><i class="fas fa-user-circle"></i> <?= htmlspecialchars($nama) ?></p>
+                <h2 class="sidebar-text">DIAPRA DPPKBPM</h2>
             </div>
 
             <nav class="sidebar-nav">
@@ -86,10 +84,10 @@ $result = mysqli_query($conn, $query);
                     <button class="menu-toggle" id="mobileMenuToggle">
                         <i class="fas fa-bars"></i>
                     </button>
-                    <h1 class="header-title"><button class="header-menu-btn" id="headerMenuBtn">
+                    <button class="header-menu-btn" id="headerMenuBtn">
                         <i class="fas fa-bars"></i>
                     </button>
-                    Data Pengguna</h1>
+                    <h1 class="header-title">Data Pengguna</h1>
                 </div>
                 <div class="header-right">
                     <div class="user-info" id="userInfoToggle">

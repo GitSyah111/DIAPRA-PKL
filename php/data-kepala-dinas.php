@@ -84,10 +84,10 @@ $result = mysqli_query($conn, $query);
                     <button class="menu-toggle" id="mobileMenuToggle">
                         <i class="fas fa-bars"></i>
                     </button>
-                    <h1 class="header-title"><button class="header-menu-btn" id="headerMenuBtn">
+                    <button class="header-menu-btn" id="headerMenuBtn">
                         <i class="fas fa-bars"></i>
                     </button>
-                    Data Kepala Dinas</h1>
+                    <h1 class="header-title">Data Kepala Dinas</h1>
                 </div>
                 <div class="header-right">
                     <div class="user-info" id="userInfoToggle">

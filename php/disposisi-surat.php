@@ -303,10 +303,6 @@ if (!empty($surat['dilihat_oleh'])) {
             <div class="sidebar-footer sidebar-text">
                 <p><i class="fas fa-info-circle"></i> Versi 1.0.0</p>
             </div>
-
-            <button class="sidebar-toggle" id="sidebarToggle" title="Toggle Sidebar">
-                <i class="fas fa-chevron-left"></i>
-            </button>
         </aside>
 
         <main class="main-content">

@@ -44,11 +44,7 @@ $result = mysqli_query($conn, $query);
                     <img src="../assets/img/LOGO.png" alt="Logo DPPKBPM" class="logo-img">
                 </div>
                 <!-- Nama instansi -->
-                <h2 class="sidebar-text">DPPKBPM</h2>
-                <!-- Subtitle instansi -->
-                <p class="subtitle sidebar-text">DIAPRA</p>
-                <!-- Username pengguna -->
-                <p class="username sidebar-text"><i class="fas fa-user-circle"></i> <?= htmlspecialchars($nama) ?></p>
+                <h2 class="sidebar-text">DIAPRA DPPKBPM</h2>
             </div>
 
             <!-- Navigasi sidebar -->
@@ -100,9 +96,6 @@ $result = mysqli_query($conn, $query);
             </div>
 
             <!-- Toggle Button untuk sidebar -->
-            <button class="sidebar-toggle" id="sidebarToggle" title="Toggle Sidebar">
-                <i class="fas fa-chevron-left"></i>
-            </button>
         </aside>
 
         <!-- Main Content -->
@@ -113,6 +106,10 @@ $result = mysqli_query($conn, $query);
                 <div class="header-left">
                     <!-- Tombol menu toggle untuk mobile -->
                     <button class="menu-toggle" id="mobileMenuToggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <!-- Tombol menu toggle untuk desktop -->
+                    <button class="header-menu-btn" id="headerMenuBtn">
                         <i class="fas fa-bars"></i>
                     </button>
                     <!-- Judul halaman -->
