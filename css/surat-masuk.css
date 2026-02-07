@@ -97,27 +97,30 @@
 }
 
 /* Table Specific Styles */
+/* Table Specific Styles - Premium Overhaul */
 #suratMasukTable {
     width: 100% !important;
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0;
 }
 
 #suratMasukTable th,
 #suratMasukTable td {
     white-space: nowrap;
     vertical-align: middle;
-    padding: 12px 15px;
-    border-bottom: 1px solid #f1f5f9;
+    padding: 16px 20px;
+    /* Spacious padding */
+    border-bottom: 1px solid var(--border-color);
 }
 
 #suratMasukTable thead th {
-    background-color: #f8fafc;
-    color: #1e3a5f;
+    background-color: var(--slate-50);
+    color: var(--text-muted);
     font-weight: 600;
     text-transform: uppercase;
-    font-size: 12px;
-    letter-spacing: 0.5px;
-    border-bottom: 2px solid #e2e8f0;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid var(--border-color);
 }
 
 /* Fix wrapping for specific columns */
@@ -125,16 +128,23 @@
 #suratMasukTable td:nth-child(4),
 #suratMasukTable td:nth-child(7) {
     white-space: normal;
-    min-width: 250px;
-    line-height: 1.5;
+    min-width: 300px;
+    /* Increase width reading comfort */
+    line-height: 1.6;
+    color: var(--slate-600);
+}
+
+#suratMasukTable tbody tr {
+    transition: background-color 0.2s ease;
 }
 
 #suratMasukTable tbody tr:hover {
-    background-color: #f8fafc;
+    background-color: var(--primary-50);
 }
 
 #suratMasukTable tbody tr:nth-child(even) {
-    background-color: #fcfcfc;
+    background-color: rgba(248, 250, 252, 0.5);
+    /* Very subtle alternating */
 }
 
 /* Buttons Container for DataTables */
@@ -192,48 +202,98 @@
 }
 
 /* Action Buttons in Table */
+/* Action Buttons in Table */
 .action-buttons-cell {
     white-space: nowrap;
+    display: flex;
+    gap: 8px;
+    /* Proper spacing */
+    justify-content: center;
 }
 
 .btn-action {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 32px;
-    height: 32px;
-    border: none;
-    border-radius: 6px;
+    width: 36px;
+    height: 36px;
+    border: 1px solid transparent;
+    border-radius: var(--radius-md);
     cursor: pointer;
-    font-size: 14px;
-    transition: all 0.3s;
-    margin: 0 2px;
+    font-size: 0.9rem;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    margin: 0;
     text-decoration: none;
     color: white;
+    box-shadow: var(--shadow-sm);
 }
 
 .btn-view {
-    background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+    background-color: white;
+    border-color: var(--border-color);
+    color: var(--slate-600);
 }
 
 .btn-view:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
+    background-color: var(--slate-50);
+    color: var(--primary-600);
+    border-color: var(--primary-200);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
+
+.btn-view-disposisi {
+    background-color: #e0f2fe;
+    /* Light sky blue */
+    color: #0284c7;
+    border: 1px solid transparent;
+}
+
+.btn-view-disposisi:hover {
+    background-color: #bae6fd;
+    color: #0369a1;
+    transform: translateY(-1px);
 }
 
 .btn-disposisi {
-    background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+    background-color: var(--primary-50);
+    color: var(--primary-600);
 }
 
 .btn-disposisi:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(6, 182, 212, 0.4);
+    background-color: var(--primary-100);
+    color: var(--primary-700);
+    transform: translateY(-1px);
+}
+
+.btn-edit {
+    background-color: var(--warning-bg);
+    color: var(--warning-text);
+}
+
+.btn-edit:hover {
+    background-color: #fef9c3;
+    color: #a16207;
+    transform: translateY(-1px);
+}
+
+.btn-delete {
+    background-color: var(--danger-bg);
+    color: var(--danger-text);
+}
+
+.btn-delete:hover {
+    background-color: #fee2e2;
+    color: #b91c1c;
+    transform: translateY(-1px);
 }
 
 .btn-disabled {
-    background: #d1d5db;
+    background: var(--slate-100);
+    color: var(--slate-400);
     cursor: not-allowed;
-    opacity: 0.6;
+    opacity: 0.7;
+    box-shadow: none;
 }
 
 .btn-disabled:hover {
