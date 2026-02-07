@@ -26,6 +26,7 @@ require_once 'auth_check.php';
 <body>
     <!-- Container utama -->
     <div class="container">
+        <div class="hover-trigger"></div>
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
             <!-- Header sidebar -->

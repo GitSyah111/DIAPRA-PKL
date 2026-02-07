@@ -259,6 +259,7 @@ if (!empty($surat['dilihat_oleh'])) {
 
 <body>
     <div class="container">
+        <div class="hover-trigger"></div>
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <div class="logo">

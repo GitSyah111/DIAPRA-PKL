@@ -49,6 +49,7 @@ $sampai_dengan_date = $data['Sampai Dengan'] > 0 ? date('Y-m-d', $data['Sampai D
 <body>
     <!-- Container utama -->
     <div class="container">
+        <div class="hover-trigger"></div>
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
             <!-- Header sidebar -->

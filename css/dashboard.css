@@ -239,11 +239,18 @@ body {
     height: 72px;
 }
 
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
 .header-title {
     font-size: 1.25rem;
     color: var(--slate-800);
     font-weight: 700;
     letter-spacing: -0.025em;
+    margin: 0;
 }
 
 .header-menu-btn {
@@ -273,22 +280,24 @@ body {
 
 /* Hide mobile toggle on desktop */
 .menu-toggle {
-    display: none;
+    display: none !important;
 }
 
 @media (max-width: 768px) {
     .header-menu-btn {
-        display: none;
-        /* Use mobile toggle on mobile if preferred, or unify them */
+        display: none !important;
     }
 
     .menu-toggle {
-        display: block;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
         background: transparent;
         border: none;
         font-size: 20px;
         color: #64748b;
-        margin-right: 16px;
+        cursor: pointer;
+        padding: 8px;
     }
 }
 
@@ -560,6 +569,9 @@ table.dataTable tbody tr:hover {
     border-top: 1px solid #e2e8f0;
     color: #94a3b8;
     font-size: 13px;
+    padding: 20px 32px;
+    margin-top: auto;
+    text-align: center;
 }
 
 .main-footer strong {

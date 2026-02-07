@@ -143,6 +143,7 @@ $sampai_dengan = $data['Sampai Dengan'] > 0 ? date('d F Y', $data['Sampai Dengan
 <body>
     <!-- Container utama -->
     <div class="container">
+        <div class="hover-trigger"></div>
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
             <!-- Header sidebar -->

@@ -35,6 +35,7 @@ $result = mysqli_query($conn, $query);
 <body>
     <!-- Container utama -->
     <div class="container">
+        <div class="hover-trigger"></div>
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
             <!-- Header sidebar -->

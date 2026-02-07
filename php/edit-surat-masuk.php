@@ -50,6 +50,7 @@ if (!empty($surat['dilihat_oleh'])) {
 
 <body>
     <div class="container">
+        <div class="hover-trigger"></div>
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">

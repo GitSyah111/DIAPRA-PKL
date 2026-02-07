@@ -367,16 +367,14 @@ if (!file_exists($file_path)) {
                 <?php endif; ?>
             <a href="<?php echo $file_path; ?>" download class="btn-header btn-primary">
                 <i class="fas fa-download"></i>
-                <span>Download</span>
             </a>
         </div>
     </div>
 
-    <div class="pdf-toolbar">
-        <div class="toolbar-left">
-        </div>
-
-        <div class="toolbar-center">
+    <div class="container">
+        <div class="hover-trigger"></div>
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
             <button class="btn-toolbar" id="prev-page" disabled>
                 <i class="fas fa-chevron-left"></i>
             </button>

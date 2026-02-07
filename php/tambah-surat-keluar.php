@@ -24,6 +24,7 @@ $next_nomor = ($row['max_nomor'] ? $row['max_nomor'] : 0) + 1;
 
 <body>
     <div class="container">
+        <div class="hover-trigger"></div>
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">

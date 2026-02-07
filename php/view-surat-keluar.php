@@ -312,22 +312,6 @@ if (!file_exists($file_path)) {
             </a>
             <a href="<?php echo $file_path; ?>" download class="btn-header btn-primary">
                 <i class="fas fa-download"></i>
-                <span>Download</span>
-            </a>
-        </div>
-    </div>
-
-    <div class="pdf-toolbar">
-        <div class="toolbar-left">
-        </div>
-
-        <div class="toolbar-center">
-            <button class="btn-toolbar" id="prev-page" disabled>
-                <i class="fas fa-chevron-left"></i>
-            </button>
-            <div class="page-info">
-                <input type="number" id="page-input" class="page-input" value="1" min="1">
-                <span>of <span id="total-pages">0</span></span>
             </div>
             <button class="btn-toolbar" id="next-page">
                 <i class="fas fa-chevron-right"></i>

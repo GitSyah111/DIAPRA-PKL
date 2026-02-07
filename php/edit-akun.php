@@ -25,11 +25,13 @@ unset($_SESSION['success_message'], $_SESSION['error_message']);
     <title>Edit Akun - DPPKBPM</title>
     <link rel="stylesheet" href="../css/dashboard.css">
     <link rel="stylesheet" href="../css/kepala-dinas.css">
+    <link rel="stylesheet" href="../css/surat-masuk.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
     <div class="container">
+        <div class="hover-trigger"></div>
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
@@ -176,12 +178,12 @@ unset($_SESSION['success_message'], $_SESSION['error_message']);
                                 </div>
                             </div>
 
-                            <div class="form-actions" style="margin-top: 30px;">
+                            <div class="form-footer">
+                                <a href="dashboard.php" class="btn-secondary">
+                                    <i class="fas fa-times"></i> Batal
+                                </a>
                                 <button type="submit" class="btn-primary">
                                     <i class="fas fa-save"></i> Simpan Perubahan
-                                </button>
-                                <button type="button" class="btn-secondary" onclick="window.location.href='dashboard.php'">
-                                    <i class="fas fa-times"></i> Batal
                                 </button>
                             </div>
                         </form>
