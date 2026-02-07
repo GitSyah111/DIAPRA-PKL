@@ -50,5 +50,5 @@ $_SESSION['user_id'] = $row['no'];
 $_SESSION['nama'] = $row['nama'];
 $_SESSION['username'] = $row['username'];
 $_SESSION['role'] = $row['role'];
-header('Location: dashboard.php');
+header('Location: pilih_tahun.php');
 exit;

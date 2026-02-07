@@ -1,16 +1,76 @@
 <?php
 require_once 'auth_check.php';
-include 'database.php';
+include 'database.php'; // koneksi.php sudah dimodifikasi untuk handle session tahun
 
+// Ambil tahun aktif dari session untuk label atau query filtering (meski koneksi sudah ke DB tahun tsb)
+$tahun_aktif = $_SESSION['tahun_aktif'] ?? date('Y');
+
+// Fungsi helper untuk inisialisasi array bulanan
+function initMonthlyArray() {
+    return array_fill(1, 12, 0); // Index 1-12 untuk Jan-Des
+}
+
+// 1. Data Surat Masuk per Bulan
+$stats_masuk = initMonthlyArray();
+$q_masuk = "SELECT MONTH(tanggal_terima) as bulan, COUNT(*) as total FROM surat_masuk WHERE YEAR(tanggal_terima) = '$tahun_aktif' GROUP BY MONTH(tanggal_terima)";
+$res_masuk = mysqli_query($conn, $q_masuk);
+while($row = mysqli_fetch_assoc($res_masuk)) {
+    $stats_masuk[$row['bulan']] = (int)$row['total'];
+}
+
+// 2. Data Surat Keluar per Bulan
+$stats_keluar = initMonthlyArray();
+$q_keluar = "SELECT MONTH(tanggal_surat) as bulan, COUNT(*) as total FROM surat_keluar WHERE YEAR(tanggal_surat) = '$tahun_aktif' GROUP BY MONTH(tanggal_surat)";
+$res_keluar = mysqli_query($conn, $q_keluar);
+while($row = mysqli_fetch_assoc($res_keluar)) {
+    $stats_keluar[$row['bulan']] = (int)$row['total'];
+}
+
+// 3. Data SPJ UMPEG per Bulan
+$stats_spj = initMonthlyArray();
+// Cek dulu apakah tabel spj_umpeg ada (untuk jaga-jaga)
+$check_spj = mysqli_query($conn, "SHOW TABLES LIKE 'spj_umpeg'");
+if(mysqli_num_rows($check_spj) > 0) {
+    $q_spj = "SELECT MONTH(tanggal) as bulan, COUNT(*) as total FROM spj_umpeg WHERE YEAR(tanggal) = '$tahun_aktif' GROUP BY MONTH(tanggal)";
+    $res_spj = mysqli_query($conn, $q_spj);
+    if($res_spj) {
+        while($row = mysqli_fetch_assoc($res_spj)) {
+            $stats_spj[$row['bulan']] = (int)$row['total'];
+        }
+    }
+}
+
+// 4. Data Surat Cuti per Bulan
+// Kolom 'Mulai Cuti' adalah INT (Unix Timestamp), Tabel 'surat cuti' (pakai backtick)
+$stats_cuti = initMonthlyArray();
+$check_cuti = mysqli_query($conn, "SHOW TABLES LIKE 'surat cuti'");
+if(mysqli_num_rows($check_cuti) > 0) {
+    // FROM_UNIXTIME mengubah int ke datetime, lalu ambil MONTH
+    $q_cuti = "SELECT MONTH(FROM_UNIXTIME(`Mulai Cuti`)) as bulan, COUNT(*) as total FROM `surat cuti` WHERE YEAR(FROM_UNIXTIME(`Mulai Cuti`)) = '$tahun_aktif' GROUP BY MONTH(FROM_UNIXTIME(`Mulai Cuti`))";
+    $res_cuti = mysqli_query($conn, $q_cuti);
+    if($res_cuti) {
+        while($row = mysqli_fetch_assoc($res_cuti)) {
+            $stats_cuti[$row['bulan']] = (int)$row['total'];
+        }
+    }
+}
+
+// Prepare data for Chart.js (re-index to 0-11 if needed, but array_values is safer for JSON)
+$json_masuk = json_encode(array_values($stats_masuk));
+$json_keluar = json_encode(array_values($stats_keluar));
+$json_spj = json_encode(array_values($stats_spj));
+$json_cuti = json_encode(array_values($stats_cuti));
+
+// --- EXISTING COUNTS LOGIC ---
 // Hitung total surat masuk
-$query_masuk = "SELECT COUNT(*) as total FROM surat_masuk";
-$result_masuk = mysqli_query($conn, $query_masuk);
-$total_masuk = mysqli_fetch_assoc($result_masuk)['total'];
+$query_masuk_total = "SELECT COUNT(*) as total FROM surat_masuk";
+$result_masuk_total = mysqli_query($conn, $query_masuk_total);
+$total_masuk = mysqli_fetch_assoc($result_masuk_total)['total'];
 
 // Hitung total surat keluar
-$query_keluar = "SELECT COUNT(*) as total FROM surat_keluar";
-$result_keluar = mysqli_query($conn, $query_keluar);
-$total_keluar = mysqli_fetch_assoc($result_keluar)['total'];
+$query_keluar_total = "SELECT COUNT(*) as total FROM surat_keluar";
+$result_keluar_total = mysqli_query($conn, $query_keluar_total);
+$total_keluar = mysqli_fetch_assoc($result_keluar_total)['total'];
 
 // Hitung surat belum disposisi
 $query_pending = "SELECT COUNT(*) as total FROM surat_masuk WHERE status_disposisi = 'Belum diproses'";
@@ -81,6 +141,8 @@ function time_elapsed_string($datetime)
     <title>DPPKBPM - Sistem Manajemen Surat</title>
     <link rel="stylesheet" href="../css/dashboard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
@@ -132,6 +194,12 @@ function time_elapsed_string($datetime)
 
             <div class="sidebar-footer sidebar-text">
                 <p><i class="fas fa-info-circle"></i> Versi 1.0.0</p>
+                <!-- Indikator Tahun Aktif -->
+                <div style="margin-top: 10px; font-size: 0.8rem; color: #a1a1aa;">
+                    DB Tahun: <strong><?= htmlspecialchars($tahun_aktif) ?></strong>
+                    <br>
+                    <a href="pilih_tahun.php" style="color: #60a5fa; text-decoration: none;">(Ganti Tahun)</a>
+                </div>
             </div>
 
 
@@ -148,7 +216,7 @@ function time_elapsed_string($datetime)
                     <button class="header-menu-btn" id="headerMenuBtn">
                         <i class="fas fa-bars"></i>
                     </button>
-                    <h1 class="header-title">Dashboard</h1>
+                    <h1 class="header-title">Dashboard (<?= htmlspecialchars($tahun_aktif) ?>)</h1>
                 </div>
                 <div class="header-right">
                     <div class="user-info" id="userInfoToggle">
@@ -219,6 +287,16 @@ function time_elapsed_string($datetime)
                     <?php endif; ?>
                 </div>
 
+                <!-- CHART SECTION -->
+                <div class="content-box" style="margin-bottom: 2rem;">
+                    <div class="box-header">
+                        <h2><i class="fas fa-chart-line"></i> Statistik Surat Tahun <?= htmlspecialchars($tahun_aktif) ?></h2>
+                    </div>
+                    <div style="padding: 1.5rem; height: 400px;">
+                        <canvas id="suratChart"></canvas>
+                    </div>
+                </div>
+
                 <!-- Recent Activity -->
                 <div class="content-box">
                     <div class="box-header">
@@ -280,6 +358,115 @@ function time_elapsed_string($datetime)
             }
         }
     </style>
+
+    <!-- CHART JS CONFIG -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('suratChart').getContext('2d');
+            
+            // Data dari PHP
+            const dataMasuk = <?= $json_masuk ?>;
+            const dataKeluar = <?= $json_keluar ?>;
+            const dataSpj = <?= $json_spj ?>;
+            const dataCuti = <?= $json_cuti ?>;
+
+            const suratChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'],
+                    datasets: [
+                        {
+                            label: 'Surat Masuk',
+                            data: dataMasuk,
+                            borderColor: '#3b82f6', // Blue
+                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                            borderWidth: 2,
+                            tension: 0.3,
+                            fill: true
+                        },
+                        {
+                            label: 'Surat Keluar',
+                            data: dataKeluar,
+                            borderColor: '#10b981', // Green
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            borderWidth: 2,
+                            tension: 0.3,
+                            fill: true
+                        },
+                        {
+                            label: 'SPJ UMPEG',
+                            data: dataSpj,
+                            borderColor: '#8b5cf6', // Purple
+                            backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                            borderWidth: 2,
+                            tension: 0.3,
+                            fill: true
+                        },
+                        {
+                            label: 'Surat Cuti',
+                            data: dataCuti,
+                            borderColor: '#f59e0b', // Orange
+                            backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                            borderWidth: 2,
+                            tension: 0.3,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                font: {
+                                    family: "'Inter', sans-serif",
+                                    size: 12
+                                }
+                            }
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                            titleColor: '#1f2937',
+                            bodyColor: '#4b5563',
+                            borderColor: '#e5e7eb',
+                            borderWidth: 1,
+                            padding: 10,
+                            titleFont: {
+                                size: 14,
+                                weight: 'bold'
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: '#f3f4f6',
+                                borderDash: [5, 5]
+                            },
+                            ticks: {
+                                stepSize: 1
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    },
+                    interaction: {
+                        mode: 'nearest',
+                        axis: 'x',
+                        intersect: false
+                    }
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>
