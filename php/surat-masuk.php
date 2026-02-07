@@ -182,7 +182,7 @@ $result = mysqli_query($conn, $query);
                                             <td class="no-export"><?php echo htmlspecialchars($dilihat); ?></td>
                                             <td class="text-center action-buttons-cell no-export">
                                                 <?php if (!empty($row['file_surat'])): ?>
-                                                    <a href="view-surat.php?id=<?php echo $row['id']; ?>" class="btn-action btn-view" title="Lihat Surat">
+                                                    <a href="../uploads/surat_masuk/<?php echo $row['file_surat']; ?>" class="btn-action btn-view" title="Lihat Surat" target="_blank">
                                                         <i class="fas fa-file-pdf"></i>
                                                     </a>
                                                 <?php else: ?>
@@ -192,7 +192,7 @@ $result = mysqli_query($conn, $query);
                                                 <?php endif; ?>
 
                                                 <?php if (!empty($row['file_disposisi'])): ?>
-                                                    <a href="../uploads/disposisi/<?php echo $row['file_disposisi']; ?>" target="_blank" class="btn-action btn-view-disposisi" title="Lihat File Disposisi" style="background-color: #17a2b8; color: white;">
+                                                    <a href="../uploads/disposisi/<?php echo $row['file_disposisi']; ?>" target="_blank" class="btn-action btn-view-disposisi" title="Lihat File Disposisi">
                                                         <i class="fas fa-file-invoice"></i>
                                                     </a>
                                                 <?php endif; ?>

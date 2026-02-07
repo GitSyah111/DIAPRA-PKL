@@ -164,7 +164,7 @@ $result = mysqli_query($conn, $query);
                                             <td class="no-export"><?php echo htmlspecialchars($dibuat_oleh); ?></td>
                                             <td class="text-center action-buttons-cell no-export">
                                                 <?php if (!empty($row['file_surat'])): ?>
-                                                    <a href="view-surat-keluar.php?id=<?php echo $row['id']; ?>" class="btn-action btn-view" title="Lihat Surat">
+                                                    <a href="../uploads/surat_keluar/<?php echo $row['file_surat']; ?>" class="btn-action btn-view" title="Lihat Surat" target="_blank">
                                                         <i class="fas fa-file-pdf"></i>
                                                     </a>
                                                 <?php else: ?>

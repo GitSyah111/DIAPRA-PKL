@@ -3,7 +3,7 @@
 // ========================================
 
 // Initialize DataTables
-$(document).ready(function() {
+$(document).ready(function () {
     if ($('#suratMasukTable').length) {
         var tableSuratMasuk = $('#suratMasukTable').DataTable({
             "language": {
@@ -23,6 +23,8 @@ $(document).ready(function() {
             "pageLength": 10,
             "ordering": true,
             "order": [[0, "desc"]], // Sort by ID descending
+            "scrollX": true, // Enable horizontal scrolling
+            "autoWidth": false, // Disable auto width calculation to allow responsive sizing
             "dom": 'Bfrtip',
             "buttons": [
                 {
@@ -51,7 +53,7 @@ $(document).ready(function() {
             ]
         });
         // Filter tanggal (Tanggal Terima = kolom index 2)
-        $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+        $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
             if (settings.nTable.id !== 'suratMasukTable') return true;
             var dari = $('#filterDari').val();
             var sampai = $('#filterSampai').val();
@@ -63,8 +65,8 @@ $(document).ready(function() {
             if (sampai && dateVal > sampai) return false;
             return true;
         });
-        $('#btnFilterTanggal').on('click', function() { tableSuratMasuk.draw(); });
-        $('#btnResetTanggal').on('click', function() {
+        $('#btnFilterTanggal').on('click', function () { tableSuratMasuk.draw(); });
+        $('#btnResetTanggal').on('click', function () {
             $('#filterDari').val('');
             $('#filterSampai').val('');
             tableSuratMasuk.draw();
@@ -93,9 +95,9 @@ function showDeleteConfirm(message, onConfirm) {
             </div>
         </div>
     `;
-    
+
     document.body.appendChild(modal);
-    
+
     // Add styles if not exists
     if (!document.getElementById('customConfirmStyles')) {
         const style = document.createElement('style');
@@ -214,20 +216,20 @@ function showDeleteConfirm(message, onConfirm) {
         `;
         document.head.appendChild(style);
     }
-    
+
     // Handle confirm button
     setTimeout(() => {
         const confirmBtn = document.getElementById('confirmDeleteBtn');
         if (confirmBtn) {
-            confirmBtn.addEventListener('click', function() {
+            confirmBtn.addEventListener('click', function () {
                 modal.remove();
                 onConfirm();
             });
         }
     }, 100);
-    
+
     // Close on overlay click
-    modal.addEventListener('click', function(e) {
+    modal.addEventListener('click', function (e) {
         if (e.target === modal) {
             modal.remove();
         }
@@ -236,21 +238,21 @@ function showDeleteConfirm(message, onConfirm) {
 
 // Delete Confirmation
 function confirmDelete(id) {
-    showDeleteConfirm('Apakah Anda yakin ingin menghapus surat ini? Data yang terhapus tidak dapat dikembalikan!', function() {
+    showDeleteConfirm('Apakah Anda yakin ingin menghapus surat ini? Data yang terhapus tidak dapat dikembalikan!', function () {
         window.location.href = 'proses-surat-masuk.php?action=delete&id=' + id;
     });
 }
 
 // File Upload Preview
 if (document.getElementById('file_surat')) {
-    document.getElementById('file_surat').addEventListener('change', function(e) {
+    document.getElementById('file_surat').addEventListener('change', function (e) {
         const fileName = e.target.files[0] ? e.target.files[0].name : 'Pilih file PDF (Maksimal 10MB)';
         const fileNameSpan = document.getElementById('file-name');
-        
+
         if (fileNameSpan) {
             fileNameSpan.textContent = fileName;
         }
-        
+
         // Validasi ukuran file
         if (e.target.files[0] && e.target.files[0].size > 10485760) {
             alert('Ukuran file terlalu besar! Maksimal 10MB');
@@ -259,7 +261,7 @@ if (document.getElementById('file_surat')) {
                 fileNameSpan.textContent = 'Pilih file PDF (Maksimal 10MB)';
             }
         }
-        
+
         // Validasi ekstensi file
         if (e.target.files[0]) {
             const fileExt = e.target.files[0].name.split('.').pop().toLowerCase();
@@ -276,7 +278,7 @@ if (document.getElementById('file_surat')) {
 
 // Form Validation for Tambah/Edit Surat Masuk
 if (document.getElementById('formSuratMasuk')) {
-    document.getElementById('formSuratMasuk').addEventListener('submit', function(e) {
+    document.getElementById('formSuratMasuk').addEventListener('submit', function (e) {
         const perihal = document.getElementById('perihal').value.trim();
         const alamatPengirim = document.getElementById('alamat_pengirim').value.trim();
         const nomorSurat = document.getElementById('nomor_surat').value.trim();
@@ -295,9 +297,9 @@ if (document.getElementById('formSuratMasuk')) {
 
 // Form Validation for Disposisi
 if (document.getElementById('formDisposisi')) {
-    document.getElementById('formDisposisi').addEventListener('submit', function(e) {
+    document.getElementById('formDisposisi').addEventListener('submit', function (e) {
         const tujuanChecked = document.querySelectorAll('input[name="tujuan_disposisi[]"]:checked').length;
-        
+
         if (tujuanChecked === 0) {
             e.preventDefault();
             alert('Pilih minimal 1 tujuan disposisi!');
@@ -318,16 +320,16 @@ if (document.getElementById('tanggal_terima') && document.getElementById('tangga
 function addSelectAllCheckbox(groupName, selectAllId) {
     const checkboxes = document.querySelectorAll(`input[name="${groupName}"]`);
     const selectAll = document.getElementById(selectAllId);
-    
+
     if (selectAll && checkboxes.length > 0) {
-        selectAll.addEventListener('change', function() {
+        selectAll.addEventListener('change', function () {
             checkboxes.forEach(checkbox => {
                 checkbox.checked = this.checked;
             });
         });
-        
+
         checkboxes.forEach(checkbox => {
-            checkbox.addEventListener('change', function() {
+            checkbox.addEventListener('change', function () {
                 const allChecked = Array.from(checkboxes).every(cb => cb.checked);
                 selectAll.checked = allChecked;
             });
@@ -341,20 +343,20 @@ function formatTanggalIndonesia(dateString) {
         'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
         'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
     ];
-    
+
     const date = new Date(dateString);
     const day = date.getDate();
     const month = months[date.getMonth()];
     const year = date.getFullYear();
-    
+
     return `${day} ${month} ${year}`;
 }
 
 // Tooltip for action buttons (optional)
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const actionButtons = document.querySelectorAll('.btn-action');
     actionButtons.forEach(btn => {
-        btn.addEventListener('mouseenter', function() {
+        btn.addEventListener('mouseenter', function () {
             const title = this.getAttribute('title');
             if (title) {
                 this.setAttribute('data-tooltip', title);
@@ -383,17 +385,17 @@ function printElement(elementId) {
 function highlightSearchResults(searchTerm) {
     const tableBody = document.getElementById('tableBody');
     if (!tableBody) return;
-    
+
     const rows = tableBody.getElementsByTagName('tr');
-    
+
     for (let i = 0; i < rows.length; i++) {
         const cells = rows[i].getElementsByTagName('td');
         let rowText = '';
-        
+
         for (let j = 0; j < cells.length - 1; j++) { // Exclude action column
             rowText += cells[j].textContent.toLowerCase() + ' ';
         }
-        
+
         if (searchTerm === '' || rowText.includes(searchTerm.toLowerCase())) {
             rows[i].style.display = '';
         } else {
@@ -403,7 +405,7 @@ function highlightSearchResults(searchTerm) {
 }
 
 // Status badge color animation
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const badges = document.querySelectorAll('.badge');
     badges.forEach((badge, index) => {
         setTimeout(() => {
@@ -426,9 +428,9 @@ function showAutoHideAlert(message, type = 'success', duration = 3000) {
         <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
         <span>${message}</span>
     `;
-    
+
     document.body.appendChild(alertDiv);
-    
+
     setTimeout(() => {
         alertDiv.style.opacity = '0';
         setTimeout(() => alertDiv.remove(), 300);

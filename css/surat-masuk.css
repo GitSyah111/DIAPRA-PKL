@@ -32,74 +32,174 @@
     font-weight: 500;
 }
 
-/* DataTables Custom Styles */
+/* DataTables Custom Styles - Modern & Clean */
 .dataTables_wrapper {
-    padding: 0;
-    overflow-x: auto;
+    padding: 20px;
     width: 100%;
     background: #fff;
     border-radius: 12px;
-
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
-.dataTables_wrapper .dataTables_length,
-.dataTables_wrapper .dataTables_filter {
-    padding: 15px 20px;
-    background: #f8fafc;
-    border-bottom: 1px solid #e2e8f0;
+/* Custom Scrollbar for DataTables */
+.dataTables_scrollBody::-webkit-scrollbar {
+    height: 10px;
+}
 
+.dataTables_scrollBody::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 6px;
+}
+
+.dataTables_scrollBody::-webkit-scrollbar-thumb {
+    background-color: #cbd5e1;
+    border-radius: 6px;
+    border: 2px solid #f1f5f9;
+}
+
+.dataTables_scrollBody::-webkit-scrollbar-thumb:hover {
+    background-color: #94a3b8;
+}
+
+/* Top Controls Area - Flex Layout */
+.dataTables_wrapper .dataTables_length {
+    float: left;
+    margin-bottom: 20px;
+}
+
+.dataTables_wrapper .dataTables_filter {
+    float: right;
+    margin-bottom: 20px;
 }
 
 .dataTables_wrapper .dataTables_length label,
 .dataTables_wrapper .dataTables_filter label {
     font-size: 14px;
-    color: #4b5563;
+    color: #475569;
+    font-weight: 500;
+    margin-bottom: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
-.dataTables_wrapper .dataTables_length select,
-.dataTables_wrapper .dataTables_filter input {
-    border: 1px solid #d1d5db;
-    border-radius: 6px;
-    padding: 6px 12px;
+.dataTables_wrapper .dataTables_length select {
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 6px 32px 6px 12px;
     font-size: 14px;
+    background: white;
+    color: #334155;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.dataTables_wrapper .dataTables_length select:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.dataTables_wrapper .dataTables_filter input {
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 14px;
+    background: white;
+    color: #334155;
+    transition: all 0.2s ease;
+    min-width: 200px;
     margin-left: 8px;
 }
 
+.dataTables_wrapper .dataTables_filter input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Clear floats */
+.dataTables_wrapper::after {
+    content: "";
+    display: block;
+    clear: both;
+}
+
+/* Bottom Info & Pagination - Flex Layout */
 .dataTables_wrapper .dataTables_info {
-    padding: 15px 20px;
+    clear: both;
+    float: left;
+    padding-top: 10px;
     font-size: 14px;
-    color: #6b7280;
+    color: #64748b;
+    font-weight: 500;
 }
 
 .dataTables_wrapper .dataTables_paginate {
-    padding: 15px 20px;
+    float: right;
+    padding-top: 10px;
 }
 
+/* Pagination Buttons Styling */
 .dataTables_wrapper .dataTables_paginate .paginate_button {
-    padding: 6px 12px;
-    margin: 0 2px;
-    border-radius: 6px;
-    border: 1px solid #d1d5db;
+    box-sizing: border-box;
+    display: inline-block;
+    min-width: 1.5em;
+    padding: 6px 14px;
+    margin-left: 4px;
+    text-align: center;
+    text-decoration: none !important;
+    cursor: pointer;
+    color: #475569 !important;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
     background: white;
-    color: #4b5563;
     font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
 }
 
 .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
-    background: #f3f4f6;
-    border-color: #9ca3af;
+    color: #334155 !important;
+    border-color: #94a3b8;
+    background: #f1f5f9;
 }
 
-.dataTables_wrapper .dataTables_paginate .paginate_button.current {
-    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-    color: white;
+.dataTables_wrapper .dataTables_paginate .paginate_button.current,
+.dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+    color: white !important;
     border-color: #3b82f6;
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
 }
 
-/* Table Specific Styles */
-/* Table Specific Styles - Premium Overhaul */
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled,
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover,
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active {
+    cursor: not-allowed;
+    color: #cbd5e1 !important;
+    border: 1px solid #e2e8f0;
+    background: #f8fafc;
+    box-shadow: none;
+}
+
+/* Table Specific Styles - Clean & Modern */
+/* Table Container for Scrolling */
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+}
+
+/* Table Specific Styles - Clean & Modern */
 #suratMasukTable {
     width: 100% !important;
+    min-width: 1200px;
+    /* Ensure table has minimum width to prevent squishing */
     border-collapse: separate;
     border-spacing: 0;
 }
@@ -108,19 +208,21 @@
 #suratMasukTable td {
     white-space: nowrap;
     vertical-align: middle;
-    padding: 16px 20px;
-    /* Spacious padding */
-    border-bottom: 1px solid var(--border-color);
+    padding: 14px 16px;
+    border-bottom: 1px solid #f1f5f9;
 }
 
 #suratMasukTable thead th {
-    background-color: var(--slate-50);
-    color: var(--text-muted);
+    background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+    color: #475569;
     font-weight: 600;
     text-transform: uppercase;
-    font-size: 0.75rem;
-    letter-spacing: 0.05em;
-    border-bottom: 1px solid var(--border-color);
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    border-bottom: 2px solid #e2e8f0;
+    position: sticky;
+    top: 0;
+    z-index: 10;
 }
 
 /* Fix wrapping for specific columns */
@@ -128,177 +230,207 @@
 #suratMasukTable td:nth-child(4),
 #suratMasukTable td:nth-child(7) {
     white-space: normal;
-    min-width: 300px;
-    /* Increase width reading comfort */
-    line-height: 1.6;
-    color: var(--slate-600);
+    min-width: 250px;
+    max-width: 350px;
+    line-height: 1.5;
+    color: #475569;
+}
+
+/* Other text columns */
+#suratMasukTable td {
+    color: #334155;
+    font-size: 0.875rem;
+}
+
+/* Center aligned columns */
+#suratMasukTable td.text-center {
+    text-align: center;
 }
 
 #suratMasukTable tbody tr {
-    transition: background-color 0.2s ease;
+    transition: all 0.2s ease;
+    border-bottom: 1px solid #f1f5f9;
 }
 
 #suratMasukTable tbody tr:hover {
-    background-color: var(--primary-50);
+    background-color: #f8fafc;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 #suratMasukTable tbody tr:nth-child(even) {
-    background-color: rgba(248, 250, 252, 0.5);
-    /* Very subtle alternating */
+    background-color: #fafbfc;
 }
 
 /* Buttons Container for DataTables */
 .dt-buttons {
-    margin-bottom: 15px;
+    margin-bottom: 16px;
     padding: 0 20px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
 }
 
 .dt-button {
-    background: #f3f4f6;
-    border: 1px solid #d1d5db;
-    color: #4b5563;
-    padding: 8px 16px;
-    border-radius: 6px;
+    background: white;
+    border: 1px solid #cbd5e1;
+    color: #475569;
+    padding: 9px 18px;
+    border-radius: 8px;
     font-size: 14px;
-    margin-right: 8px;
+    font-weight: 500;
     cursor: pointer;
-    transition: all 0.3s;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
 }
 
 .dt-button:hover {
-    background: #e5e7eb;
-    border-color: #9ca3af;
+    background: #f8fafc;
+    border-color: #94a3b8;
+    color: #334155;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
-/* Badge Styles */
+.dt-button:active {
+    transform: translateY(0);
+}
+
+/* Badge Styles - Soft & Professional */
 .badge {
     display: inline-block;
-    padding: 6px 12px;
-    border-radius: 6px;
+    padding: 6px 14px;
+    border-radius: 20px;
     font-size: 12px;
     font-weight: 600;
     text-transform: capitalize;
     letter-spacing: 0.3px;
+    border: 1px solid transparent;
 }
 
 .badge-warning {
-    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-    color: white;
+    background: #fef3c7;
+    color: #92400e;
+    border-color: #fde68a;
 }
 
 .badge-success {
-    background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
-    color: white;
+    background: #d1fae5;
+    color: #065f46;
+    border-color: #a7f3d0;
 }
 
 .badge-info {
-    background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
-    color: white;
+    background: #dbeafe;
+    color: #1e40af;
+    border-color: #bfdbfe;
 }
 
 .badge-danger {
-    background: linear-gradient(135deg, #f87171 0%, #ef4444 100%);
-    color: white;
+    background: #fee2e2;
+    color: #991b1b;
+    border-color: #fecaca;
 }
 
-/* Action Buttons in Table */
-/* Action Buttons in Table */
+/* Action Buttons in Table - Unified & Clean */
 .action-buttons-cell {
     white-space: nowrap;
     display: flex;
-    gap: 8px;
-    /* Proper spacing */
+    gap: 6px;
     justify-content: center;
+    align-items: center;
+    min-width: 180px;
+    /* Prevent buttons from being cut off */
 }
 
 .btn-action {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 36px;
-    height: 36px;
-    border: 1px solid transparent;
-    border-radius: var(--radius-md);
+    width: 34px;
+    height: 34px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
     cursor: pointer;
-    font-size: 0.9rem;
+    font-size: 0.875rem;
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     margin: 0;
     text-decoration: none;
-    color: white;
-    box-shadow: var(--shadow-sm);
+    background: white;
+    color: #64748b;
 }
 
+.btn-action:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-color: #cbd5e1;
+}
+
+/* Specific button colors - subtle and harmonious */
 .btn-view {
-    background-color: white;
-    border-color: var(--border-color);
-    color: var(--slate-600);
+    color: #3b82f6;
 }
 
 .btn-view:hover {
-    background-color: var(--slate-50);
-    color: var(--primary-600);
-    border-color: var(--primary-200);
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-md);
+    background-color: #eff6ff;
+    border-color: #3b82f6;
+    color: #2563eb;
 }
 
 .btn-view-disposisi {
-    background-color: #e0f2fe;
-    /* Light sky blue */
-    color: #0284c7;
-    border: 1px solid transparent;
+    color: #0891b2;
 }
 
 .btn-view-disposisi:hover {
-    background-color: #bae6fd;
-    color: #0369a1;
-    transform: translateY(-1px);
+    background-color: #ecfeff;
+    border-color: #0891b2;
+    color: #0e7490;
 }
 
 .btn-disposisi {
-    background-color: var(--primary-50);
-    color: var(--primary-600);
+    color: #8b5cf6;
 }
 
 .btn-disposisi:hover {
-    background-color: var(--primary-100);
-    color: var(--primary-700);
-    transform: translateY(-1px);
+    background-color: #f5f3ff;
+    border-color: #8b5cf6;
+    color: #7c3aed;
 }
 
 .btn-edit {
-    background-color: var(--warning-bg);
-    color: var(--warning-text);
+    color: #f59e0b;
 }
 
 .btn-edit:hover {
-    background-color: #fef9c3;
-    color: #a16207;
-    transform: translateY(-1px);
+    background-color: #fffbeb;
+    border-color: #f59e0b;
+    color: #d97706;
 }
 
 .btn-delete {
-    background-color: var(--danger-bg);
-    color: var(--danger-text);
+    color: #ef4444;
 }
 
 .btn-delete:hover {
-    background-color: #fee2e2;
-    color: #b91c1c;
-    transform: translateY(-1px);
+    background-color: #fef2f2;
+    border-color: #ef4444;
+    color: #dc2626;
 }
 
 .btn-disabled {
-    background: var(--slate-100);
-    color: var(--slate-400);
+    background: #f8fafc;
+    color: #cbd5e1;
+    border-color: #e2e8f0;
     cursor: not-allowed;
-    opacity: 0.7;
-    box-shadow: none;
+    opacity: 0.6;
 }
 
 .btn-disabled:hover {
     transform: none;
     box-shadow: none;
+    background: #f8fafc;
+    border-color: #e2e8f0;
 }
 
 /* Form Container */

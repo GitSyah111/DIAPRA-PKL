@@ -260,6 +260,26 @@ function time_elapsed_string($datetime)
     </div>
 
     <script src="../js/dashboard.js"></script>
+    <style>
+        /* Ensure only one menu button shows at a time */
+        .menu-toggle {
+            display: block;
+        }
+        
+        .header-menu-btn {
+            display: none;
+        }
+        
+        @media (min-width: 769px) {
+            .menu-toggle {
+                display: none;
+            }
+            
+            .header-menu-btn {
+                display: block;
+            }
+        }
+    </style>
 </body>
 
 </html>
