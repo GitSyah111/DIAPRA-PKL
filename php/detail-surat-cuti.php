@@ -152,11 +152,7 @@ $sampai_dengan = $data['Sampai Dengan'] > 0 ? date('d F Y', $data['Sampai Dengan
                     <img src="../assets/img/LOGO.png" alt="Logo DPPKBPM" class="logo-img">
                 </div>
                 <!-- Nama instansi -->
-                <h2 class="sidebar-text">DPPKBPM</h2>
-                <!-- Subtitle instansi -->
-                <p class="subtitle sidebar-text">DIAPRA</p>
-                <!-- Username pengguna -->
-                <p class="username sidebar-text"><i class="fas fa-user-circle"></i> @Muhammad ibnu Riayath Syah</p>
+                <h2 class="sidebar-text">DIAPRA DPPKBPM</h2>
             </div>
 
             <!-- Navigasi sidebar -->
@@ -218,6 +214,9 @@ $sampai_dengan = $data['Sampai Dengan'] > 0 ? date('d F Y', $data['Sampai Dengan
                 <div class="header-left">
                     <!-- Tombol menu toggle untuk mobile -->
                     <button class="menu-toggle" id="mobileMenuToggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <button class="header-menu-btn" id="headerMenuBtn">
                         <i class="fas fa-bars"></i>
                     </button>
                     <!-- Judul halaman -->

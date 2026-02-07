@@ -311,10 +311,10 @@ if (!empty($surat['dilihat_oleh'])) {
                     <button class="menu-toggle" id="mobileMenuToggle">
                         <i class="fas fa-bars"></i>
                     </button>
-                    <h1 class="header-title"><button class="header-menu-btn" id="headerMenuBtn">
+                    <button class="header-menu-btn" id="headerMenuBtn">
                         <i class="fas fa-bars"></i>
                     </button>
-                    Unggah Disposisi <?php echo htmlspecialchars($surat['nomor_surat']); ?></h1>
+                    <h1 class="header-title">Unggah Disposisi <?php echo htmlspecialchars($surat['nomor_surat']); ?></h1>
                 </div>
                 <div class="header-right">
                     <div class="user-info" id="userInfoToggle">
@@ -485,20 +485,23 @@ if (!empty($surat['dilihat_oleh'])) {
                                 </label>
                                 
                                 <?php if (!empty($surat['file_disposisi'])): ?>
-                                    <div class="current-file" style="margin-bottom: 10px; padding: 10px; background: #eeffee; border: 1px solid #ccffcc; border-radius: 6px;">
-                                        <div style="display: flex; align-items: center; justify-content: space-between;">
-                                            <div>
-                                                <i class="fas fa-check-circle" style="color: green;"></i> File saat ini: 
-                                                <strong><?php echo htmlspecialchars($surat['file_disposisi']); ?></strong>
+                                    <div class="file-info-display">
+                                        <div class="file-info-row">
+                                            <div class="file-info-details">
+                                                <i class="fas fa-check-circle"></i>
+                                                <div class="file-info-text">
+                                                    <span class="file-info-label">File saat ini:</span>
+                                                    <span class="file-info-name"><?php echo htmlspecialchars($surat['file_disposisi']); ?></span>
+                                                </div>
                                             </div>
-                                            <div>
-                                                <a href="../uploads/disposisi/<?php echo $surat['file_disposisi']; ?>" target="_blank" class="btn-primary" style="padding: 4px 8px; font-size: 12px; text-decoration: none;">
+                                            <div class="file-info-actions">
+                                                <a href="../uploads/disposisi/<?php echo $surat['file_disposisi']; ?>" target="_blank" class="btn-view-small">
                                                     <i class="fas fa-eye"></i> Preview
                                                 </a>
                                             </div>
                                         </div>
-                                        <div style="margin-top: 8px;">
-                                            <label style="font-weight: normal; cursor: pointer; color: #d33;">
+                                        <div class="file-delete-option">
+                                            <label class="file-delete-label">
                                                 <input type="checkbox" name="delete_file_disposisi" value="1"> Hapus file ini (Centang untuk menghapus/mengganti tanpa upload baru)
                                             </label>
                                         </div>

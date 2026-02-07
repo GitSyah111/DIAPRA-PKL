@@ -642,3 +642,259 @@
         justify-content: center;
     }
 }
+
+/* ========================================
+   HEADER LEFT LAYOUT FIX
+   ======================================== */
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.header-left .header-title {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* Ensure header-menu-btn is not inside h1 */
+.header-left .header-menu-btn {
+    flex-shrink: 0;
+}
+
+/* ========================================
+   FILE DISPLAY COMPONENT - STANDARDIZED
+   ======================================== */
+.file-info-display {
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    border: 1px solid #86efac;
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+}
+
+.file-info-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.file-info-details {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+    min-width: 200px;
+}
+
+.file-info-details i {
+    font-size: 24px;
+    color: #16a34a;
+    flex-shrink: 0;
+}
+
+.file-info-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.file-info-label {
+    font-size: 12px;
+    color: #6b7280;
+    font-weight: 500;
+}
+
+.file-info-name {
+    font-size: 14px;
+    color: #166534;
+    font-weight: 600;
+    word-break: break-all;
+}
+
+.file-info-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.btn-view-small {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-view-small:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35);
+}
+
+.file-delete-option {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px dashed #86efac;
+}
+
+.file-delete-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: #dc2626;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 8px 12px;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.file-delete-label:hover {
+    background: #fee2e2;
+    border-color: #fca5a5;
+}
+
+.file-delete-label input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: #dc2626;
+    cursor: pointer;
+}
+
+/* ========================================
+   USER INFO HEADER - PROPER ALIGNMENT
+   ======================================== */
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 16px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.user-info:hover {
+    background: white;
+    border-color: #cbd5e1;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.user-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #334155;
+    white-space: nowrap;
+}
+
+.user-role {
+    font-size: 11px;
+    font-weight: 600;
+    color: #2563eb;
+    background: #dbeafe;
+    padding: 4px 10px;
+    border-radius: 50px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+
+.user-info i.fa-chevron-down {
+    font-size: 10px;
+    color: #94a3b8;
+    margin-left: 4px;
+}
+
+/* ========================================
+   FORM FOOTER BUTTONS - CONSISTENT
+   ======================================== */
+.form-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding-top: 24px;
+    border-top: 1px solid #e5e7eb;
+    margin-top: 32px;
+}
+
+.form-footer .btn-primary,
+.form-footer .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.form-footer .btn-primary {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    color: white;
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+}
+
+.form-footer .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(59, 130, 246, 0.4);
+}
+
+.form-footer .btn-secondary {
+    background: #6b7280;
+    color: white;
+}
+
+.form-footer .btn-secondary:hover {
+    background: #4b5563;
+    transform: translateY(-1px);
+}
+
+@media (max-width: 480px) {
+    .form-footer {
+        flex-direction: column-reverse;
+    }
+
+    .form-footer .btn-primary,
+    .form-footer .btn-secondary {
+        width: 100%;
+    }
+
+    .file-info-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .file-info-actions {
+        justify-content: flex-start;
+    }
+}

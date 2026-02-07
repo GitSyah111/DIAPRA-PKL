@@ -39,9 +39,7 @@ $result_users = mysqli_query($conn, $query_users);
                 <div class="logo">
                     <img src="../assets/img/LOGO.png" alt="Logo DPPKBPM" class="logo-img">
                 </div>
-                <h2 class="sidebar-text">DPPKBPM</h2>
-                <p class="subtitle sidebar-text">Sistem Manajemen Surat</p>
-                <p class="username sidebar-text"><i class="fas fa-user-circle"></i> <?= htmlspecialchars($nama) ?></p>
+                <h2 class="sidebar-text">DIAPRA DPPKBPM</h2>
             </div>
 
             <nav class="sidebar-nav">
@@ -92,10 +90,10 @@ $result_users = mysqli_query($conn, $query_users);
                     <button class="menu-toggle" id="mobileMenuToggle">
                         <i class="fas fa-bars"></i>
                     </button>
-                    <h1 class="header-title"><button class="header-menu-btn" id="headerMenuBtn">
+                    <button class="header-menu-btn" id="headerMenuBtn">
                         <i class="fas fa-bars"></i>
                     </button>
-                    Tambah Surat Masuk</h1>
+                    <h1 class="header-title">Tambah Surat Masuk</h1>
                 </div>
                 <div class="header-right">
                     <div class="user-info" id="userInfoToggle">

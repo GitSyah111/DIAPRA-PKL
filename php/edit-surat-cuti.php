@@ -58,11 +58,7 @@ $sampai_dengan_date = $data['Sampai Dengan'] > 0 ? date('Y-m-d', $data['Sampai D
                     <img src="../assets/img/LOGO.png" alt="Logo DPPKBPM" class="logo-img">
                 </div>
                 <!-- Nama instansi -->
-                <h2 class="sidebar-text">DPPKBPM</h2>
-                <!-- Subtitle instansi -->
-                <p class="subtitle sidebar-text">DIAPRA</p>
-                <!-- Username pengguna -->
-                <p class="username sidebar-text"><i class="fas fa-user-circle"></i> @Muhammad ibnu Riayath Syah</p>
+                <h2 class="sidebar-text">DIAPRA DPPKBPM</h2>
             </div>
 
             <!-- Navigasi sidebar -->
@@ -124,6 +120,9 @@ $sampai_dengan_date = $data['Sampai Dengan'] > 0 ? date('Y-m-d', $data['Sampai D
                 <div class="header-left">
                     <!-- Tombol menu toggle untuk mobile -->
                     <button class="menu-toggle" id="mobileMenuToggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <button class="header-menu-btn" id="headerMenuBtn">
                         <i class="fas fa-bars"></i>
                     </button>
                     <!-- Judul halaman -->
@@ -325,21 +324,23 @@ $sampai_dengan_date = $data['Sampai Dengan'] > 0 ? date('Y-m-d', $data['Sampai D
                             </label>
 
                             <?php if (!empty($data['file_surat'])): ?>
-                                <div class="current-file" style="margin-bottom: 10px; padding: 10px; background: #eeffee; border: 1px solid #ccffcc; border-radius: 6px;">
-                                    <div style="display: flex; align-items: center; justify-content: space-between;">
-                                        <div>
+                                <div class="file-info-display">
+                                    <div class="file-info-row">
+                                        <div class="file-info-details">
                                             <i class="fas fa-file-pdf"></i>
-                                            <span>File saat ini: <strong><?php echo htmlspecialchars($data['file_surat']); ?></strong></span>
+                                            <div class="file-info-text">
+                                                <span class="file-info-label">File saat ini:</span>
+                                                <span class="file-info-name"><?php echo htmlspecialchars($data['file_surat']); ?></span>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <a href="../uploads/surat_cuti/<?php echo $data['file_surat']; ?>"
-                                                target="_blank" class="btn-view-file" style="padding: 4px 8px; font-size: 12px; text-decoration: none; margin-right: 5px;">
+                                        <div class="file-info-actions">
+                                            <a href="../uploads/surat_cuti/<?php echo $data['file_surat']; ?>" target="_blank" class="btn-view-small">
                                                 <i class="fas fa-eye"></i> Lihat
                                             </a>
                                         </div>
                                     </div>
-                                    <div style="margin-top: 8px;">
-                                        <label style="font-weight: normal; cursor: pointer; color: #d33;">
+                                    <div class="file-delete-option">
+                                        <label class="file-delete-label">
                                             <input type="checkbox" name="delete_file_surat" value="1"> Hapus file ini (Centang untuk menghapus/mengganti tanpa upload baru)
                                         </label>
                                     </div>
