@@ -85,6 +85,7 @@ function time_elapsed_string($datetime)
 
 <body>
     <div class="container">
+        <div class="hover-trigger"></div>
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">

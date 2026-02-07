@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const sidebar = document.getElementById('sidebar');
     const mainContent = document.querySelector('.main-content');
     const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+    const headerMenuBtn = document.getElementById('headerMenuBtn'); // Added
     const userInfoToggle = document.getElementById('userInfoToggle');
     const userDropdown = document.getElementById('userDropdown');
 
@@ -20,7 +21,44 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Mobile Menu Toggle
+    // Antigravity Sidebar Logic
+    const hoverTrigger = document.createElement('div');
+    hoverTrigger.className = 'hover-trigger';
+    document.body.appendChild(hoverTrigger);
+
+    // Toggle Sidebar via Header Button
+    if (headerMenuBtn) { // Changed id to match PHP
+        headerMenuBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            sidebar.classList.toggle('active');
+
+            // Force DataTable resize
+            setTimeout(() => {
+                if (typeof $ !== 'undefined') {
+                    $(window).trigger('resize');
+                }
+            }, 300); // Wait for transition
+        });
+    }
+
+    // Close logic when clicking outside
+    document.addEventListener('click', function (event) {
+        const isClickInsideSidebar = sidebar.contains(event.target);
+        const isClickOnToggle = headerMenuBtn && headerMenuBtn.contains(event.target);
+
+        if (sidebar.classList.contains('active') && !isClickInsideSidebar && !isClickOnToggle) {
+            sidebar.classList.remove('active');
+
+            // Force DataTable resize
+            setTimeout(() => {
+                if (typeof $ !== 'undefined') {
+                    $(window).trigger('resize');
+                }
+            }, 300);
+        }
+    });
+
+    // Mobile specific logic retained but integrated
     if (mobileMenuToggle) {
         mobileMenuToggle.addEventListener('click', function (e) {
             e.stopPropagation();
@@ -28,43 +66,9 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Close dropdowns and sidebar when clicking outside
-    document.addEventListener('click', function (event) {
-        // Close user dropdown if clicking outside
-        if (userDropdown && userInfoToggle) {
-            const isClickInsideDropdown = userDropdown.contains(event.target);
-            const isClickOnToggle = userInfoToggle.contains(event.target);
-
-            if (!isClickInsideDropdown && !isClickOnToggle) {
-                userDropdown.classList.remove('active');
-                userInfoToggle.classList.remove('active');
-            }
-        }
-
-        // Close sidebar on mobile when clicking outside
-        if (window.innerWidth <= 768) {
-            const isClickInsideSidebar = sidebar.contains(event.target);
-            const isClickOnToggle = mobileMenuToggle && mobileMenuToggle.contains(event.target);
-
-            if (!isClickInsideSidebar && !isClickOnToggle) {
-                sidebar.classList.remove('active');
-            }
-        }
-    });
-
-    // Prevent sidebar close when clicking inside sidebar (Mobile)
-    sidebar.addEventListener('click', function (e) {
-        if (window.innerWidth <= 768) {
-            e.stopPropagation();
-        }
-    });
-
-    // Handle window resize
+    // Handle window resize - remove active class on mode switch if needed
     window.addEventListener('resize', function () {
-        if (window.innerWidth > 768) {
-            // Desktop mode: remove mobile active class
-            sidebar.classList.remove('active');
-        }
+        // Optional: Reset state on extreme resize if desired
     });
 
     // Smooth scroll untuk anchor links (jika ada)

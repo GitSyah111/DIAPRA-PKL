@@ -43,9 +43,22 @@ unset($_SESSION['login_error'], $_SESSION['register_success']);
 
         <div class="register-link">
             Belum punya akun? <a href="register.php">Daftar di sini</a>
+            <br>
             Lupa password? <a href="lupa-password.php">Reset password</a>
         </div>
     </div>
+
+    <script>
+        document.querySelector('form').addEventListener('submit', function(e) {
+            const btn = this.querySelector('button[type="submit"]');
+            if (this.checkValidity()) {
+                btn.innerHTML = 'Loading...';
+                btn.disabled = true;
+                btn.style.opacity = '0.7';
+                btn.style.cursor = 'not-allowed';
+            }
+        });
+    </script>
 </body>
 
 </html>
