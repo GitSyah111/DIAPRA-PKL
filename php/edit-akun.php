@@ -105,11 +105,11 @@ unset($_SESSION['success_message'], $_SESSION['error_message']);
                         <a href="edit-akun.php" class="active">
                             <i class="fas fa-user-edit"></i> Edit Akun
                         </a>
+                        <button class="logout-btn">
+                            <i class="fas fa-sign-out-alt"></i>
+                            Logout
+                        </button>
                     </div>
-                    <button class="logout-btn">
-                        <i class="fas fa-sign-out-alt"></i>
-                        Logout
-                    </button>
                 </div>
             </header>
 

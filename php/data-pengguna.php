@@ -100,11 +100,11 @@ $result = mysqli_query($conn, $query);
                         <a href="edit-akun.php">
                             <i class="fas fa-user-edit"></i> Edit Akun
                         </a>
+                        <button class="logout-btn">
+                            <i class="fas fa-sign-out-alt"></i>
+                            Logout
+                        </button>
                     </div>
-                    <button class="logout-btn">
-                        <i class="fas fa-sign-out-alt"></i>
-                        Logout
-                    </button>
                 </div>
             </header>
 

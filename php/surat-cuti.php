@@ -128,12 +128,12 @@ $result = mysqli_query($conn, $query);
                         <a href="edit-akun.php">
                             <i class="fas fa-user-edit"></i> Edit Akun
                         </a>
+                        <!-- Tombol logout -->
+                        <button class="logout-btn">
+                            <i class="fas fa-sign-out-alt"></i>
+                            Logout
+                        </button>
                     </div>
-                    <!-- Tombol logout -->
-                    <button class="logout-btn">
-                        <i class="fas fa-sign-out-alt"></i>
-                        Logout
-                    </button>
                 </div>
             </header>
 
