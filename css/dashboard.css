@@ -505,6 +505,16 @@ body {
     color: #7e22ce;
 }
 
+.stat-card.indigo .stat-icon {
+    background: #e0e7ff;
+    color: #4338ca;
+}
+
+.stat-card.teal .stat-icon {
+    background: #ccfbf1;
+    color: #0f766e;
+}
+
 .stat-info h3 {
     font-size: 0.875rem;
     color: var(--text-muted);

@@ -82,52 +82,25 @@ $query_users = "SELECT COUNT(*) as total FROM user";
 $result_users = mysqli_query($conn, $query_users);
 $total_users = mysqli_fetch_assoc($result_users)['total'];
 
-// Ambil 3 aktivitas terbaru (gabungan surat masuk dan keluar)
-$aktivitas = [];
-
-// Surat masuk terbaru
-$query_aktivitas_masuk = "SELECT 'masuk' as tipe, nomor_surat, perihal, created_at FROM surat_masuk ORDER BY created_at DESC LIMIT 2";
-$result_aktivitas_masuk = mysqli_query($conn, $query_aktivitas_masuk);
-while ($row = mysqli_fetch_assoc($result_aktivitas_masuk)) {
-    $aktivitas[] = $row;
+// Hitung total SPJ UMPEG
+$total_spj = 0;
+$check_spj_table = mysqli_query($conn, "SHOW TABLES LIKE 'spj_umpeg'");
+if (mysqli_num_rows($check_spj_table) > 0) {
+    $query_spj = "SELECT COUNT(*) as total FROM spj_umpeg";
+    $result_spj = mysqli_query($conn, $query_spj);
+    if ($result_spj) {
+        $total_spj = mysqli_fetch_assoc($result_spj)['total'];
+    }
 }
 
-// Surat keluar terbaru
-$query_aktivitas_keluar = "SELECT 'keluar' as tipe, nomor_surat, perihal, created_at FROM surat_keluar ORDER BY created_at DESC LIMIT 2";
-$result_aktivitas_keluar = mysqli_query($conn, $query_aktivitas_keluar);
-while ($row = mysqli_fetch_assoc($result_aktivitas_keluar)) {
-    $aktivitas[] = $row;
-}
-
-// Sort berdasarkan waktu terbaru dan ambil 3 teratas
-usort($aktivitas, function ($a, $b) {
-    return strtotime($b['created_at']) - strtotime($a['created_at']);
-});
-$aktivitas = array_slice($aktivitas, 0, 3);
-
-// Fungsi untuk menghitung waktu relatif
-function time_elapsed_string($datetime)
-{
-    $now = new DateTime;
-    $ago = new DateTime($datetime);
-    $diff = $now->diff($ago);
-
-    if ($diff->d == 0) {
-        if ($diff->h == 0) {
-            if ($diff->i == 0) {
-                return 'Baru saja';
-            }
-            return $diff->i . ' menit yang lalu';
-        }
-        return $diff->h . ' jam yang lalu';
-    } elseif ($diff->d == 1) {
-        return '1 hari yang lalu';
-    } elseif ($diff->d < 7) {
-        return $diff->d . ' hari yang lalu';
-    } elseif ($diff->d < 30) {
-        return floor($diff->d / 7) . ' minggu yang lalu';
-    } else {
-        return date('d/m/Y', strtotime($datetime));
+// Hitung total Surat Cuti
+$total_cuti = 0;
+$check_cuti_table = mysqli_query($conn, "SHOW TABLES LIKE 'surat cuti'");
+if (mysqli_num_rows($check_cuti_table) > 0) {
+    $query_cuti = "SELECT COUNT(*) as total FROM `surat cuti`";
+    $result_cuti = mysqli_query($conn, $query_cuti);
+    if ($result_cuti) {
+        $total_cuti = mysqli_fetch_assoc($result_cuti)['total'];
     }
 }
 ?>
@@ -143,6 +116,7 @@ function time_elapsed_string($datetime)
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 </head>
 
 <body>
@@ -273,6 +247,32 @@ function time_elapsed_string($datetime)
                         </div>
                     </a>
 
+                    <!-- New Card: SPJ UMPEG -->
+                    <?php if ($role !== 'user'): ?>
+                    <a href="spj-umpeg.php" class="stat-card indigo" style="text-decoration: none; color: inherit;">
+                        <div class="stat-icon">
+                            <i class="fas fa-file-invoice"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>SPJ UMPEG</h3>
+                            <p class="stat-number"><?php echo $total_spj; ?></p>
+                            <span class="stat-label">Total Dokumen</span>
+                        </div>
+                    </a>
+                    <?php endif; ?>
+
+                    <!-- New Card: Surat Cuti -->
+                    <a href="surat-cuti.php" class="stat-card teal" style="text-decoration: none; color: inherit;">
+                        <div class="stat-icon">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Surat Cuti</h3>
+                            <p class="stat-number"><?php echo $total_cuti; ?></p>
+                            <span class="stat-label">Total Pengajuan</span>
+                        </div>
+                    </a>
+
                     <?php if ($role !== 'user'): ?>
                     <a href="data-pengguna.php" class="stat-card purple" style="text-decoration: none; color: inherit;">
                         <div class="stat-icon">
@@ -297,37 +297,6 @@ function time_elapsed_string($datetime)
                     </div>
                 </div>
 
-                <!-- Recent Activity -->
-                <div class="content-box">
-                    <div class="box-header">
-                        <h2><i class="fas fa-history"></i> Aktivitas Terbaru</h2>
-                        <a href="surat-masuk.php" class="view-all">Lihat Semua <i class="fas fa-arrow-right"></i></a>
-                    </div>
-                    <div class="activity-list">
-                        <?php if (count($aktivitas) > 0): ?>
-                            <?php foreach ($aktivitas as $item): ?>
-                                <div class="activity-item">
-                                    <div class="activity-icon <?php echo $item['tipe'] == 'masuk' ? 'incoming' : 'outgoing'; ?>">
-                                        <i class="fas fa-<?php echo $item['tipe'] == 'masuk' ? 'envelope' : 'paper-plane'; ?>"></i>
-                                    </div>
-                                    <div class="activity-content">
-                                        <h4>Surat <?php echo ucfirst($item['tipe']); ?> <?php echo $item['tipe'] == 'masuk' ? 'Baru' : 'Terkirim'; ?></h4>
-                                        <p>Surat perihal "<?php echo htmlspecialchars(substr($item['perihal'], 0, 60)); ?><?php echo strlen($item['perihal']) > 60 ? '...' : ''; ?>" - No: <?php echo htmlspecialchars($item['nomor_surat']); ?></p>
-                                        <span class="activity-time">
-                                            <i class="fas fa-clock"></i> <?php echo time_elapsed_string($item['created_at']); ?>
-                                        </span>
-                                    </div>
-                                </div>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <div class="activity-item">
-                                <div class="activity-content" style="text-align: center; width: 100%;">
-                                    <p style="color: #9ca3af;">Belum ada aktivitas</p>
-                                </div>
-                            </div>
-                        <?php endif; ?>
-                    </div>
-                </div>
             </div>
 
             <!-- Footer -->

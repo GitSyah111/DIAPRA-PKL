@@ -7,9 +7,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $tahun = $_POST['tahun'];
     // Validasi sederhana: pastikan tahun adalah angka 4 digit
     if (preg_match('/^[0-9]{4}$/', $tahun)) {
-        $_SESSION['tahun_aktif'] = $tahun;
-        header('Location: dashboard.php');
-        exit;
+        // Cek apakah database tersedia
+        $test_db_name = 'db_diapra_' . $tahun;
+        // Gunakan credentials dari koneksi.php (hardcoded sini atau include, better manual check to avoid session issues)
+        // Kita assume root/empty password sesuai koneksi.php
+        $test_conn = @new mysqli('localhost', 'root', '', $test_db_name);
+        
+        if ($test_conn->connect_error) {
+            $error = "Database untuk tahun $tahun belum tersedia.";
+        } else {
+            $test_conn->close();
+            $_SESSION['tahun_aktif'] = $tahun;
+            header('Location: dashboard.php');
+            exit;
+        }
     } else {
         $error = "Tahun tidak valid.";
     }

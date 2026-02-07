@@ -40,17 +40,21 @@ $error_msg = "";
 $koneksi = try_connect($DB_HOST, $DB_USER, $DB_PASS, $DB_NAME);
 
 // 2. Jika gagal DAN ini adalah default (user belum pilih tahun), coba fallback ke tahun-tahun sebelumnya
+// 2. Jika gagal: 
+// - Jika user SUDAH pilih tahun (session set), jangan fallback! Biarkan error agar user tahu DB tidak ada.
+// - Jika user BELUM pilih tahun (login page), coba fallback hanya untuk keperluan autentikasi user.
 if (!$koneksi && !isset($_SESSION['tahun_aktif'])) {
-    // Coba mundur sampai 3 tahun ke belakang
-    for ($i = 1; $i <= 3; $i++) {
+    // Coba mundur sampai 3 tahun ke belakang hanya untuk mencari DB valid buat login
+    for ($i = 0; $i <= 3; $i++) {
         $fallback_year = date('Y') - $i;
+        if ($fallback_year == $tahun_db) continue; // Skip jika sama dengan yang sudah dicoba
+
         $fallback_db = 'db_diapra_' . $fallback_year;
         $koneksi = try_connect($DB_HOST, $DB_USER, $DB_PASS, $fallback_db);
         if ($koneksi) {
-            // Berhasil konek ke fallback, update variabel
-            $tahun_db = $fallback_year;
-            $DB_NAME = $fallback_db;
-            break;
+            // Kita gunakan DB ini sementara untuk login, TAPI jangan set sebagai tahun_aktif
+            // $DB_NAME = $fallback_db; 
+            break; 
         }
     }
 }
