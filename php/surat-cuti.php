@@ -212,21 +212,19 @@ $result = mysqli_query($conn, $query);
                                             <!-- Kolom Sisa Cuti -->
                                             <td><?php echo htmlspecialchars($row['Sisa Cuti']); ?></td>
                                             <!-- Kolom Aksi -->
-                                            <td class="text-center action-buttons-cell no-export">
-                                                <div style="display: flex; justify-content: center; gap: 5px;">
+                                            <td class="text-center no-export">
+                                                <div class="action-buttons-wrapper">
                                                     <!-- Tombol lihat file -->
                                                     <?php if (!empty($row['file_surat'])): ?>
                                                         <a href="../uploads/surat_cuti/<?php echo $row['file_surat']; ?>"
-                                                            target="_blank" class="btn-action btn-view-file" title="Lihat File"
-                                                            style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);">
+                                                            target="_blank" class="btn-action btn-view-file" title="Lihat File">
                                                             <i class="fas fa-file-pdf"></i>
                                                         </a>
                                                     <?php endif; ?>
 
                                                     <!-- Tombol lihat detail -->
                                                     <a href="detail-surat-cuti.php?id=<?php echo $row['id']; ?>"
-                                                        class="btn-action btn-view" title="Lihat Detail"
-                                                        style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                                                        class="btn-action btn-view" title="Lihat Detail">
                                                         <i class="fas fa-eye"></i>
                                                     </a>
 

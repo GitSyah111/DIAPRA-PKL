@@ -186,8 +186,7 @@ $result = mysqli_query($conn, $query);
                                                     <?php endif; ?>
 
                                                     <a href="detail-spj-umpeg.php?id=<?php echo $row['id']; ?>"
-                                                        class="btn-action btn-view" title="Lihat Detail"
-                                                        style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                                                        class="btn-action btn-view" title="Lihat Detail">
                                                         <i class="fas fa-eye"></i>
                                                     </a>
 

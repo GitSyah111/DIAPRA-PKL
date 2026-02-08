@@ -214,7 +214,12 @@
     border-bottom: 1px solid #f1f5f9;
 }
 
-#suratMasukTable thead th {
+#suratMasukTable thead th,
+#suratKeluarTable thead th,
+#spjUmpegTable thead th,
+#suratCutiTable thead th,
+#penggunaTable thead th,
+#kepalaDinasTable thead th {
     background: linear-gradient(180deg, #3b82f6 0%, #2563eb 100%);
     color: white;
     font-weight: 600;
@@ -222,59 +227,6 @@
     font-size: 0.7rem;
     letter-spacing: 0.08em;
     border-bottom: 2px solid #1d4ed8;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-}
-
-#suratKeluarTable thead th {
-    background: linear-gradient(180deg, #10b981 0%, #059669 100%);
-    color: white;
-    font-weight: 600;
-    text-transform: uppercase;
-    font-size: 0.7rem;
-    letter-spacing: 0.08em;
-    border-bottom: 2px solid #047857;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-}
-
-#spjUmpegTable thead th {
-    background: linear-gradient(180deg, #6366f1 0%, #4f46e5 100%);
-    color: white;
-    font-weight: 600;
-    text-transform: uppercase;
-    font-size: 0.7rem;
-    letter-spacing: 0.08em;
-    border-bottom: 2px solid #4338ca;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-}
-
-#suratCutiTable thead th {
-    background: linear-gradient(180deg, #14b8a6 0%, #0d9488 100%);
-    color: white;
-    font-weight: 600;
-    text-transform: uppercase;
-    font-size: 0.7rem;
-    letter-spacing: 0.08em;
-    border-bottom: 2px solid #0f766e;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-}
-
-#penggunaTable thead th,
-#kepalaDinasTable thead th {
-    background: linear-gradient(180deg, #a855f7 0%, #9333ea 100%);
-    color: white;
-    font-weight: 600;
-    text-transform: uppercase;
-    font-size: 0.7rem;
-    letter-spacing: 0.08em;
-    border-bottom: 2px solid #7e22ce;
     position: sticky;
     top: 0;
     z-index: 10;
