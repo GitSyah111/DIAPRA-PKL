@@ -170,7 +170,7 @@ if (mysqli_num_rows($check_cuti_table) > 0) {
                 <p><i class="fas fa-info-circle"></i> Versi 1.0.0</p>
                 <!-- Indikator Tahun Aktif -->
                 <div style="margin-top: 10px; font-size: 0.8rem; color: #a1a1aa;">
-                    DB Tahun: <strong><?= htmlspecialchars($tahun_aktif) ?></strong>
+                    Data Tahun: <strong><?= htmlspecialchars($tahun_aktif) ?></strong>
                     <br>
                     <a href="pilih_tahun.php" style="color: #60a5fa; text-decoration: none;">(Ganti Tahun)</a>
                 </div>

@@ -72,6 +72,11 @@ $result = mysqli_query($conn, $query);
 
             <div class="sidebar-footer sidebar-text">
                 <p><i class="fas fa-info-circle"></i> Versi 1.0.0</p>
+                <div style="margin-top: 10px; font-size: 0.8rem; color: #a1a1aa;">
+                    Data Tahun: <strong><?= htmlspecialchars($tahun_aktif) ?></strong>
+                    <br>
+                    <a href="pilih_tahun.php" style="color: #60a5fa; text-decoration: none;">(Ganti Tahun)</a>
+                </div>
             </div>
 
 
@@ -122,6 +127,28 @@ $result = mysqli_query($conn, $query);
                 <div class="content-box">
                     <div class="box-header">
                         <h2><i class="fas fa-inbox"></i> Daftar Surat Masuk</h2>
+                        <div class="filter-container" style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:10px;">
+                            <div class="filter-group">
+                                <label for="filterStatus">Status Disposisi:</label>
+                                <select id="filterStatus" class="form-control" style="padding: 6px 12px; border: 1px solid #d1d5db; border-radius: 4px;">
+                                    <option value="">Semua Status</option>
+                                    <option value="Belum diproses">Belum diproses</option>
+                                    <option value="Sudah didisposisi">Sudah didisposisi</option>
+                                </select>
+                            </div>
+                            <div class="filter-group">
+                                <label for="filterDari">Dari Tanggal:</label>
+                                <input type="date" id="filterDari" class="form-control">
+                            </div>
+                            <div class="filter-group">
+                                <label for="filterSampai">Sampai Tanggal:</label>
+                                <input type="date" id="filterSampai" class="form-control">
+                            </div>
+                            <div class="filter-actions" style="display: flex; gap: 10px; align-items: flex-end;">
+                                <button type="button" class="btn-primary" id="btnFilter" style="padding:6px 12px; height: 38px;"><i class="fas fa-filter"></i> Filter</button>
+                                <button type="button" class="btn-secondary" id="btnReset" style="padding:6px 12px; height: 38px;"><i class="fas fa-times"></i> Reset</button>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="table-container">
@@ -239,7 +266,97 @@ $result = mysqli_query($conn, $query);
     <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
 
     <script src="../js/dashboard.js"></script>
-    <script src="../js/surat-masuk.js"></script>
+    <script src="../js/dashboard.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Initialize DataTable
+            var table = $('#suratMasukTable').DataTable({
+                dom: 'Bfrtip',
+                buttons: [{
+                        extend: 'excel',
+                        text: '<i class="fas fa-file-excel"></i> Excel',
+                        className: 'dt-button',
+                        exportOptions: {
+                            columns: ':not(.no-export)'
+                        }
+                    },
+                    {
+                        extend: 'pdf',
+                        text: '<i class="fas fa-file-pdf"></i> PDF',
+                        className: 'dt-button',
+                        exportOptions: {
+                            columns: ':not(.no-export)'
+                        }
+                    }
+                ],
+                language: {
+                    search: "Cari:",
+                    lengthMenu: "Tampilkan _MENU_ data per halaman",
+                    zeroRecords: "Data tidak ditemukan",
+                    info: "Menampilkan halaman _PAGE_ dari _PAGES_",
+                    infoEmpty: "Tidak ada data yang tersedia",
+                    infoFiltered: "(difilter dari _MAX_ total data)",
+                    paginate: {
+                        first: "Pertama",
+                        last: "Terakhir",
+                        next: "Selanjutnya",
+                        previous: "Sebelumnya"
+                    }
+                },
+                pageLength: 10,
+                order: [
+                    [0, 'asc']
+                ]
+            });
+
+            // Custom Filtering Function
+            $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+                if (settings.nTable.id !== 'suratMasukTable') return true;
+
+                // Status Filter (Column index 7)
+                var statusFilter = $('#filterStatus').val();
+                var statusData = data[7]; // Index 7 is Status Disposisi
+
+                if (statusFilter && !statusData.includes(statusFilter)) {
+                    return false;
+                }
+
+                // Date Filter (Column index 2 - Tanggal Terima)
+                var dari = $('#filterDari').val();
+                var sampai = $('#filterSampai').val();
+                
+                // Get data-date attribute from the cell
+                var row = $(table.row(dataIndex).node());
+                var dateVal = row.find('td:eq(2)').attr('data-date');
+
+                if (!dari && !sampai) return true;
+                if (!dateVal) return false;
+                if (dari && dateVal < dari) return false;
+                if (sampai && dateVal > sampai) return false;
+
+                return true;
+            });
+
+            // Event Listeners
+            $('#btnFilter').on('click', function() {
+                table.draw();
+            });
+
+            $('#btnReset').on('click', function() {
+                $('#filterStatus').val('');
+                $('#filterDari').val('');
+                $('#filterSampai').val('');
+                table.draw();
+            });
+        });
+
+        // Delete confirmation
+        function confirmDelete(id) {
+            if (confirm('Apakah Anda yakin ingin menghapus data surat masuk ini? File yang terlampir juga akan dihapus.')) {
+                window.location.href = 'proses-surat-masuk.php?action=delete&id=' + id;
+            }
+        }
+    </script>
 </body>
 
 </html>

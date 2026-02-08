@@ -72,6 +72,11 @@ $result = mysqli_query($conn, $query);
 
             <div class="sidebar-footer sidebar-text">
                 <p><i class="fas fa-info-circle"></i> Versi 1.0.0</p>
+                <div style="margin-top: 10px; font-size: 0.8rem; color: #a1a1aa;">
+                    Data Tahun: <strong><?= htmlspecialchars($tahun_aktif) ?></strong>
+                    <br>
+                    <a href="pilih_tahun.php" style="color: #60a5fa; text-decoration: none;">(Ganti Tahun)</a>
+                </div>
             </div>
         </aside>
 
@@ -121,11 +126,18 @@ $result = mysqli_query($conn, $query);
                     <div class="box-header">
                         <h2><i class="fas fa-file-invoice"></i> Daftar SPJ UMPEG</h2>
                         <div class="date-filter" style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:10px;">
-                            <label>Filter Tanggal:</label>
-                            <input type="date" id="filterDari" placeholder="Dari">
-                            <input type="date" id="filterSampai" placeholder="Sampai">
-                            <button type="button" class="btn-primary" id="btnFilterTanggal" style="padding:6px 12px;"><i class="fas fa-filter"></i> Filter</button>
-                            <button type="button" class="btn-secondary" id="btnResetTanggal" style="padding:6px 12px;"><i class="fas fa-times"></i> Reset</button>
+                            <div class="filter-group">
+                                <label for="filterDari">Dari Tanggal:</label>
+                                <input type="date" id="filterDari" class="form-control">
+                            </div>
+                            <div class="filter-group">
+                                <label for="filterSampai">Sampai Tanggal:</label>
+                                <input type="date" id="filterSampai" class="form-control">
+                            </div>
+                            <div class="filter-actions" style="display: flex; gap: 10px; align-items: flex-end;">
+                                <button type="button" class="btn-primary" id="btnFilterTanggal" style="padding:6px 12px; height: 38px;"><i class="fas fa-filter"></i> Filter</button>
+                                <button type="button" class="btn-secondary" id="btnResetTanggal" style="padding:6px 12px; height: 38px;"><i class="fas fa-times"></i> Reset</button>
+                            </div>
                         </div>
                     </div>
 

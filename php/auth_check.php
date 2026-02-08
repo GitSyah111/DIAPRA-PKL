@@ -9,3 +9,4 @@ if (empty($_SESSION['user_id']) || empty($_SESSION['role'])) {
 }
 $role = $_SESSION['role'];
 $nama = $_SESSION['nama'] ?? '';
+$tahun_aktif = $_SESSION['tahun_aktif'] ?? date('Y');

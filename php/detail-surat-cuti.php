@@ -202,6 +202,11 @@ $sampai_dengan = $data['Sampai Dengan'] > 0 ? date('d F Y', $data['Sampai Dengan
             <!-- Footer sidebar -->
             <div class="sidebar-footer sidebar-text">
                 <p><i class="fas fa-info-circle"></i> Versi 1.0.0</p>
+                <div style="margin-top: 10px; font-size: 0.8rem; color: #a1a1aa;">
+                    Data Tahun: <strong><?= htmlspecialchars($tahun_aktif) ?></strong>
+                    <br>
+                    <a href="pilih_tahun.php" style="color: #60a5fa; text-decoration: none;">(Ganti Tahun)</a>
+                </div>
             </div>
 
             <!-- Toggle Button untuk sidebar -->
