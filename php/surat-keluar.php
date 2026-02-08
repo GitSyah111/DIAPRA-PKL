@@ -14,13 +14,15 @@ $result = mysqli_query($conn, $query);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Surat Keluar - DPPKBPM</title>
-    <link rel="stylesheet" href="../css/dashboard.css">
-    <link rel="stylesheet" href="../css/kepala-dinas.css">
-    <link rel="stylesheet" href="../css/surat-masuk.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- DataTables CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="../css/kepala-dinas.css">
+    <link rel="stylesheet" href="../css/surat-masuk.css">
+
 </head>
 
 <body>
@@ -145,14 +147,14 @@ $result = mysqli_query($conn, $query);
                         <table id="suratKeluarTable" class="data-table display" style="width:100%">
                             <thead>
                                 <tr>
-                                    <th width="3%">No</th>
-                                    <th width="10%">Nomor Agenda</th>
-                                    <th width="12%">Nomor Surat</th>
-                                    <th width="15%">Tujuan Surat</th>
-                                    <th width="10%">Tanggal Surat</th>
-                                    <th width="20%">Perihal</th>
-                                    <th width="10%" class="no-export">Dibuat oleh</th>
-                                    <th width="15%" class="no-export">Aksi</th>
+                                    <th>No</th>
+                                    <th>Nomor Agenda</th>
+                                    <th>Nomor Surat</th>
+                                    <th>Tujuan Surat</th>
+                                    <th>Tanggal Surat</th>
+                                    <th>Perihal</th>
+                                    <th class="no-export">Dibuat oleh</th>
+                                    <th class="no-export">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -174,24 +176,26 @@ $result = mysqli_query($conn, $query);
                                             <td data-date="<?= date('Y-m-d', strtotime($row['tanggal_surat'])) ?>"><?php echo $tgl_surat; ?></td>
                                             <td><?php echo htmlspecialchars($row['perihal']); ?></td>
                                             <td class="no-export"><?php echo htmlspecialchars($dibuat_oleh); ?></td>
-                                            <td class="text-center action-buttons-cell no-export">
-                                                <?php if (!empty($row['file_surat'])): ?>
-                                                    <a href="../uploads/surat_keluar/<?php echo $row['file_surat']; ?>" class="btn-action btn-view" title="Lihat Surat" target="_blank">
-                                                        <i class="fas fa-file-pdf"></i>
+                                            <td class="text-center no-export">
+                                                <div class="action-buttons-wrapper">
+                                                    <?php if (!empty($row['file_surat'])): ?>
+                                                        <a href="../uploads/surat_keluar/<?php echo $row['file_surat']; ?>" class="btn-action btn-view" title="Lihat Surat" target="_blank">
+                                                            <i class="fas fa-file-pdf"></i>
+                                                        </a>
+                                                    <?php else: ?>
+                                                        <button class="btn-action btn-disabled" title="Belum ada file" disabled>
+                                                            <i class="fas fa-file-pdf"></i>
+                                                        </button>
+                                                    <?php endif; ?>
+
+                                                    <a href="edit-surat-keluar.php?id=<?php echo $row['id']; ?>" class="btn-action btn-edit" title="Edit">
+                                                        <i class="fas fa-edit"></i>
                                                     </a>
-                                                <?php else: ?>
-                                                    <button class="btn-action btn-disabled" title="Belum ada file" disabled>
-                                                        <i class="fas fa-file-pdf"></i>
+
+                                                    <button class="btn-action btn-delete" onclick="confirmDelete(<?php echo $row['id']; ?>)" title="Hapus">
+                                                        <i class="fas fa-trash"></i>
                                                     </button>
-                                                <?php endif; ?>
-
-                                                <a href="edit-surat-keluar.php?id=<?php echo $row['id']; ?>" class="btn-action btn-edit" title="Edit">
-                                                    <i class="fas fa-edit"></i>
-                                                </a>
-
-                                                <button class="btn-action btn-delete" onclick="confirmDelete(<?php echo $row['id']; ?>)" title="Hapus">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
+                                                </div>
                                             </td>
                                         </tr>
                                 <?php

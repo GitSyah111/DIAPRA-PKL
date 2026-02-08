@@ -14,13 +14,15 @@ $result = mysqli_query($conn, $query);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Surat Masuk - DPPKBPM</title>
-    <link rel="stylesheet" href="../css/dashboard.css">
-    <link rel="stylesheet" href="../css/kepala-dinas.css">
-    <link rel="stylesheet" href="../css/surat-masuk.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- DataTables CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css">
+    <!-- Custom CSS (Loaded after libraries to override styles) -->
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="../css/kepala-dinas.css">
+    <link rel="stylesheet" href="../css/surat-masuk.css">
+
 </head>
 
 <body>
@@ -155,16 +157,16 @@ $result = mysqli_query($conn, $query);
                         <table id="suratMasukTable" class="data-table display" style="width:100%">
                             <thead>
                                 <tr>
-                                    <th width="3%">No</th>
-                                    <th width="7%">Nomor Agenda</th>
-                                    <th width="10%">Tanggal Terima</th>
-                                    <th width="15%">Alamat Pengirim</th>
-                                    <th width="10%">Tanggal Surat</th>
-                                    <th width="12%">Nomor Surat</th>
-                                    <th width="18%">Perihal</th>
-                                    <th width="10%" class="no-export">Status Disposisi</th>
-                                    <th width="10%" class="no-export">Dapat Dilihat</th>
-                                    <th width="15%" class="no-export">Aksi</th>
+                                    <th>No</th>
+                                    <th>Nomor Agenda</th>
+                                    <th>Tanggal Terima</th>
+                                    <th>Alamat Pengirim</th>
+                                    <th>Tanggal Surat</th>
+                                    <th>Nomor Surat</th>
+                                    <th>Perihal</th>
+                                    <th class="no-export">Status Disposisi</th>
+                                    <th class="no-export">Dapat Dilihat</th>
+                                    <th class="no-export">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -207,34 +209,36 @@ $result = mysqli_query($conn, $query);
                                                 </span>
                                             </td>
                                             <td class="no-export"><?php echo htmlspecialchars($dilihat); ?></td>
-                                            <td class="text-center action-buttons-cell no-export">
-                                                <?php if (!empty($row['file_surat'])): ?>
-                                                    <a href="../uploads/surat_masuk/<?php echo $row['file_surat']; ?>" class="btn-action btn-view" title="Lihat Surat" target="_blank">
-                                                        <i class="fas fa-file-pdf"></i>
+                                            <td class="text-center no-export">
+                                                <div class="action-buttons-wrapper">
+                                                    <?php if (!empty($row['file_surat'])): ?>
+                                                        <a href="../uploads/surat_masuk/<?php echo $row['file_surat']; ?>" class="btn-action btn-view" title="Lihat Surat" target="_blank">
+                                                            <i class="fas fa-file-pdf"></i>
+                                                        </a>
+                                                    <?php else: ?>
+                                                        <button class="btn-action btn-disabled" title="Belum ada file" disabled>
+                                                            <i class="fas fa-file-pdf"></i>
+                                                        </button>
+                                                    <?php endif; ?>
+
+                                                    <?php if (!empty($row['file_disposisi'])): ?>
+                                                        <a href="../uploads/disposisi/<?php echo $row['file_disposisi']; ?>" target="_blank" class="btn-action btn-view-disposisi" title="Lihat File Disposisi">
+                                                            <i class="fas fa-file-invoice"></i>
+                                                        </a>
+                                                    <?php endif; ?>
+
+                                                    <a href="disposisi-surat.php?id=<?php echo $row['id']; ?>" class="btn-action btn-disposisi" title="Disposisi">
+                                                        <i class="fas fa-share-square"></i>
                                                     </a>
-                                                <?php else: ?>
-                                                    <button class="btn-action btn-disabled" title="Belum ada file" disabled>
-                                                        <i class="fas fa-file-pdf"></i>
+
+                                                    <a href="edit-surat-masuk.php?id=<?php echo $row['id']; ?>" class="btn-action btn-edit" title="Edit">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+
+                                                    <button class="btn-action btn-delete" onclick="confirmDelete(<?php echo $row['id']; ?>)" title="Hapus">
+                                                        <i class="fas fa-trash"></i>
                                                     </button>
-                                                <?php endif; ?>
-
-                                                <?php if (!empty($row['file_disposisi'])): ?>
-                                                    <a href="../uploads/disposisi/<?php echo $row['file_disposisi']; ?>" target="_blank" class="btn-action btn-view-disposisi" title="Lihat File Disposisi">
-                                                        <i class="fas fa-file-invoice"></i>
-                                                    </a>
-                                                <?php endif; ?>
-
-                                                <a href="disposisi-surat.php?id=<?php echo $row['id']; ?>" class="btn-action btn-disposisi" title="Disposisi">
-                                                    <i class="fas fa-share-square"></i>
-                                                </a>
-
-                                                <a href="edit-surat-masuk.php?id=<?php echo $row['id']; ?>" class="btn-action btn-edit" title="Edit">
-                                                    <i class="fas fa-edit"></i>
-                                                </a>
-
-                                                <button class="btn-action btn-delete" onclick="confirmDelete(<?php echo $row['id']; ?>)" title="Hapus">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
+                                                </div>
                                             </td>
                                         </tr>
                                 <?php
@@ -267,96 +271,7 @@ $result = mysqli_query($conn, $query);
 
     <script src="../js/dashboard.js"></script>
     <script src="../js/dashboard.js"></script>
-    <script>
-        $(document).ready(function() {
-            // Initialize DataTable
-            var table = $('#suratMasukTable').DataTable({
-                dom: 'Bfrtip',
-                buttons: [{
-                        extend: 'excel',
-                        text: '<i class="fas fa-file-excel"></i> Excel',
-                        className: 'dt-button',
-                        exportOptions: {
-                            columns: ':not(.no-export)'
-                        }
-                    },
-                    {
-                        extend: 'pdf',
-                        text: '<i class="fas fa-file-pdf"></i> PDF',
-                        className: 'dt-button',
-                        exportOptions: {
-                            columns: ':not(.no-export)'
-                        }
-                    }
-                ],
-                language: {
-                    search: "Cari:",
-                    lengthMenu: "Tampilkan _MENU_ data per halaman",
-                    zeroRecords: "Data tidak ditemukan",
-                    info: "Menampilkan halaman _PAGE_ dari _PAGES_",
-                    infoEmpty: "Tidak ada data yang tersedia",
-                    infoFiltered: "(difilter dari _MAX_ total data)",
-                    paginate: {
-                        first: "Pertama",
-                        last: "Terakhir",
-                        next: "Selanjutnya",
-                        previous: "Sebelumnya"
-                    }
-                },
-                pageLength: 10,
-                order: [
-                    [0, 'asc']
-                ]
-            });
-
-            // Custom Filtering Function
-            $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
-                if (settings.nTable.id !== 'suratMasukTable') return true;
-
-                // Status Filter (Column index 7)
-                var statusFilter = $('#filterStatus').val();
-                var statusData = data[7]; // Index 7 is Status Disposisi
-
-                if (statusFilter && !statusData.includes(statusFilter)) {
-                    return false;
-                }
-
-                // Date Filter (Column index 2 - Tanggal Terima)
-                var dari = $('#filterDari').val();
-                var sampai = $('#filterSampai').val();
-                
-                // Get data-date attribute from the cell
-                var row = $(table.row(dataIndex).node());
-                var dateVal = row.find('td:eq(2)').attr('data-date');
-
-                if (!dari && !sampai) return true;
-                if (!dateVal) return false;
-                if (dari && dateVal < dari) return false;
-                if (sampai && dateVal > sampai) return false;
-
-                return true;
-            });
-
-            // Event Listeners
-            $('#btnFilter').on('click', function() {
-                table.draw();
-            });
-
-            $('#btnReset').on('click', function() {
-                $('#filterStatus').val('');
-                $('#filterDari').val('');
-                $('#filterSampai').val('');
-                table.draw();
-            });
-        });
-
-        // Delete confirmation
-        function confirmDelete(id) {
-            if (confirm('Apakah Anda yakin ingin menghapus data surat masuk ini? File yang terlampir juga akan dihapus.')) {
-                window.location.href = 'proses-surat-masuk.php?action=delete&id=' + id;
-            }
-        }
-    </script>
+    <script src="../js/surat-masuk.js"></script>
 </body>
 
 </html>

@@ -197,8 +197,9 @@
 
 /* Table Specific Styles - Clean & Modern */
 #suratMasukTable {
-    width: 100% !important;
-    min-width: 1200px;
+    /* width: 100% !important; */
+    /* DIHAPUS AGAR DATATABLES MENGATUR LEBAR */
+    /* min-width: 1200px; */
     /* Ensure table has minimum width to prevent squishing */
     border-collapse: separate;
     border-spacing: 0;
@@ -206,7 +207,8 @@
 
 #suratMasukTable th,
 #suratMasukTable td {
-    white-space: nowrap;
+    /* white-space: nowrap; */
+    /* Disable global nowrap to allow wrapping */
     vertical-align: middle;
     padding: 14px 16px;
     border-bottom: 1px solid #f1f5f9;
@@ -279,20 +281,24 @@
 }
 
 /* Fix wrapping for specific columns */
-/* Column 4 (Alamat Pengirim) & Column 7 (Perihal) */
 #suratMasukTable td:nth-child(4),
 #suratMasukTable td:nth-child(7) {
     white-space: normal;
     min-width: 250px;
     max-width: 350px;
     line-height: 1.5;
-    color: #475569;
+    color: #212529;
 }
 
 /* Other text columns */
 #suratMasukTable td {
-    color: #334155;
+    color: #212529;
     font-size: 0.875rem;
+    border-right: 1px solid #dee2e6;
+}
+
+#suratMasukTable td:last-child {
+    border-right: none;
 }
 
 /* Center aligned columns */
@@ -302,16 +308,21 @@
 
 #suratMasukTable tbody tr {
     transition: all 0.2s ease;
-    border-bottom: 1px solid #f1f5f9;
+    border-bottom: 1px solid #dee2e6;
 }
 
 #suratMasukTable tbody tr:hover {
-    background-color: #f8fafc;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    background-color: #e9ecef;
+    /* Slightly darker hover */
+}
+
+/* Zebra Striping - Matching the image (White and Light Gray) */
+#suratMasukTable tbody tr:nth-child(odd) {
+    background-color: #ffffff;
 }
 
 #suratMasukTable tbody tr:nth-child(even) {
-    background-color: #fafbfc;
+    background-color: #f8f9fa;
 }
 
 /* Buttons Container for DataTables */
@@ -387,7 +398,7 @@
 }
 
 /* Action Buttons in Table - Unified & Clean */
-.action-buttons-cell {
+.action-buttons-wrapper {
     white-space: nowrap;
     display: flex;
     gap: 6px;
