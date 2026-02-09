@@ -223,7 +223,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <script>
                     Swal.fire({
                         title: 'Gagal!',
-                        text: 'Gagal mengupdate surat keluar!',
+                        text: 'Error: " . mysqli_error($conn) . "',
                         icon: 'error',
                         confirmButtonText: 'OK',
                         confirmButtonColor: '#d33'

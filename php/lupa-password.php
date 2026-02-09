@@ -11,28 +11,17 @@ unset($_SESSION['error']);
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Lupa Password - DPPKBPM</title>
+    <title>Lupa Password - DIAPRA</title>
     <link rel="stylesheet" href="../css/login.css" />
-    <style>
-        .back-link {
-            text-align: center;
-            margin-top: 15px;
-            font-size: 14px;
-        }
-        .back-link a {
-            color: #666;
-            text-decoration: none;
-        }
-        .back-link a:hover {
-            color: #333;
-            text-decoration: underline;
-        }
-    </style>
 </head>
 
 <body>
     <div class="login-container">
-        <h2>Lupa Password</h2>
+        <div class="auth-header">
+            <img src="../assets/img/LOGO.png" alt="Logo DIAPRA" class="logo-img">
+            <div class="app-title">Digitalisasi Administrasi Persuratan<br>(DIAPRA)</div>
+            <div class="auth-subtitle">Reset Password</div>
+        </div>
 
         <?php if ($error_message): ?>
             <div class="message error"><?= htmlspecialchars($error_message) ?></div>
@@ -40,7 +29,7 @@ unset($_SESSION['error']);
 
         <?php if ($step == 1): ?>
             <!-- STEP 1: Masukkan Username -->
-            <p style="text-align: center; margin-bottom: 20px; color: #666;">
+            <p style="text-align: center; margin-bottom: 20px; color: var(--text-light); font-size: 14px;">
                 Masukkan username Anda untuk mereset password.
             </p>
             <form action="proses-reset.php?action=check_username" method="post">
@@ -56,7 +45,7 @@ unset($_SESSION['error']);
                 <?php header('Location: lupa-password.php'); exit; ?>
             <?php endif; ?>
             
-            <p style="text-align: center; margin-bottom: 20px; color: #666;">
+            <p style="text-align: center; margin-bottom: 20px; color: var(--text-light); font-size: 14px;">
                 Reset password untuk akun: <strong><?= htmlspecialchars($_SESSION['reset_username']) ?></strong>
             </p>
             <form action="proses-reset.php?action=reset_password" method="post">
@@ -72,9 +61,13 @@ unset($_SESSION['error']);
             </form>
         <?php endif; ?>
 
-        <div class="back-link">
+        <div class="auth-footer">
             <a href="login.php">Kembali ke Login</a>
         </div>
+    </div>
+
+    <div class="copyright">
+        &copy; <?= date('Y') ?> DIAPRA DPPKBPM. All rights reserved.
     </div>
 </body>
 

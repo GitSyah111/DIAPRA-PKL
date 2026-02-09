@@ -223,7 +223,7 @@ $result = mysqli_query($conn, $query);
                                                 <div class="action-buttons-wrapper">
                                                     <?php if (!empty($row['file_surat'])): ?>
                                                         <a href="../uploads/surat_cuti/<?php echo $row['file_surat']; ?>"
-                                                            target="_blank" class="btn-action btn-view-file" title="Lihat File">
+                                                            target="_blank" class="btn-action btn-view" title="Lihat File">
                                                             <i class="fas fa-file-pdf"></i>
                                                         </a>
                                                     <?php else: ?>

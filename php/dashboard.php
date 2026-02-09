@@ -349,17 +349,29 @@ if ($role == 'bidang') {
         }
     </style>
 
-    <!-- CHART JS CONFIG -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const ctx = document.getElementById('suratChart').getContext('2d');
             
+            // Create Gradients for Area Fill (Neon Style)
+            // Neon Indigo for Surat Masuk (#6366f1)
+            const gradientMasuk = ctx.createLinearGradient(0, 0, 0, 400);
+            gradientMasuk.addColorStop(0, 'rgba(99, 102, 241, 0.4)'); 
+            gradientMasuk.addColorStop(1, 'rgba(99, 102, 241, 0.0)'); 
+
+            // Neon Rose for Surat Keluar (#f43f5e)
+            const gradientKeluar = ctx.createLinearGradient(0, 0, 0, 400);
+            gradientKeluar.addColorStop(0, 'rgba(244, 63, 94, 0.4)'); 
+            gradientKeluar.addColorStop(1, 'rgba(244, 63, 94, 0.0)'); 
+            
             // Data dari PHP
             const dataMasuk = <?= $json_masuk ?>;
             const dataKeluar = <?= $json_keluar ?>;
-            const dataSpj = <?= $json_spj ?>;
-            const dataCuti = <?= $json_cuti ?>;
 
+            // Global Defaults for High-End Look
+            Chart.defaults.font.family = "'Inter', sans-serif";
+            Chart.defaults.color = '#94a3b8';
+            
             const suratChart = new Chart(ctx, {
                 type: 'line',
                 data: {
@@ -368,40 +380,41 @@ if ($role == 'bidang') {
                         {
                             label: 'Surat Masuk',
                             data: dataMasuk,
-                            borderColor: '#3b82f6', // Blue
-                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                            borderWidth: 2,
-                            tension: 0.3,
-                            fill: true
+                            borderColor: '#6366f1', // Neon Indigo
+                            backgroundColor: gradientMasuk,
+                            borderWidth: 5,
+                            pointRadius: 0, // Hidden points
+                            pointHoverRadius: 8,
+                            pointHoverBackgroundColor: '#6366f1',
+                            pointHoverBorderColor: '#ffffff',
+                            pointHoverBorderWidth: 3,
+                            tension: 0.4,
+                            cubicInterpolationMode: 'monotone',
+                            fill: true,
+                            // Shadow Effects via Dataset Properties (if supported/plugin) or just placeholder for style intent
+                            shadowColor: 'rgba(99, 102, 241, 0.6)',
+                            shadowBlur: 15,
+                            shadowOffsetX: 0,
+                            shadowOffsetY: 5
                         },
                         {
                             label: 'Surat Keluar',
                             data: dataKeluar,
-                            borderColor: '#10b981', // Green
-                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                            borderWidth: 2,
-                            tension: 0.3,
-                            fill: true
-                        },
-                        <?php if ($role !== 'user' && $role !== 'bidang'): ?>
-                        {
-                            label: 'SPJ UMPEG',
-                            data: dataSpj,
-                            borderColor: '#8b5cf6', // Purple
-                            backgroundColor: 'rgba(139, 92, 246, 0.1)',
-                            borderWidth: 2,
-                            tension: 0.3,
-                            fill: true
-                        },
-                        <?php endif; ?>
-                        {
-                            label: 'Surat Cuti',
-                            data: dataCuti,
-                            borderColor: '#f59e0b', // Orange
-                            backgroundColor: 'rgba(245, 158, 11, 0.1)',
-                            borderWidth: 2,
-                            tension: 0.3,
-                            fill: true
+                            borderColor: '#f43f5e', // Neon Rose
+                            backgroundColor: gradientKeluar,
+                            borderWidth: 5,
+                            pointRadius: 0, // Hidden points
+                            pointHoverRadius: 8,
+                            pointHoverBackgroundColor: '#f43f5e',
+                            pointHoverBorderColor: '#ffffff',
+                            pointHoverBorderWidth: 3,
+                            tension: 0.4,
+                            cubicInterpolationMode: 'monotone',
+                            fill: true,
+                            shadowColor: 'rgba(244, 63, 94, 0.6)',
+                            shadowBlur: 15,
+                            shadowOffsetX: 0,
+                            shadowOffsetY: 5
                         }
                     ]
                 },
@@ -411,41 +424,76 @@ if ($role == 'bidang') {
                     plugins: {
                         legend: {
                             position: 'top',
+                            align: 'end',
                             labels: {
+                                usePointStyle: true,
+                                boxWidth: 12,
+                                padding: 25,
                                 font: {
-                                    family: "'Inter', sans-serif",
-                                    size: 12
-                                }
+                                    size: 13,
+                                    weight: 600
+                                },
+                                color: '#cbd5e1' 
                             }
                         },
                         tooltip: {
                             mode: 'index',
                             intersect: false,
-                            backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                            titleColor: '#1f2937',
-                            bodyColor: '#4b5563',
-                            borderColor: '#e5e7eb',
+                            backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                            titleColor: '#f8fafc',
+                            bodyColor: '#e2e8f0',
+                            borderColor: '#334155',
                             borderWidth: 1,
-                            padding: 10,
+                            padding: 14,
+                            boxPadding: 8,
+                            cornerRadius: 8,
                             titleFont: {
                                 size: 14,
-                                weight: 'bold'
-                            }
+                                weight: 'bold',
+                                family: "'Inter', sans-serif"
+                            },
+                            bodyFont: {
+                                size: 13, 
+                                family: "'Inter', sans-serif"
+                            },
+                            displayColors: true,
                         }
                     },
                     scales: {
                         y: {
                             beginAtZero: true,
+                            // Tambahkan padding atas agar dot tertinggi tidak terpotong
+                            suggestedMax: Math.max(...dataMasuk, ...dataKeluar) + 1, 
                             grid: {
-                                color: '#f3f4f6',
-                                borderDash: [5, 5]
+                                color: 'rgba(241, 245, 249, 0.05)', 
+                                borderDash: [5, 5],
+                                drawBorder: false
                             },
                             ticks: {
-                                stepSize: 1
+                                stepSize: 1,
+                                padding: 15,
+                                color: '#94a3b8',
+                                font: {
+                                    size: 11
+                                }
+                            },
+                            border: {
+                                display: false
                             }
                         },
                         x: {
                             grid: {
+                                display: false,
+                                drawBorder: false
+                            },
+                            ticks: {
+                                padding: 10,
+                                color: '#94a3b8',
+                                font: {
+                                    size: 11
+                                }
+                            },
+                            border: {
                                 display: false
                             }
                         }
@@ -454,6 +502,11 @@ if ($role == 'bidang') {
                         mode: 'nearest',
                         axis: 'x',
                         intersect: false
+                    },
+                    elements: {
+                        point: {
+                            hitRadius: 20
+                        }
                     }
                 }
             });

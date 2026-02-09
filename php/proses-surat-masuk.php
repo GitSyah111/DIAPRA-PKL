@@ -220,15 +220,55 @@ if (isset($_POST['action']) || isset($_GET['action'])) {
                   WHERE id = '$id'";
 
         if (mysqli_query($conn, $query)) {
-            echo "<script>
-                alert('Surat masuk berhasil diupdate!');
-                window.location.href = 'surat-masuk.php';
-            </script>";
+            echo "<!DOCTYPE html>
+            <html lang='id'>
+            <head>
+                <meta charset='UTF-8'>
+                <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+                <title>Processing...</title>
+                <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css'>
+                <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
+                <style>body { font-family: 'Poppins', sans-serif; background-color: #f3f4f6; }</style>
+            </head>
+            <body>
+                <script>
+                    Swal.fire({
+                        title: 'Berhasil!',
+                        text: 'Surat masuk berhasil diupdate!',
+                        icon: 'success',
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: '#3085d6'
+                    }).then((result) => {
+                        window.location.href = 'surat-masuk.php';
+                    });
+                </script>
+            </body>
+            </html>";
         } else {
-            echo "<script>
-                alert('Error: " . mysqli_error($conn) . "');
-                window.location.href = 'edit-surat-masuk.php?id=$id';
-            </script>";
+            echo "<!DOCTYPE html>
+            <html lang='id'>
+            <head>
+                <meta charset='UTF-8'>
+                <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+                <title>Processing...</title>
+                <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css'>
+                <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
+                <style>body { font-family: 'Poppins', sans-serif; background-color: #f3f4f6; }</style>
+            </head>
+            <body>
+                <script>
+                    Swal.fire({
+                        title: 'Gagal!',
+                        text: 'Error: " . mysqli_error($conn) . "',
+                        icon: 'error',
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: '#d33'
+                    }).then((result) => {
+                        window.location.href = 'edit-surat-masuk.php?id=$id';
+                    });
+                </script>
+            </body>
+            </html>";
         }
     }
 
