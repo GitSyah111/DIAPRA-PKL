@@ -102,11 +102,10 @@ $next_nomor = ($row['max_nomor'] ? $row['max_nomor'] : 0) + 1;
                         <a href="edit-akun.php">
                             <i class="fas fa-user-edit"></i> Edit Akun
                         </a>
+                        <a href="logout.php" class="logout-btn">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
                     </div>
-                    <button class="logout-btn">
-                        <i class="fas fa-sign-out-alt"></i>
-                        Logout
-                    </button>
                 </div>
             </header>
 

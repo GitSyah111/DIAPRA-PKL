@@ -45,9 +45,7 @@ if (!empty($surat['dilihat_oleh'])) {
     $dilihat_array = explode(', ', $surat['dilihat_oleh']);
 }
 
-// Ambil Riwayat Disposisi
-$query_history = "SELECT * FROM disposisi WHERE id_surat_masuk = '$id' ORDER BY id DESC";
-$result_history = mysqli_query($conn, $query_history);
+
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -353,11 +351,10 @@ $result_history = mysqli_query($conn, $query_history);
                         <a href="edit-akun.php">
                             <i class="fas fa-user-edit"></i> Edit Akun
                         </a>
+                        <a href="logout.php" class="logout-btn">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
                     </div>
-                    <button class="logout-btn">
-                        <i class="fas fa-sign-out-alt"></i>
-                        Logout
-                    </button>
                 </div>
             </header>
 
@@ -502,53 +499,7 @@ $result_history = mysqli_query($conn, $query_history);
                 </div>
             </div>
 
-                <!-- RIWAYAT DISPOSISI -->
-                <div class="content-box">
-                    <div class="box-header">
-                        <h2><i class="fas fa-history"></i> Riwayat Disposisi</h2>
-                    </div>
-                    <div class="table-container">
-                        <table class="data-table display" style="width:100%">
-                            <thead>
-                                <tr>
-                                    <th>No</th>
-                                    <th>Tujuan</th>
-                                    <th>Isi Disposisi</th>
-                                    <th>Sifat</th>
-                                    <th>Catatan</th>
-                                    <th>File</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php if (mysqli_num_rows($result_history) > 0): ?>
-                                    <?php $no_disp = 1; ?>
-                                    <?php while ($row_disp = mysqli_fetch_assoc($result_history)): ?>
-                                        <tr>
-                                            <td class="text-center"><?php echo $no_disp++; ?></td>
-                                            <td><?php echo htmlspecialchars($row_disp['tujuan_bidang']); ?></td>
-                                            <td><?php echo htmlspecialchars($row_disp['isi_disposisi']); ?></td>
-                                            <td><span class="badge badge-info"><?php echo htmlspecialchars($row_disp['sifat']); ?></span></td>
-                                            <td><?php echo htmlspecialchars($row_disp['catatan']); ?></td>
-                                            <td class="text-center">
-                                                <?php if (!empty($row_disp['file_disposisi'])): ?>
-                                                    <a href="../uploads/disposisi/<?php echo $row_disp['file_disposisi']; ?>" target="_blank" class="btn-action btn-view-small">
-                                                        <i class="fas fa-eye"></i>
-                                                    </a>
-                                                <?php else: ?>
-                                                    -
-                                                <?php endif; ?>
-                                            </td>
-                                        </tr>
-                                    <?php endwhile; ?>
-                                <?php else: ?>
-                                    <tr>
-                                        <td colspan="6" class="text-center">Belum ada riwayat disposisi.</td>
-                                    </tr>
-                                <?php endif; ?>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+
 
             </div>
 
