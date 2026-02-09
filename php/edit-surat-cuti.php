@@ -146,12 +146,10 @@ $sampai_dengan_date = $data['Sampai Dengan'] > 0 ? date('Y-m-d', $data['Sampai D
                         <a href="edit-akun.php">
                             <i class="fas fa-user-edit"></i> Edit Akun
                         </a>
+                        <a href="logout.php" class="logout-btn">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
                     </div>
-                    <!-- Tombol logout -->
-                    <button class="logout-btn">
-                        <i class="fas fa-sign-out-alt"></i>
-                        Logout
-                    </button>
                 </div>
             </header>
 
