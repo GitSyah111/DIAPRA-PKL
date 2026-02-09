@@ -14,28 +14,23 @@ if (isset($_POST['action']) && $_POST['action'] == 'disposisi') {
     $batas_waktu = !empty($_POST['batas_waktu']) ? mysqli_real_escape_string($conn, $_POST['batas_waktu']) : NULL;
     $status_disposisi = 'Sudah didisposisi'; // Set status otomatis
 
+    $id_disposisi = isset($_POST['id_disposisi']) ? mysqli_real_escape_string($conn, $_POST['id_disposisi']) : '';
 
-    $dilihat_oleh = '';
-    if (isset($_POST['dilihat_oleh']) && is_array($_POST['dilihat_oleh'])) {
-        $dilihat_oleh = implode(', ', $_POST['dilihat_oleh']);
+    // =========================================================
+    // HANDLE UPLOAD FILE DISPOSISI
+    // =========================================================
+    
+    // Ambil data file lama jika ini adalah UPDATE
+    $file_disposisi_lama = '';
+    if (!empty($id_disposisi)) {
+        $query_old = "SELECT file_disposisi FROM disposisi WHERE id = '$id_disposisi'";
+        $result_old = mysqli_query($conn, $query_old);
+        if ($row_old = mysqli_fetch_assoc($result_old)) {
+            $file_disposisi_lama = $row_old['file_disposisi'];
+        }
     }
 
-    // =========================================================
-    // HANDLE UPLOAD FILE DISPOSISI
-    // =========================================================
-    
-    // Ambil data file lama dulu jika perlu
-    // =========================================================
-    // HANDLE UPLOAD FILE DISPOSISI
-    // =========================================================
-    
-    // Tidak perlu ambil data lama karena ini INSERT baru
-    $file_disposisi = '';
-
-    /* 
-       NOTE: Jika tabel disposisi belum punya kolom file_disposisi, 
-       kode ini mengasumsikan kolom tersebut sudah ditambahkan sesuai rencana.
-    */
+    $file_disposisi = $file_disposisi_lama; // Default ke file lama
 
     // Cek jika ada file baru diupload
     if (isset($_FILES['file_disposisi']) && $_FILES['file_disposisi']['error'] == 0) {
@@ -63,7 +58,10 @@ if (isset($_POST['action']) && $_POST['action'] == 'disposisi') {
             exit();
         }
 
-        // Tidak perlu hapus file lama karena ini record baru
+        // Hapus file lama jika ada dan ada upload baru
+        if (!empty($file_disposisi_lama) && file_exists('../uploads/disposisi/' . $file_disposisi_lama)) {
+            unlink('../uploads/disposisi/' . $file_disposisi_lama);
+        }
 
         // Generate nama file unik
         $new_file_name = 'disposisi_' . time() . '_' . uniqid() . '.' . $file_ext;
@@ -86,9 +84,6 @@ if (isset($_POST['action']) && $_POST['action'] == 'disposisi') {
         }
     }
 
-    // Insert Query ke tabel disposisi
-    // Kolom: id_surat_masuk, tujuan_bidang, isi_disposisi, sifat, batas_waktu, catatan, status_baca, file_disposisi
-    
     // Mapping variables
     $tujuan_bidang = mysqli_real_escape_string($conn, $_POST['tujuan_disposisi']);
     $isi_disposisi = mysqli_real_escape_string($conn, $_POST['instruksi_disposisi']);
@@ -98,8 +93,23 @@ if (isset($_POST['action']) && $_POST['action'] == 'disposisi') {
     // Handle NULL batas_waktu for SQL
     $batas_waktu_sql = $batas_waktu ? "'$batas_waktu'" : "NULL";
 
-    $query = "INSERT INTO disposisi (id_surat_masuk, tujuan_bidang, isi_disposisi, sifat, batas_waktu, catatan, status_baca, file_disposisi)
-              VALUES ('$id_surat_masuk', '$tujuan_bidang', '$isi_disposisi', '$sifat_db', $batas_waktu_sql, '$catatan_db', 0, '$file_disposisi')";
+    if (!empty($id_disposisi)) {
+        // UPDATE Existing Disposisi
+        $query = "UPDATE disposisi SET 
+                  tujuan_bidang = '$tujuan_bidang',
+                  isi_disposisi = '$isi_disposisi',
+                  sifat = '$sifat_db',
+                  batas_waktu = $batas_waktu_sql,
+                  catatan = '$catatan_db',
+                  file_disposisi = '$file_disposisi'
+                  WHERE id = '$id_disposisi'";
+        $msg_success = 'Data disposisi berhasil diperbarui!';
+    } else {
+        // INSERT New Disposisi
+        $query = "INSERT INTO disposisi (id_surat_masuk, tujuan_bidang, isi_disposisi, sifat, batas_waktu, catatan, status_baca, file_disposisi)
+                  VALUES ('$id_surat_masuk', '$tujuan_bidang', '$isi_disposisi', '$sifat_db', $batas_waktu_sql, '$catatan_db', 0, '$file_disposisi')";
+        $msg_success = 'Disposisi berhasil disimpan!';
+    }
 
     // Note: Kita juga perlu update status_disposisi di tabel surat_masuk agar tahu surat ini sudah didisposisi
     $query_update_status = "UPDATE surat_masuk SET status_disposisi = 'Sudah didisposisi' WHERE id = '$id_surat_masuk'";
@@ -120,7 +130,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'disposisi') {
             <script>
                 Swal.fire({
                     title: 'Berhasil!',
-                    text: 'Disposisi berhasil disimpan!',
+                    text: '$msg_success',
                     icon: 'success',
                     confirmButtonText: 'OK',
                     confirmButtonColor: '#3085d6'
