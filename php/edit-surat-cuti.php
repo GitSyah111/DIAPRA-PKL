@@ -7,7 +7,7 @@ require_once 'auth_check.php';
 $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
 // Query untuk mengambil data Surat Cuti berdasarkan ID
-$query = "SELECT * FROM `surat cuti` WHERE id = $id";
+$query = "SELECT * FROM `surat_cuti` WHERE id = $id";
 // Eksekusi query
 $result = mysqli_query($conn, $query);
 
