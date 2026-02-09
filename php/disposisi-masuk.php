@@ -239,8 +239,8 @@ $result = mysqli_query($conn, $query);
                                         </tr>
                                 <?php
                                     }
-                                } else {
-                                    echo '<tr><td colspan="7" class="text-center">Tidak ada data disposisi masuk.</td></tr>';
+                                    // PENTING: Jangan gunakan colspan manual yang tidak sesuai jumlah kolom thead
+                                    // DataTables akan otomatis menangani "No data available" jika tbody kosong
                                 }
                                 ?>
                             </tbody>
@@ -303,24 +303,36 @@ $result = mysqli_query($conn, $query);
     <script src="../js/dashboard.js"></script>
     <script>
         $(document).ready(function() {
+            // Hapus instance lama jika ada untuk mencegah konflik
+            if ($.fn.DataTable.isDataTable('#disposisiTable')) {
+                $('#disposisiTable').DataTable().destroy();
+            }
+
             $('#disposisiTable').DataTable({
-                destroy: true, // Destroy existing table to prevent initialization errors
-                stateSave: false, // Do not save state to avoid column count mismatch from cache
                 responsive: true,
-                columns: [
-                    { width: "5%" },  // No
-                    { width: "15%" }, // No. Surat
-                    { width: "20%" }, // Perihal
-                    { width: "20%" }, // Isi Disposisi
-                    { width: "10%" }, // Sifat
-                    { width: "10%" }, // Batas Waktu
-                    { width: "20%", orderable: false } // Aksi
-                ],
+                stateSave: false, // Hindari cache struktur lama
+                // HAPUS properti 'columns: [...]' yang kaku agar jumlah kolom dideteksi otomatis dari HTML
+                columnDefs: [{
+                    targets: -1, // Gunakan indeks negatif (-1) untuk selalu merujuk ke kolom TERAKHIR (Aksi)
+                    orderable: false, // Matikan sorting
+                    searchable: false // Matikan pencarian di kolom aksi
+                }],
                 language: {
                     search: "Cari Disposisi:",
-                    zeroRecords: "Tidak ada data disposisi"
+                    zeroRecords: "Tidak ada data disposisi",
+                    info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
+                    infoEmpty: "Tidak ada data yang tersedia",
+                    infoFiltered: "(difilter dari _MAX_ total data)",
+                    paginate: {
+                        first: "Pertama",
+                        last: "Terakhir",
+                        next: "Selanjutnya",
+                        previous: "Sebelumnya"
+                    }
                 },
-                order: [[0, 'asc']]
+                order: [
+                    [0, 'asc'] // Default urutkan berdasarkan kolom pertama (No)
+                ]
             });
         });
 

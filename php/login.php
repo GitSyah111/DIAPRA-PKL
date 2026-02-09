@@ -2,8 +2,7 @@
 session_start();
 include_once '../database/koneksi.php';
 $error_message = $_SESSION['login_error'] ?? '';
-$success_message = $_SESSION['register_success'] ?? '';
-unset($_SESSION['login_error'], $_SESSION['register_success']);
+unset($_SESSION['login_error']);
 ?>
 
 <!DOCTYPE html>
@@ -25,9 +24,7 @@ unset($_SESSION['login_error'], $_SESSION['register_success']);
             <div class="message error"><?= htmlspecialchars($error_message) ?></div>
         <?php endif; ?>
 
-        <?php if ($success_message): ?>
-            <div class="message success"><?= htmlspecialchars($success_message) ?></div>
-        <?php endif; ?>
+
 
         <form action="login_process.php" method="post" novalidate>
             <div class="input-group">
@@ -42,8 +39,6 @@ unset($_SESSION['login_error'], $_SESSION['register_success']);
         </form>
 
         <div class="register-link">
-            Belum punya akun? <a href="register.php">Daftar di sini</a>
-            <br>
             Lupa password? <a href="lupa-password.php">Reset password</a>
         </div>
     </div>

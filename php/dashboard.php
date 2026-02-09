@@ -266,17 +266,6 @@ if ($role == 'bidang') {
                                 <span class="stat-label">Total Disposisi Diterima</span>
                             </div>
                         </a>
-                    <?php else: ?>
-                        <a href="surat-belum-disposisi.php" class="stat-card orange" style="text-decoration: none; color: inherit;">
-                            <div class="stat-icon">
-                                <i class="fas fa-clock"></i>
-                            </div>
-                            <div class="stat-info">
-                                <h3>Belum Disposisi</h3>
-                                <p class="stat-number"><?php echo $total_pending; ?></p>
-                                <span class="stat-label">Menunggu disposisi</span>
-                            </div>
-                        </a>
                     <?php endif; ?>
 
                     <!-- New Card: SPJ UMPEG -->
