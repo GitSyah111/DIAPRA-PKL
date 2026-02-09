@@ -4,7 +4,12 @@ include 'database.php';
 require_once 'auth_check.php';
 
 // Query untuk mengambil data Surat Cuti dengan urutan terbaru
-$query = "SELECT * FROM `surat cuti` ORDER BY id DESC";
+// Query untuk mengambil data Surat Cuti dengan urutan terbaru
+// Fix table name to surat_cuti
+$query = "SELECT surat_cuti.*, user.nama_bidang, user.username 
+          FROM `surat_cuti` 
+          LEFT JOIN user ON surat_cuti.id_user = user.no 
+          ORDER BY surat_cuti.id DESC";
 // Eksekusi query ke database
 $result = mysqli_query($conn, $query);
 ?>
@@ -64,7 +69,15 @@ $result = mysqli_query($conn, $query);
                     <i class="fas fa-paper-plane"></i>
                     <span class="sidebar-text">Surat Keluar</span>
                 </a>
-                <?php if ($role !== 'user'): ?>
+
+                <?php if ($role == 'bidang'): ?>
+                <a href="disposisi-masuk.php" class="nav-item" title="Disposisi Masuk">
+                    <i class="fas fa-inbox"></i>
+                    <span class="sidebar-text">Disposisi Masuk</span>
+                </a>
+                <?php endif; ?>
+
+                <?php if ($role !== 'user' && $role !== 'bidang'): ?>
                 <!-- Menu SPJ UMPEG -->
                 <a href="spj-umpeg.php" class="nav-item" title="SPJ UMPEG">
                     <i class="fas fa-file-invoice"></i>
@@ -76,7 +89,7 @@ $result = mysqli_query($conn, $query);
                     <i class="fas fa-calendar-check"></i>
                     <span class="sidebar-text">Surat Cuti</span>
                 </a>
-                <?php if ($role !== 'user'): ?>
+                <?php if ($role !== 'user' && $role !== 'bidang'): ?>
                 <!-- Menu Data Pengguna -->
                 <a href="data-pengguna.php" class="nav-item" title="Data Pengguna">
                     <i class="fas fa-users"></i>
@@ -154,87 +167,81 @@ $result = mysqli_query($conn, $query);
 
                 <!-- Data Table -->
                 <div class="content-box">
-                    <!-- Header box -->
                     <div class="box-header">
                         <h2><i class="fas fa-calendar-check"></i> Daftar Surat Cuti</h2>
+                        <div class="filter-container" style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:10px;">
+                            <div class="filter-group">
+                                <label for="filterDari">Dari Tanggal:</label>
+                                <input type="date" id="filterDari" class="form-control">
+                            </div>
+                            <div class="filter-group">
+                                <label for="filterSampai">Sampai Tanggal:</label>
+                                <input type="date" id="filterSampai" class="form-control">
+                            </div>
+                            <div class="filter-actions" style="display: flex; gap: 10px; align-items: flex-end;">
+                                <button type="button" class="btn-primary" id="btnFilterTanggal" style="padding:6px 12px; height: 38px;"><i class="fas fa-filter"></i> Filter</button>
+                                <button type="button" class="btn-secondary" id="btnResetTanggal" style="padding:6px 12px; height: 38px;"><i class="fas fa-times"></i> Reset</button>
+                            </div>
+                        </div>
                     </div>
 
-                    <!-- Container tabel -->
                     <div class="table-container">
-                        <!-- Tabel DataTables -->
                         <table id="suratCutiTable" class="data-table display" style="width:100%">
-                            <!-- Header tabel -->
                             <thead>
                                 <tr>
-                                    <th width="5%">No</th>
-                                    <th width="12%">Nama/NIP</th>
-                                    <th width="10%">Pangkat/GOL RUANG</th>
-                                    <th width="12%">Jabatan</th>
-                                    <th width="10%">Jenis Cuti</th>
-                                    <th width="8%">Lamanya</th>
-                                    <th width="10%">Mulai Cuti</th>
-                                    <th width="10%">Sampai Dengan</th>
-                                    <th width="8%">Sisa Cuti</th>
-                                    <th width="15%" class="no-export">Aksi</th>
+                                    <th>No</th>
+                                    <th>Nama/NIP</th>
+                                    <th>Pangkat/GOL</th>
+                                    <th>Jabatan</th>
+                                    <th>Jenis Cuti</th>
+                                    <th>Lamanya</th>
+                                    <th>Mulai Cuti</th>
+                                    <th>Sampai Dengan</th>
+                                    <th>Sisa Cuti</th>
+                                    <th class="no-export">Aksi</th>
                                 </tr>
                             </thead>
-                            <!-- Body tabel -->
                             <tbody>
                                 <?php
-                                // Cek apakah ada data
                                 if (mysqli_num_rows($result) > 0) {
-                                    // Inisialisasi nomor urut
                                     $no = 1;
-                                    // Loop untuk menampilkan data
                                     while ($row = mysqli_fetch_assoc($result)) {
-                                        // Konversi timestamp Mulai Cuti ke format tanggal
                                         $mulai_cuti = $row['Mulai Cuti'] > 0 ? date('d/m/Y', $row['Mulai Cuti']) : '-';
-                                        // Konversi timestamp Sampai Dengan ke format tanggal
                                         $sampai_dengan = $row['Sampai Dengan'] > 0 ? date('d/m/Y', $row['Sampai Dengan']) : '-';
                                 ?>
                                         <tr>
-                                            <!-- Kolom nomor -->
                                             <td class="text-center"><?php echo $no++; ?></td>
-                                            <!-- Kolom Nama/NIP -->
                                             <td><?php echo htmlspecialchars($row['Nama/NIP']); ?></td>
-                                            <!-- Kolom Pangkat/GOL RUANG -->
                                             <td><?php echo htmlspecialchars($row['Pangkat/GOL RUANG']); ?></td>
-                                            <!-- Kolom Jabatan -->
                                             <td><?php echo htmlspecialchars($row['Jabatan']); ?></td>
-                                            <!-- Kolom Jenis Cuti -->
                                             <td><?php echo htmlspecialchars($row['Jenis Cuti']); ?></td>
-                                            <!-- Kolom Lamanya -->
                                             <td><?php echo htmlspecialchars($row['Lamanya']); ?></td>
-                                            <!-- Kolom Mulai Cuti -->
                                             <td data-date="<?= $row['Mulai Cuti'] > 0 ? date('Y-m-d', $row['Mulai Cuti']) : '' ?>"><?php echo $mulai_cuti; ?></td>
-                                            <!-- Kolom Sampai Dengan -->
                                             <td><?php echo $sampai_dengan; ?></td>
-                                            <!-- Kolom Sisa Cuti -->
                                             <td><?php echo htmlspecialchars($row['Sisa Cuti']); ?></td>
-                                            <!-- Kolom Aksi -->
                                             <td class="text-center no-export">
                                                 <div class="action-buttons-wrapper">
-                                                    <!-- Tombol lihat file -->
                                                     <?php if (!empty($row['file_surat'])): ?>
                                                         <a href="../uploads/surat_cuti/<?php echo $row['file_surat']; ?>"
                                                             target="_blank" class="btn-action btn-view-file" title="Lihat File">
                                                             <i class="fas fa-file-pdf"></i>
                                                         </a>
+                                                    <?php else: ?>
+                                                        <button class="btn-action btn-disabled" title="Belum ada file" disabled>
+                                                            <i class="fas fa-file-pdf"></i>
+                                                        </button>
                                                     <?php endif; ?>
 
-                                                    <!-- Tombol lihat detail -->
                                                     <a href="detail-surat-cuti.php?id=<?php echo $row['id']; ?>"
                                                         class="btn-action btn-view" title="Lihat Detail">
                                                         <i class="fas fa-eye"></i>
                                                     </a>
 
-                                                    <!-- Tombol edit -->
                                                     <a href="edit-surat-cuti.php?id=<?php echo $row['id']; ?>"
                                                         class="btn-action btn-edit" title="Edit">
                                                         <i class="fas fa-edit"></i>
                                                     </a>
 
-                                                    <!-- Tombol hapus -->
                                                     <button class="btn-action btn-delete"
                                                         onclick="confirmDelete(<?php echo $row['id']; ?>)" title="Hapus">
                                                         <i class="fas fa-trash"></i>
@@ -276,90 +283,11 @@ $result = mysqli_query($conn, $query);
     <!-- DataTables Print button -->
     <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
 
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- JavaScript dashboard -->
     <script src="../js/dashboard.js"></script>
-
-    <script>
-        // Inisialisasi ketika dokumen siap
-        $(document).ready(function() {
-            // Initialize DataTable
-            var tableCuti = $('#suratCutiTable').DataTable({
-                // Layout DataTables dengan buttons
-                dom: 'Bfrtip',
-                // Konfigurasi tombol export
-                buttons: [{
-                        // Tombol export Excel
-                        extend: 'excel',
-                        text: '<i class="fas fa-file-excel"></i> Excel',
-                        className: 'dt-button',
-                        // Opsi export, exclude kolom no-export
-                        exportOptions: {
-                            columns: ':not(.no-export)'
-                        }
-                    },
-                    {
-                        // Tombol export PDF
-                        extend: 'pdf',
-                        text: '<i class="fas fa-file-pdf"></i> PDF',
-                        className: 'dt-button',
-                        // Opsi export, exclude kolom no-export
-                        exportOptions: {
-                            columns: ':not(.no-export)'
-                        }
-                    }
-                ],
-                // Konfigurasi bahasa Indonesia
-                language: {
-                    search: "Cari:",
-                    lengthMenu: "Tampilkan _MENU_ data per halaman",
-                    zeroRecords: "Data tidak ditemukan",
-                    info: "Menampilkan halaman _PAGE_ dari _PAGES_",
-                    infoEmpty: "Tidak ada data yang tersedia",
-                    infoFiltered: "(difilter dari _MAX_ total data)",
-                    paginate: {
-                        first: "Pertama",
-                        last: "Terakhir",
-                        next: "Selanjutnya",
-                        previous: "Sebelumnya"
-                    }
-                },
-                // Jumlah data per halaman
-                pageLength: 10,
-                // Urutan default berdasarkan kolom pertama ascending
-                order: [
-                    [0, 'asc']
-                ]
-            });
-            // Filter tanggal (Mulai Cuti = kolom index 6)
-            $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
-                if (settings.nTable.id !== 'suratCutiTable') return true;
-                var dari = $('#filterDari').val();
-                var sampai = $('#filterSampai').val();
-                if (!dari && !sampai) return true;
-                var row = $(tableCuti.row(dataIndex).node());
-                var dateVal = row.find('td:eq(6)').attr('data-date');
-                if (!dateVal) return false;
-                if (dari && dateVal < dari) return false;
-                if (sampai && dateVal > sampai) return false;
-                return true;
-            });
-            $('#btnFilterTanggal').on('click', function() { tableCuti.draw(); });
-            $('#btnResetTanggal').on('click', function() {
-                $('#filterDari').val('');
-                $('#filterSampai').val('');
-                tableCuti.draw();
-            });
-        });
-
-        // Fungsi konfirmasi hapus data
-        function confirmDelete(id) {
-            // Tampilkan dialog konfirmasi
-            if (confirm('Apakah Anda yakin ingin menghapus data Surat Cuti ini?')) {
-                // Redirect ke proses-surat-cuti.php dengan action delete
-                window.location.href = 'proses-surat-cuti.php?action=delete&id=' + id;
-            }
-        }
-    </script>
+    <script src="../js/surat-cuti.js"></script>
 </body>
 
 </html>

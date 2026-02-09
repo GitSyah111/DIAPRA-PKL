@@ -49,7 +49,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $nomor_surat = mysqli_real_escape_string($conn, $_POST['nomor_surat']);
         $tujuan_surat = mysqli_real_escape_string($conn, $_POST['tujuan_surat']);
         $perihal = mysqli_real_escape_string($conn, $_POST['perihal']);
-        $dibuat_oleh = 'Admin'; // Bisa diganti dengan session username
+        
+        $id_user = $_SESSION['user_id'];
+        // Use nama_bidang if available, otherwise username, otherwise nama
+        $dibuat_oleh = !empty($_SESSION['nama_bidang']) ? $_SESSION['nama_bidang'] : (!empty($_SESSION['username']) ? $_SESSION['username'] : $_SESSION['nama']);
 
         $file_surat = '';
 
@@ -68,8 +71,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
         // Insert ke database
-        $query = "INSERT INTO surat_keluar (nomor_urut, nomor_surat, tujuan_surat, tanggal_surat, perihal, dibuat_oleh, file_surat) 
-                  VALUES ('$nomor_urut', '$nomor_surat', '$tujuan_surat', '$tanggal_surat', '$perihal', '$dibuat_oleh', '$file_surat')";
+        // Insert ke database
+        $query = "INSERT INTO surat_keluar (nomor_urut, nomor_surat, tujuan_surat, tanggal_surat, perihal, dibuat_oleh, file_surat, id_user) 
+                  VALUES ('$nomor_urut', '$nomor_surat', '$tujuan_surat', '$tanggal_surat', '$perihal', '$dibuat_oleh', '$file_surat', '$id_user')";
 
         if (mysqli_query($conn, $query)) {
             echo "<!DOCTYPE html>

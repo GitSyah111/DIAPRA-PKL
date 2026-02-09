@@ -4,7 +4,11 @@ include 'database.php';
 require_once 'auth_check.php';
 
 // Query untuk mengambil data surat masuk yang belum disposisi
-$query = "SELECT * FROM surat_masuk WHERE status_disposisi = 'Belum diproses' ORDER BY id DESC";
+$query = "SELECT surat_masuk.*, user.nama_bidang, user.username 
+          FROM surat_masuk 
+          LEFT JOIN user ON surat_masuk.id_user = user.no 
+          WHERE status_disposisi = 'Belum diproses' 
+          ORDER BY surat_masuk.id DESC";
 $result = mysqli_query($conn, $query);
 ?>
 <!DOCTYPE html>
@@ -152,6 +156,7 @@ $result = mysqli_query($conn, $query);
                                     <th width="10%">Tanggal Surat</th>
                                     <th width="12%">Nomor Surat</th>
                                     <th width="23%">Perihal</th>
+                                    <th width="10%" class="no-export">Diinput Oleh</th>
                                     <th width="10%" class="no-export">Status</th>
                                     <th width="15%" class="no-export">Aksi</th>
                                 </tr>
@@ -164,6 +169,9 @@ $result = mysqli_query($conn, $query);
                                         // Format tanggal
                                         $tgl_terima = date('d/m/Y', strtotime($row['tanggal_terima']));
                                         $tgl_surat = date('d/m/Y', strtotime($row['tanggal_surat']));
+
+                                        // Diinput oleh
+                                        $diinput_oleh = !empty($row['nama_bidang']) ? $row['nama_bidang'] : (!empty($row['username']) ? $row['username'] : '-');
                                 ?>
                                         <tr>
                                             <td class="text-center"><?php echo $no++; ?></td>
@@ -173,6 +181,7 @@ $result = mysqli_query($conn, $query);
                                             <td><?php echo $tgl_surat; ?></td>
                                             <td><?php echo htmlspecialchars($row['nomor_surat']); ?></td>
                                             <td><?php echo htmlspecialchars($row['perihal']); ?></td>
+                                            <td class="no-export"><?php echo htmlspecialchars($diinput_oleh); ?></td>
                                             <td class="text-center no-export">
                                                 <span class="badge badge-warning">
                                                     <i class="fas fa-clock"></i> Belum Diproses
@@ -205,7 +214,7 @@ $result = mysqli_query($conn, $query);
                                 <?php
                                     }
                                 } else {
-                                    echo '<tr><td colspan="9" class="text-center" style="padding: 40px;">
+                                    echo '<tr><td colspan="10" class="text-center" style="padding: 40px;">
                                             <i class="fas fa-check-circle" style="font-size: 48px; color: #10b981; margin-bottom: 15px;"></i>
                                             <p style="font-size: 16px; color: #6b7280;"><strong>Tidak ada surat yang menunggu disposisi</strong></p>
                                             <p style="font-size: 14px; color: #9ca3af; margin-top: 5px;">Semua surat masuk sudah didisposisi</p>

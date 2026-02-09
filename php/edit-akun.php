@@ -121,15 +121,31 @@ unset($_SESSION['success_message'], $_SESSION['error_message']);
             <!-- Content Area -->
             <div class="content">
                 <?php if ($success_message): ?>
-                    <div class="alert alert-success">
-                        <i class="fas fa-check-circle"></i> <?= htmlspecialchars($success_message) ?>
-                    </div>
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            Swal.fire({
+                                title: 'Berhasil!',
+                                text: '<?= htmlspecialchars($success_message) ?>',
+                                icon: 'success',
+                                confirmButtonColor: '#3085d6',
+                                confirmButtonText: 'OK'
+                            });
+                        });
+                    </script>
                 <?php endif; ?>
                 
                 <?php if ($error_message): ?>
-                    <div class="alert alert-error">
-                        <i class="fas fa-exclamation-circle"></i> <?= htmlspecialchars($error_message) ?>
-                    </div>
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            Swal.fire({
+                                title: 'Gagal!',
+                                text: '<?= htmlspecialchars($error_message) ?>',
+                                icon: 'error',
+                                confirmButtonColor: '#d33',
+                                confirmButtonText: 'OK'
+                            });
+                        });
+                    </script>
                 <?php endif; ?>
 
                 <!-- Edit Account Form -->
@@ -204,6 +220,7 @@ unset($_SESSION['success_message'], $_SESSION['error_message']);
     </div>
 
     <script src="../js/dashboard.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         // Form validation
         document.getElementById('editAccountForm').addEventListener('submit', function(e) {

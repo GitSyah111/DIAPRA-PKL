@@ -15,6 +15,7 @@ if (isset($_POST['action']) || isset($_GET['action'])) {
         $tanggal_surat = mysqli_real_escape_string($conn, $_POST['tanggal_surat']);
         $nomor_surat = mysqli_real_escape_string($conn, $_POST['nomor_surat']);
         $perihal = mysqli_real_escape_string($conn, $_POST['perihal']);
+        $id_user = $_SESSION['user_id'];
 
         // Dilihat oleh (array to string)
         $dilihat_oleh = '';
@@ -72,9 +73,9 @@ if (isset($_POST['action']) || isset($_GET['action'])) {
 
         // Insert ke database
         $query = "INSERT INTO surat_masuk 
-                  (nomor_agenda, tanggal_terima, alamat_pengirim, tanggal_surat, nomor_surat, perihal, file_surat, dilihat_oleh, status_disposisi) 
+                  (nomor_agenda, tanggal_terima, alamat_pengirim, tanggal_surat, nomor_surat, perihal, file_surat, dilihat_oleh, status_disposisi, id_user) 
                   VALUES 
-                  ('$nomor_agenda', '$tanggal_terima', '$alamat_pengirim', '$tanggal_surat', '$nomor_surat', '$perihal', '$file_surat', '$dilihat_oleh', 'Belum diproses')";
+                  ('$nomor_agenda', '$tanggal_terima', '$alamat_pengirim', '$tanggal_surat', '$nomor_surat', '$perihal', '$file_surat', '$dilihat_oleh', 'Belum diproses', '$id_user')";
 
         if (mysqli_query($conn, $query)) {
             echo "<!DOCTYPE html>

@@ -17,8 +17,59 @@ $(document).ready(function () {
                 extend: 'pdf',
                 text: '<i class="fas fa-file-pdf"></i> PDF',
                 className: 'dt-button',
+                orientation: 'landscape',
+                pageSize: 'A4',
+                title: 'Laporan SPJ UMPEG',
                 exportOptions: {
                     columns: ':not(.no-export)'
+                },
+                customize: function (doc) {
+                    // Styling
+                    doc.defaultStyle.fontSize = 10;
+                    doc.styles.tableHeader.fontSize = 11;
+                    doc.styles.tableHeader.alignment = 'center';
+                    doc.styles.tableBodyOdd.alignment = 'center';
+                    doc.styles.tableBodyEven.alignment = 'center';
+
+                    // Layout columns
+                    var tableNode;
+                    for (var i = 0; i < doc.content.length; i++) {
+                        if (doc.content[i].table) {
+                            tableNode = doc.content[i];
+                            break;
+                        }
+                    }
+                    if (tableNode) {
+                        tableNode.table.widths = Array(tableNode.table.body[0].length).fill('*');
+                    }
+
+                    // Add Filter Period
+                    var dari = $('#filterDari').val();
+                    var sampai = $('#filterSampai').val();
+                    var periodeText = '';
+                    function fmt(d) { return d.split('-').reverse().join('/'); }
+
+                    if (dari && sampai) periodeText = 'Periode: ' + fmt(dari) + ' s/d ' + fmt(sampai);
+                    else if (dari) periodeText = 'Periode: Dari ' + fmt(dari);
+                    else if (sampai) periodeText = 'Periode: Sampai ' + fmt(sampai);
+
+                    if (periodeText) {
+                        doc.content.splice(1, 0, {
+                            text: periodeText,
+                            alignment: 'center',
+                            margin: [0, 0, 0, 10],
+                            fontSize: 11
+                        });
+                    }
+
+                    // Add Total Count
+                    var rowCount = tableNode ? (tableNode.table.body.length - 1) : 0;
+                    doc.content.push({
+                        text: 'Total Arsip: ' + rowCount,
+                        margin: [0, 20, 0, 0],
+                        fontSize: 11,
+                        bold: true
+                    });
                 }
             }
             ],

@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jan 20, 2026 at 08:20 PM
--- Server version: 8.0.30
--- PHP Version: 8.1.10
+-- Waktu pembuatan: 09 Feb 2026 pada 01.27
+-- Versi server: 8.0.30
+-- Versi PHP: 8.1.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,31 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `si_surat`
+-- Basis data: `db_diapra_2026`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `kadis`
+-- Struktur dari tabel `disposisi`
+--
+
+CREATE TABLE `disposisi` (
+  `id` int NOT NULL,
+  `id_surat_masuk` int NOT NULL,
+  `tujuan_bidang` varchar(100) NOT NULL,
+  `isi_disposisi` text NOT NULL,
+  `sifat` varchar(50) NOT NULL,
+  `batas_waktu` date DEFAULT NULL,
+  `catatan` text,
+  `file_disposisi` varchar(255) DEFAULT NULL,
+  `status_baca` tinyint(1) DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `kadis`
 --
 
 CREATE TABLE `kadis` (
@@ -35,7 +53,7 @@ CREATE TABLE `kadis` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Dumping data for table `kadis`
+-- Dumping data untuk tabel `kadis`
 --
 
 INSERT INTO `kadis` (`no`, `nama`, `pangkat`, `NIP`) VALUES
@@ -44,7 +62,7 @@ INSERT INTO `kadis` (`no`, `nama`, `pangkat`, `NIP`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `spj_umpeg`
+-- Struktur dari tabel `spj_umpeg`
 --
 
 CREATE TABLE `spj_umpeg` (
@@ -58,39 +76,49 @@ CREATE TABLE `spj_umpeg` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Dumping data for table `spj_umpeg`
+-- Dumping data untuk tabel `spj_umpeg`
 --
 
 INSERT INTO `spj_umpeg` (`id`, `nomor_urut`, `nomor_spj`, `tanggal`, `nama_kegiatan`, `dibuat_oleh`, `file_spj`) VALUES
-(1, 1, 'SPJ/001/UMPEG/2025', '2025-11-24', 'Permohonan Persetujuan Pelaksanaan Pembayaran Belanja Surat Kabar', 'Admin', 'spj_1764033421_6925038da800e.pdf');
+(4, 1, 'SPJ/001/UMPEG/2026', '2026-01-01', 'Permohonan Persetujuan Pelaksanaan Pembayaran Belanja Surat Kabar', 'Super Admin', 'spj_1770524871_698810c7a9275.pdf');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `surat cuti`
+-- Struktur dari tabel `surat_cuti`
 --
 
-CREATE TABLE `surat cuti` (
+CREATE TABLE `surat_cuti` (
   `id` int NOT NULL,
+  `id_user` bigint DEFAULT NULL,
   `Nama/NIP` varchar(100) NOT NULL,
   `Pangkat/GOL RUANG` varchar(25) NOT NULL,
-  `Jabatan` varchar(30) NOT NULL,
+  `Jabatan` varchar(255) DEFAULT NULL,
   `Jenis Cuti` varchar(20) NOT NULL,
   `Lamanya` varchar(11) NOT NULL,
   `Dilaksanakan DI` varchar(20) NOT NULL,
   `Mulai Cuti` int NOT NULL,
   `Sampai Dengan` int NOT NULL,
-  `Sisa Cuti` varchar(11) NOT NULL
+  `Sisa Cuti` varchar(11) NOT NULL,
+  `file_surat` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data untuk tabel `surat_cuti`
+--
+
+INSERT INTO `surat_cuti` (`id`, `id_user`, `Nama/NIP`, `Pangkat/GOL RUANG`, `Jabatan`, `Jenis Cuti`, `Lamanya`, `Dilaksanakan DI`, `Mulai Cuti`, `Sampai Dengan`, `Sisa Cuti`, `file_surat`) VALUES
+(4, NULL, 'NOVA PUSPITA SARI, S.Kom ', 'penata III', 'Penyusun Bahan Kebijakan Pengabdian Masyarakat ', 'Cuti Tahunan', '5 hari', 'Banjarmasin', 1769385600, 1769731200, '2 Hari', 'surat_cuti_1770451950_6986f3eeaa133.pdf');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `surat_keluar`
+-- Struktur dari tabel `surat_keluar`
 --
 
 CREATE TABLE `surat_keluar` (
   `id` int NOT NULL,
+  `id_user` bigint DEFAULT NULL,
   `nomor_urut` int NOT NULL,
   `nomor_surat` varchar(255) NOT NULL,
   `tujuan_surat` varchar(255) NOT NULL,
@@ -102,21 +130,22 @@ CREATE TABLE `surat_keluar` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Dumping data for table `surat_keluar`
+-- Dumping data untuk tabel `surat_keluar`
 --
 
-INSERT INTO `surat_keluar` (`id`, `nomor_urut`, `nomor_surat`, `tujuan_surat`, `tanggal_surat`, `perihal`, `dibuat_oleh`, `file_surat`, `created_at`) VALUES
-(1, 1, ' 400.13/1799/KS/DPPKBPM-BJM/XI/2025', 'Terlampir', '2025-11-12', 'Rapat Koordinasi dalam Rangka Persiapan Expose Hasil Survei Indeks Pembangunan Keluarga (Ibangga), Tahun Anggaran 2025 ', 'Admin', '69266a6e0d4be_1764125294.pdf', '2025-11-26 02:48:14'),
-(2, 2, '900.1.3.5/128-Sekr/DPPKBPM-BJM//2025', 'Kepala DPPKBPM', '2025-11-25', 'Permohonan Persetujuan Pelaksanaan Pembayaran Jasa Pelayanan Umum Kantor', 'Admin', '69279b77a199c_1764203383.pdf', '2025-11-27 00:29:43');
+INSERT INTO `surat_keluar` (`id`, `id_user`, `nomor_urut`, `nomor_surat`, `tujuan_surat`, `tanggal_surat`, `perihal`, `dibuat_oleh`, `file_surat`, `created_at`) VALUES
+(9, NULL, 1, '800.1.4.1/100-Sekr/DPPKBPM', 'Koordinator PKB Banjarmasin Tengah', '2026-01-19', 'Pemberitahuan Peralihan Penempatan Peserta Magang Fresh Graduated Batch 2 Sebagai PКВ', 'Admin', '69880f0a26774_1770524426.pdf', '2026-02-08 04:20:26'),
+(10, NULL, 2, '800.1.11.1/101 /DPPKBPM/2026', 'AFIFAH, AM.Keb', '2026-01-20', 'SURAT PERINTAH PELAKSANA TUGAS', 'Admin', '69881474727d4_1770525812.pdf', '2026-02-08 04:43:32');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `surat_masuk`
+-- Struktur dari tabel `surat_masuk`
 --
 
 CREATE TABLE `surat_masuk` (
   `id` int NOT NULL,
+  `id_user` bigint DEFAULT NULL,
   `nomor_agenda` varchar(100) NOT NULL,
   `tanggal_terima` date NOT NULL,
   `alamat_pengirim` varchar(255) NOT NULL,
@@ -130,120 +159,170 @@ CREATE TABLE `surat_masuk` (
   `catatan_disposisi` text,
   `status_disposisi` varchar(50) NOT NULL DEFAULT 'Belum diproses',
   `dilihat_oleh` text,
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `file_disposisi` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Dumping data for table `surat_masuk`
+-- Dumping data untuk tabel `surat_masuk`
 --
 
-INSERT INTO `surat_masuk` (`id`, `nomor_agenda`, `tanggal_terima`, `alamat_pengirim`, `tanggal_surat`, `nomor_surat`, `perihal`, `file_surat`, `sifat_surat`, `tujuan_disposisi`, `instruksi_disposisi`, `catatan_disposisi`, `status_disposisi`, `dilihat_oleh`, `created_at`) VALUES
-(5, '1', '2025-11-24', 'Sekretariat Daerah Kota Banjarmasin', '2025-11-05', '000.8.2./ 357 /ORG', 'Rapat Koordinasi Pembahasan Usulan Peta Jabatan dan Penyesuaian Informasi Jabatan', 'surat_1763967031_6924003718c3e.pdf', NULL, NULL, NULL, NULL, 'Belum diproses', '', '2025-11-24 06:50:31');
+INSERT INTO `surat_masuk` (`id`, `id_user`, `nomor_agenda`, `tanggal_terima`, `alamat_pengirim`, `tanggal_surat`, `nomor_surat`, `perihal`, `file_surat`, `sifat_surat`, `tujuan_disposisi`, `instruksi_disposisi`, `catatan_disposisi`, `status_disposisi`, `dilihat_oleh`, `created_at`, `file_disposisi`) VALUES
+(12, NULL, '1', '2026-01-05', 'Kemendukbangga/ BKKBN', '2026-01-02', '02/SP.04/J18/2026', 'Pernyataan Kesediaan Hibah Alat dan Obat Kontrasepsi', 'surat_1770520311_6987fef7df933.pdf', '', '', '', '', 'Sudah didisposisi', '', '2026-02-08 03:11:51', 'disposisi_1770520437_6987ff75ac7f1.pdf'),
+(13, NULL, '2', '2026-01-04', 'Kemendukbangga/ BKKBN', '2026-01-02', '1/PK.01/J18/2026', 'Penyampaian Buku Saku Pendampingan. Pengasuhan Program Taman Asuh Sayang Anak (TAMASYA)  di Tempat Penitipan Anak oleh Tim Pendamping Keluarga\r\n', 'surat_1770520416_6987ff603bc11.pdf', NULL, NULL, NULL, NULL, 'Belum diproses', '', '2026-02-08 03:13:36', NULL),
+(14, NULL, '3', '2026-01-06', 'WALI KOTA BANJARMASIN', '2026-02-05', '900.1.1/ 003 -Angg/BPKPAD/I/2026', 'Undangan Penyerahan DPA-SKPD ', 'surat_1770522410_6988072a0646e.pdf', NULL, NULL, NULL, NULL, 'Belum diproses', '', '2026-02-08 03:46:50', NULL),
+(15, 5, '4', '2026-01-16', ' UNIVERSITAS ISLAM NEGERI ANTASARI BANJARMASIN FAKULTAS DAKWAH DAN ILMU KOMUNIKASI', '2026-01-06', '003 /Un.14/III.4/1/PP.00.9/1/2026', '003 /Un.14/III.4/1/PP.00.9/1/2026', 'surat_1770597902_69892e0e8769c.pdf', NULL, NULL, NULL, NULL, 'Belum diproses', '', '2026-02-09 00:45:02', NULL);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user`
+-- Struktur dari tabel `user`
 --
 
 CREATE TABLE `user` (
   `no` bigint NOT NULL,
   `nama` varchar(100) NOT NULL,
   `username` varchar(255) NOT NULL,
-  `password` varchar(10) NOT NULL,
-  `role` enum('admin','user') NOT NULL
+  `password` varchar(255) NOT NULL,
+  `role` enum('super_admin','admin','bidang') NOT NULL DEFAULT 'bidang',
+  `nama_bidang` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Dumping data for table `user`
+-- Dumping data untuk tabel `user`
 --
 
-INSERT INTO `user` (`no`, `nama`, `username`, `password`, `role`) VALUES
-(1, 'Admin', 'Admin', 'admin123', 'admin'),
-(2, 'Bidang Dalduk', 'bidangdalduk', 'dalduk123', 'user'),
-(3, 'Bidang Keluarga Berencana', 'bidangKB', 'kb123', 'user'),
-(4, 'Bidang Keluarga Sejahtera', 'bidangKS', 'ks123', 'user'),
-(5, 'Bidang Pemberdayaan Masyarakat', 'bidangPM', 'pm123', 'user');
+INSERT INTO `user` (`no`, `nama`, `username`, `password`, `role`, `nama_bidang`) VALUES
+(1, 'Super Admin', 'Super Admin', '5d2e7856bb154101615a0a4b01a486de', 'super_admin', NULL),
+(2, 'Bidang Dalduk', 'bidangdalduk', '9b9263edc30ea713fa1575ad88d89e4e', 'bidang', 'Bidang Pengendalian Penduduk'),
+(3, 'Bidang Keluarga Berencana', 'bidangKB', '2790b86da27e701033b28bce76bc9268', 'bidang', 'Bidang Keluarga Berencana'),
+(4, 'Bidang Keluarga Sejahtera', 'bidangKS', '60854555c690d7f0ceb76f8876baee6e', 'bidang', 'Bidang Keluarga Sejahtera'),
+(5, 'Bidang Pemberdayaan Masyarakat', 'bidangPM', 'b655e7469e74cb9ba7147f180f714bb5', 'bidang', 'Bidang Pemberdayaan Masyarakat'),
+(10, 'Admin', 'Admin', '0192023a7bbd73250516f069df18b500', 'admin', NULL);
 
 --
--- Indexes for dumped tables
+-- Indeks untuk tabel yang dibuang
 --
 
 --
--- Indexes for table `kadis`
+-- Indeks untuk tabel `disposisi`
+--
+ALTER TABLE `disposisi`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_surat_masuk` (`id_surat_masuk`);
+
+--
+-- Indeks untuk tabel `kadis`
 --
 ALTER TABLE `kadis`
   ADD PRIMARY KEY (`no`);
 
 --
--- Indexes for table `spj_umpeg`
+-- Indeks untuk tabel `spj_umpeg`
 --
 ALTER TABLE `spj_umpeg`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `surat cuti`
+-- Indeks untuk tabel `surat_cuti`
 --
-ALTER TABLE `surat cuti`
-  ADD PRIMARY KEY (`id`);
+ALTER TABLE `surat_cuti`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_surat_cuti_user` (`id_user`);
 
 --
--- Indexes for table `surat_keluar`
+-- Indeks untuk tabel `surat_keluar`
 --
 ALTER TABLE `surat_keluar`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_surat_keluar_user` (`id_user`);
 
 --
--- Indexes for table `surat_masuk`
+-- Indeks untuk tabel `surat_masuk`
 --
 ALTER TABLE `surat_masuk`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_surat_masuk_user` (`id_user`);
 
 --
--- Indexes for table `user`
+-- Indeks untuk tabel `user`
 --
 ALTER TABLE `user`
   ADD PRIMARY KEY (`no`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT untuk tabel yang dibuang
 --
 
 --
--- AUTO_INCREMENT for table `kadis`
+-- AUTO_INCREMENT untuk tabel `disposisi`
+--
+ALTER TABLE `disposisi`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT untuk tabel `kadis`
 --
 ALTER TABLE `kadis`
   MODIFY `no` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT for table `spj_umpeg`
+-- AUTO_INCREMENT untuk tabel `spj_umpeg`
 --
 ALTER TABLE `spj_umpeg`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT for table `surat cuti`
+-- AUTO_INCREMENT untuk tabel `surat_cuti`
 --
-ALTER TABLE `surat cuti`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+ALTER TABLE `surat_cuti`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT for table `surat_keluar`
+-- AUTO_INCREMENT untuk tabel `surat_keluar`
 --
 ALTER TABLE `surat_keluar`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
--- AUTO_INCREMENT for table `surat_masuk`
+-- AUTO_INCREMENT untuk tabel `surat_masuk`
 --
 ALTER TABLE `surat_masuk`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
--- AUTO_INCREMENT for table `user`
+-- AUTO_INCREMENT untuk tabel `user`
 --
 ALTER TABLE `user`
-  MODIFY `no` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `no` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
+-- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
+--
+
+--
+-- Ketidakleluasaan untuk tabel `disposisi`
+--
+ALTER TABLE `disposisi`
+  ADD CONSTRAINT `fk_disposisi_surat` FOREIGN KEY (`id_surat_masuk`) REFERENCES `surat_masuk` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Ketidakleluasaan untuk tabel `surat_cuti`
+--
+ALTER TABLE `surat_cuti`
+  ADD CONSTRAINT `fk_surat_cuti_user` FOREIGN KEY (`id_user`) REFERENCES `user` (`no`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+--
+-- Ketidakleluasaan untuk tabel `surat_keluar`
+--
+ALTER TABLE `surat_keluar`
+  ADD CONSTRAINT `fk_surat_keluar_user` FOREIGN KEY (`id_user`) REFERENCES `user` (`no`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+--
+-- Ketidakleluasaan untuk tabel `surat_masuk`
+--
+ALTER TABLE `surat_masuk`
+  ADD CONSTRAINT `fk_surat_masuk_user` FOREIGN KEY (`id_user`) REFERENCES `user` (`no`) ON DELETE RESTRICT ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

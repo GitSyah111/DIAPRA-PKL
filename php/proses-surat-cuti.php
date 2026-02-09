@@ -82,10 +82,11 @@ if (isset($_POST['action']) || isset($_GET['action'])) {
         }
 
         // Query insert ke database dengan kolom menggunakan backticks
-        $query = "INSERT INTO `surat cuti` 
-                  (`Nama/NIP`, `Pangkat/GOL RUANG`, `Jabatan`, `Jenis Cuti`, `Lamanya`, `Dilaksanakan DI`, `Mulai Cuti`, `Sampai Dengan`, `Sisa Cuti`, `file_surat`) 
+        // TABEL USER (Perbaikan Nama Tabel & Relasi) - Note: Tabel lama bernama `surat cuti` (spasi), sekarang jadi `surat_cuti` (underscore)
+        $query = "INSERT INTO `surat_cuti` 
+                  (`Nama/NIP`, `Pangkat/GOL RUANG`, `Jabatan`, `Jenis Cuti`, `Lamanya`, `Dilaksanakan DI`, `Mulai Cuti`, `Sampai Dengan`, `Sisa Cuti`, `file_surat`, `id_user`) 
                   VALUES 
-                  ('$nama_nip', '$pangkat_gol', '$jabatan', '$jenis_cuti', '$lamanya', '$dilaksanakan_di', '$mulai_cuti', '$sampai_dengan', '$sisa_cuti', '$file_surat')";
+                  ('$nama_nip', '$pangkat_gol', '$jabatan', '$jenis_cuti', '$lamanya', '$dilaksanakan_di', '$mulai_cuti', '$sampai_dengan', '$sisa_cuti', '$file_surat', '$id_user')";
 
         // Eksekusi query
         try {
@@ -175,7 +176,7 @@ if (isset($_POST['action']) || isset($_GET['action'])) {
         $sisa_cuti = mysqli_real_escape_string($conn, $_POST['sisa_cuti']);
 
         // Ambil data file lama
-        $query_old = "SELECT file_surat FROM `surat cuti` WHERE id = '$id'";
+        $query_old = "SELECT file_surat FROM `surat_cuti` WHERE id = '$id'";
         $result_old = mysqli_query($conn, $query_old);
         $old_data = mysqli_fetch_assoc($result_old);
         $file_surat = $old_data['file_surat'];
@@ -237,7 +238,7 @@ if (isset($_POST['action']) || isset($_GET['action'])) {
         $file_update_str = $file_surat ? "'$file_surat'" : "NULL";
 
         // Query update ke database dengan kolom menggunakan backticks
-        $query = "UPDATE `surat cuti` SET 
+        $query = "UPDATE `surat_cuti` SET 
                   `Nama/NIP` = '$nama_nip',
                   `Pangkat/GOL RUANG` = '$pangkat_gol',
                   `Jabatan` = '$jabatan',
@@ -312,7 +313,7 @@ if (isset($_POST['action']) || isset($_GET['action'])) {
         $id = mysqli_real_escape_string($conn, $_GET['id']);
 
         // Ambil data file untuk dihapus
-        $query_file = "SELECT file_surat FROM `surat cuti` WHERE id = '$id'";
+        $query_file = "SELECT file_surat FROM `surat_cuti` WHERE id = '$id'";
         $result_file = mysqli_query($conn, $query_file);
         $file_data = mysqli_fetch_assoc($result_file);
 
@@ -322,7 +323,7 @@ if (isset($_POST['action']) || isset($_GET['action'])) {
         }
 
         // Query delete dari database
-        $query = "DELETE FROM `surat cuti` WHERE id = '$id'";
+        $query = "DELETE FROM `surat_cuti` WHERE id = '$id'";
 
         // Eksekusi query
         if (mysqli_query($conn, $query)) {

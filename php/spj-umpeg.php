@@ -50,8 +50,17 @@ $result = mysqli_query($conn, $query);
                     <i class="fas fa-paper-plane"></i>
                     <span class="sidebar-text">Surat Keluar</span>
                 </a>
-                <?php if ($role !== 'user'): ?>
-                <a href="spj-umpeg.php" class="nav-item" title="SPJ UMPEG">
+
+                <?php if ($role == 'bidang'): ?>
+                <a href="disposisi-masuk.php" class="nav-item" title="Disposisi Masuk">
+                    <i class="fas fa-inbox"></i>
+                    <span class="sidebar-text">Disposisi Masuk</span>
+                </a>
+                <?php endif; ?>
+
+                <?php if ($role !== 'user' && $role !== 'bidang'): ?>
+                <!-- Menu SPJ UMPEG (Active) -->
+                <a href="spj-umpeg.php" class="nav-item active" title="SPJ UMPEG">
                     <i class="fas fa-file-invoice"></i>
                     <span class="sidebar-text">SPJ UMPEG</span>
                 </a>
@@ -60,7 +69,7 @@ $result = mysqli_query($conn, $query);
                     <i class="fas fa-calendar-check"></i>
                     <span class="sidebar-text">Surat Cuti</span>
                 </a>
-                <?php if ($role !== 'user'): ?>
+                <?php if ($role !== 'user' && $role !== 'bidang'): ?>
                 <a href="data-pengguna.php" class="nav-item" title="Data Pengguna">
                     <i class="fas fa-users"></i>
                     <span class="sidebar-text">Data Pengguna</span>
@@ -122,6 +131,37 @@ $result = mysqli_query($conn, $query);
                         Tambah SPJ UMPEG
                     </a>
                 </div>
+
+                <!-- SweetAlert Logic for Session Messages -->
+                <?php if (isset($_SESSION['success'])): ?>
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            Swal.fire({
+                                title: 'Berhasil!',
+                                text: '<?php echo $_SESSION['success']; ?>',
+                                icon: 'success',
+                                confirmButtonColor: '#3085d6',
+                                confirmButtonText: 'OK'
+                            });
+                        });
+                    </script>
+                    <?php unset($_SESSION['success']); ?>
+                <?php endif; ?>
+
+                <?php if (isset($_SESSION['error'])): ?>
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            Swal.fire({
+                                title: 'Gagal!',
+                                text: '<?php echo $_SESSION['error']; ?>',
+                                icon: 'error',
+                                confirmButtonColor: '#d33',
+                                confirmButtonText: 'OK'
+                            });
+                        });
+                    </script>
+                    <?php unset($_SESSION['error']); ?>
+                <?php endif; ?>
 
                 <!-- Data Table -->
                 <div class="content-box">
@@ -230,6 +270,8 @@ $result = mysqli_query($conn, $query);
     <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
 
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="../js/dashboard.js"></script>
     <script src="../js/spj-umpeg.js"></script>
 

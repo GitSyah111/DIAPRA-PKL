@@ -103,6 +103,17 @@ if (mysqli_num_rows($check_cuti_table) > 0) {
         $total_cuti = mysqli_fetch_assoc($result_cuti)['total'];
     }
 }
+
+// Hitung Disposisi Masuk (Khusus Role Bidang)
+$total_disposisi_masuk = 0;
+if ($role == 'bidang') {
+    $nama_bidang = $_SESSION['nama_bidang'] ?? '';
+    $query_disp_bidang = "SELECT COUNT(*) as total FROM disposisi WHERE tujuan_bidang = '$nama_bidang'";
+    $result_disp_bidang = mysqli_query($conn, $query_disp_bidang);
+    if ($result_disp_bidang) {
+        $total_disposisi_masuk = mysqli_fetch_assoc($result_disp_bidang)['total'];
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -144,7 +155,15 @@ if (mysqli_num_rows($check_cuti_table) > 0) {
                     <i class="fas fa-paper-plane"></i>
                     <span class="sidebar-text">Surat Keluar</span>
                 </a>
-                <?php if ($role !== 'user'): ?>
+
+                <?php if ($role == 'bidang'): ?>
+                <a href="disposisi-masuk.php" class="nav-item" title="Disposisi Masuk">
+                    <i class="fas fa-inbox"></i>
+                    <span class="sidebar-text">Disposisi Masuk</span>
+                </a>
+                <?php endif; ?>
+
+                <?php if ($role !== 'user' && $role !== 'bidang'): ?>
                 <a href="spj-umpeg.php" class="nav-item" title="SPJ UMPEG">
                     <i class="fas fa-file-invoice"></i>
                     <span class="sidebar-text">SPJ UMPEG</span>
@@ -154,7 +173,7 @@ if (mysqli_num_rows($check_cuti_table) > 0) {
                     <i class="fas fa-calendar-check"></i>
                     <span class="sidebar-text">Surat Cuti</span>
                 </a>
-                <?php if ($role !== 'user'): ?>
+                <?php if ($role !== 'user' && $role !== 'bidang'): ?>
                 <a href="data-pengguna.php" class="nav-item" title="Data Pengguna">
                     <i class="fas fa-users"></i>
                     <span class="sidebar-text">Data Pengguna</span>
@@ -236,19 +255,32 @@ if (mysqli_num_rows($check_cuti_table) > 0) {
                         </div>
                     </a>
 
-                    <a href="surat-belum-disposisi.php" class="stat-card orange" style="text-decoration: none; color: inherit;">
-                        <div class="stat-icon">
-                            <i class="fas fa-clock"></i>
-                        </div>
-                        <div class="stat-info">
-                            <h3>Belum Disposisi</h3>
-                            <p class="stat-number"><?php echo $total_pending; ?></p>
-                            <span class="stat-label">Menunggu disposisi</span>
-                        </div>
-                    </a>
+                    <?php if ($role == 'bidang'): ?>
+                        <a href="disposisi-masuk.php" class="stat-card orange" style="text-decoration: none; color: inherit;">
+                            <div class="stat-icon">
+                                <i class="fas fa-inbox"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>Disposisi Masuk</h3>
+                                <p class="stat-number"><?php echo $total_disposisi_masuk; ?></p>
+                                <span class="stat-label">Total Disposisi Diterima</span>
+                            </div>
+                        </a>
+                    <?php else: ?>
+                        <a href="surat-belum-disposisi.php" class="stat-card orange" style="text-decoration: none; color: inherit;">
+                            <div class="stat-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>Belum Disposisi</h3>
+                                <p class="stat-number"><?php echo $total_pending; ?></p>
+                                <span class="stat-label">Menunggu disposisi</span>
+                            </div>
+                        </a>
+                    <?php endif; ?>
 
                     <!-- New Card: SPJ UMPEG -->
-                    <?php if ($role !== 'user'): ?>
+                    <?php if ($role !== 'user' && $role !== 'bidang'): ?>
                     <a href="spj-umpeg.php" class="stat-card indigo" style="text-decoration: none; color: inherit;">
                         <div class="stat-icon">
                             <i class="fas fa-file-invoice"></i>
@@ -273,7 +305,7 @@ if (mysqli_num_rows($check_cuti_table) > 0) {
                         </div>
                     </a>
 
-                    <?php if ($role !== 'user'): ?>
+                    <?php if ($role !== 'user' && $role !== 'bidang'): ?>
                     <a href="data-pengguna.php" class="stat-card purple" style="text-decoration: none; color: inherit;">
                         <div class="stat-icon">
                             <i class="fas fa-users"></i>
@@ -362,6 +394,7 @@ if (mysqli_num_rows($check_cuti_table) > 0) {
                             tension: 0.3,
                             fill: true
                         },
+                        <?php if ($role !== 'user' && $role !== 'bidang'): ?>
                         {
                             label: 'SPJ UMPEG',
                             data: dataSpj,
@@ -371,6 +404,7 @@ if (mysqli_num_rows($check_cuti_table) > 0) {
                             tension: 0.3,
                             fill: true
                         },
+                        <?php endif; ?>
                         {
                             label: 'Surat Cuti',
                             data: dataCuti,

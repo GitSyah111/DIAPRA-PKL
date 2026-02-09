@@ -4,7 +4,11 @@ include 'database.php';
 require_once 'auth_check.php';
 
 // Query untuk mengambil data surat keluar
-$query = "SELECT * FROM surat_keluar ORDER BY id DESC";
+// Query untuk mengambil data surat keluar
+$query = "SELECT surat_keluar.*, user.nama_bidang, user.username 
+          FROM surat_keluar 
+          LEFT JOIN user ON surat_keluar.id_user = user.no 
+          ORDER BY surat_keluar.id DESC";
 $result = mysqli_query($conn, $query);
 ?>
 <!DOCTYPE html>
@@ -50,7 +54,15 @@ $result = mysqli_query($conn, $query);
                     <i class="fas fa-paper-plane"></i>
                     <span class="sidebar-text">Surat Keluar</span>
                 </a>
-                <?php if ($role !== 'user'): ?>
+
+                <?php if ($role == 'bidang'): ?>
+                <a href="disposisi-masuk.php" class="nav-item" title="Disposisi Masuk">
+                    <i class="fas fa-inbox"></i>
+                    <span class="sidebar-text">Disposisi Masuk</span>
+                </a>
+                <?php endif; ?>
+
+                <?php if ($role !== 'user' && $role !== 'bidang'): ?>
                 <a href="spj-umpeg.php" class="nav-item" title="SPJ UMPEG">
                     <i class="fas fa-file-invoice"></i>
                     <span class="sidebar-text">SPJ UMPEG</span>
@@ -60,7 +72,7 @@ $result = mysqli_query($conn, $query);
                     <i class="fas fa-calendar-check"></i>
                     <span class="sidebar-text">Surat Cuti</span>
                 </a>
-                <?php if ($role !== 'user'): ?>
+                <?php if ($role !== 'user' && $role !== 'bidang'): ?>
                 <a href="data-pengguna.php" class="nav-item" title="Data Pengguna">
                     <i class="fas fa-users"></i>
                     <span class="sidebar-text">Data Pengguna</span>
@@ -123,6 +135,37 @@ $result = mysqli_query($conn, $query);
                     </a>
                 </div>
 
+                <!-- SweetAlert Logic for Session Messages -->
+                <?php if (isset($_SESSION['success'])): ?>
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            Swal.fire({
+                                title: 'Berhasil!',
+                                text: '<?php echo $_SESSION['success']; ?>',
+                                icon: 'success',
+                                confirmButtonColor: '#3085d6',
+                                confirmButtonText: 'OK'
+                            });
+                        });
+                    </script>
+                    <?php unset($_SESSION['success']); ?>
+                <?php endif; ?>
+
+                <?php if (isset($_SESSION['error'])): ?>
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            Swal.fire({
+                                title: 'Gagal!',
+                                text: '<?php echo $_SESSION['error']; ?>',
+                                icon: 'error',
+                                confirmButtonColor: '#d33',
+                                confirmButtonText: 'OK'
+                            });
+                        });
+                    </script>
+                    <?php unset($_SESSION['error']); ?>
+                <?php endif; ?>
+
                 <!-- Data Table -->
                 <div class="content-box">
                     <div class="box-header">
@@ -166,7 +209,8 @@ $result = mysqli_query($conn, $query);
                                         $tgl_surat = date('d/m/Y', strtotime($row['tanggal_surat']));
 
                                         // Dibuat oleh
-                                        $dibuat_oleh = !empty($row['dibuat_oleh']) ? $row['dibuat_oleh'] : 'Admin';
+                                        // Prioritaskan nama_bidang from join, then username from join, then fallback to existing column dibuat_oleh or 'Admin'
+                                        $display_creator = !empty($row['nama_bidang']) ? $row['nama_bidang'] : (!empty($row['username']) ? $row['username'] : (!empty($row['dibuat_oleh']) ? $row['dibuat_oleh'] : 'Admin'));
                                 ?>
                                         <tr>
                                             <td class="text-center"><?php echo $no++; ?></td>
@@ -175,7 +219,7 @@ $result = mysqli_query($conn, $query);
                                             <td><?php echo htmlspecialchars($row['tujuan_surat']); ?></td>
                                             <td data-date="<?= date('Y-m-d', strtotime($row['tanggal_surat'])) ?>"><?php echo $tgl_surat; ?></td>
                                             <td><?php echo htmlspecialchars($row['perihal']); ?></td>
-                                            <td class="no-export"><?php echo htmlspecialchars($dibuat_oleh); ?></td>
+                                            <td class="no-export"><?php echo htmlspecialchars($display_creator); ?></td>
                                             <td class="text-center no-export">
                                                 <div class="action-buttons-wrapper">
                                                     <?php if (!empty($row['file_surat'])): ?>
@@ -226,6 +270,8 @@ $result = mysqli_query($conn, $query);
     <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
 
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="../js/dashboard.js"></script>
     <script src="../js/surat-keluar.js"></script>
 </body>

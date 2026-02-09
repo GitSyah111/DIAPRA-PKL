@@ -7,7 +7,10 @@ require_once 'auth_check.php';
 $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
 // Query untuk mengambil data Surat Cuti berdasarkan ID
-$query = "SELECT * FROM `surat cuti` WHERE id = $id";
+$query = "SELECT surat_cuti.*, user.nama_bidang, user.username 
+          FROM `surat_cuti` 
+          LEFT JOIN user ON surat_cuti.id_user = user.no 
+          WHERE surat_cuti.id = $id";
 // Eksekusi query
 $result = mysqli_query($conn, $query);
 
@@ -387,6 +390,22 @@ $sampai_dengan = $data['Sampai Dengan'] > 0 ? date('d F Y', $data['Sampai Dengan
                         <!-- Value Sisa Cuti -->
                         <div class="detail-value">
                             <?php echo htmlspecialchars($data['Sisa Cuti']); ?>
+                        </div>
+                    </div>
+
+                    <!-- Detail row Dibuat Oleh -->
+                    <div class="detail-row">
+                        <!-- Label Dibuat Oleh -->
+                        <div class="detail-label">
+                            <i class="fas fa-user-edit"></i>
+                            Dibuat Oleh
+                        </div>
+                        <!-- Value Dibuat Oleh -->
+                        <div class="detail-value">
+                            <?php 
+                                $dibuat_oleh = !empty($data['nama_bidang']) ? $data['nama_bidang'] : (!empty($data['username']) ? $data['username'] : '-');
+                                echo htmlspecialchars($dibuat_oleh); 
+                            ?>
                         </div>
                     </div>
 

@@ -9,6 +9,12 @@ if (!isset($_GET['id'])) {
     exit();
 }
 
+// Security Check: Hanya Admin/Super Admin yang boleh akses halaman ini
+if ($_SESSION['role'] !== 'admin' && $_SESSION['role'] !== 'super_admin') {
+    echo "<script>alert('Akses ditolak! Halaman ini hanya untuk Admin.'); window.location.href = 'surat-masuk.php';</script>";
+    exit();
+}
+
 $id = mysqli_real_escape_string($conn, $_GET['id']);
 
 // Ambil data surat masuk
@@ -29,11 +35,19 @@ $surat = mysqli_fetch_assoc($result);
 $query_users = "SELECT nama FROM user ORDER BY nama ASC";
 $result_users = mysqli_query($conn, $query_users);
 
+// Ambil data user BIDANG untuk dropdown "Tujuan Disposisi"
+$query_bidang = "SELECT nama_bidang FROM user WHERE role = 'bidang' AND nama_bidang IS NOT NULL AND nama_bidang != '' ORDER BY nama_bidang ASC";
+$result_bidang = mysqli_query($conn, $query_bidang);
+
 // Array dilihat oleh yang sudah dipilih
 $dilihat_array = array();
 if (!empty($surat['dilihat_oleh'])) {
     $dilihat_array = explode(', ', $surat['dilihat_oleh']);
 }
+
+// Ambil Riwayat Disposisi
+$query_history = "SELECT * FROM disposisi WHERE id_surat_masuk = '$id' ORDER BY id DESC";
+$result_history = mysqli_query($conn, $query_history);
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -281,7 +295,14 @@ if (!empty($surat['dilihat_oleh'])) {
                     <i class="fas fa-paper-plane"></i>
                     <span class="sidebar-text">Surat Keluar</span>
                 </a>
-                <?php if ($role !== 'user'): ?>
+                <?php if ($role == 'bidang'): ?>
+                <a href="disposisi-masuk.php" class="nav-item" title="Disposisi Masuk">
+                    <i class="fas fa-inbox"></i>
+                    <span class="sidebar-text">Disposisi Masuk</span>
+                </a>
+                <?php endif; ?>
+
+                <?php if ($role !== 'user' && $role !== 'bidang'): ?>
                 <a href="spj-umpeg.php" class="nav-item" title="SPJ UMPEG">
                     <i class="fas fa-file-invoice"></i>
                     <span class="sidebar-text">SPJ UMPEG</span>
@@ -410,135 +431,64 @@ if (!empty($surat['dilihat_oleh'])) {
                                     class="readonly-input">
                             </div>
 
+                            <!-- Sifat Surat (Dropdown update) -->
                             <div class="form-group">
-                                <label for="sifat_surat">
-                                    <i class="fas fa-exclamation-triangle"></i> Sifat Surat
-                                </label>
-                                <select id="sifat_surat" name="sifat_surat" class="form-select">
-                                    <option value="">Pilih Sifat Surat</option>
-                                    <option value="Sangat Segera" <?php echo (($surat['sifat_surat'] ?? '') == 'Sangat Segera') ? 'selected' : ''; ?>>Sangat Segera</option>
-                                    <option value="Segera" <?php echo (($surat['sifat_surat'] ?? '') == 'Segera') ? 'selected' : ''; ?>>Segera</option>
-                                    <option value="Rahasia" <?php echo (($surat['sifat_surat'] ?? '') == 'Rahasia') ? 'selected' : ''; ?>>Rahasia</option>
-                                    <option value="Biasa" <?php echo (($surat['sifat_surat'] ?? '') == 'Biasa') ? 'selected' : ''; ?>>Biasa</option>
+                                <label for="sifat_surat">Sifat Surat <span class="required">*</span></label>
+                                <select id="sifat_surat" name="sifat_surat" class="form-control" required>
+                                    <option value="">-- Pilih Sifat Surat --</option>
+                                    <option value="Biasa" <?php echo ($surat['sifat_surat'] == 'Biasa') ? 'selected' : ''; ?>>Biasa</option>
+                                    <option value="Penting" <?php echo ($surat['sifat_surat'] == 'Penting') ? 'selected' : ''; ?>>Penting</option>
+                                    <option value="Segera" <?php echo ($surat['sifat_surat'] == 'Segera') ? 'selected' : ''; ?>>Segera</option>
+                                    <option value="Rahasia" <?php echo ($surat['sifat_surat'] == 'Rahasia') ? 'selected' : ''; ?>>Rahasia</option>
                                 </select>
                             </div>
 
+                            <!-- Batas Waktu (New Field) -->
                             <div class="form-group">
-                                <label>
-                                    <i class="fas fa-user-check"></i> Tujuan Disposisi
-                                </label>
-                                <div class="checkbox-group">
-                                    <?php
-                                    $tujuan_options = [
-                                        'Sekretaris',
-                                        'Kabid Keluarga Berencana',
-                                        'Kabid Keluarga Sejahtera',
-                                        'Kabid Pengendalian Penduduk dan Informasi Data',
-                                        'Kabid Pemberdayaan Masyarakat'
-                                    ];
-                                    $tujuan_selected = !empty($surat['tujuan_disposisi']) ? explode(', ', $surat['tujuan_disposisi']) : [];
-
-                                    foreach ($tujuan_options as $option) {
-                                        $checked = in_array($option, $tujuan_selected) ? 'checked' : '';
-                                        echo '<label class="checkbox-label">
-                                                <input type="checkbox" name="tujuan_disposisi[]" value="' . htmlspecialchars($option) . '" ' . $checked . '>
-                                                <span>' . htmlspecialchars($option) . '</span>
-                                              </label>';
-                                    }
-                                    ?>
-                                </div>
+                                <label for="batas_waktu">Batas Waktu</label>
+                                <input type="date" id="batas_waktu" name="batas_waktu" class="form-control">
                             </div>
 
+                            <!-- Tujuan Disposisi (New Interface: Dropdown Bidang) -->
                             <div class="form-group">
-                                <label>
-                                    <i class="fas fa-tasks"></i> Instruksi Disposisi
-                                </label>
-                                <div class="checkbox-group">
-                                    <?php
-                                    $instruksi_options = [
-                                        'Tanggapan dan Saran',
-                                        'Proses lebih lanjut',
-                                        'Koordinasi/konfirmasi',
-                                        'Untuk diketahui',
-                                        'Untuk dilaksanakan',
-                                        'Selesaikan sesuai prosedur'
-                                    ];
-                                    $instruksi_selected = !empty($surat['instruksi_disposisi']) ? explode(', ', $surat['instruksi_disposisi']) : [];
-
-                                    foreach ($instruksi_options as $option) {
-                                        $checked = in_array($option, $instruksi_selected) ? 'checked' : '';
-                                        echo '<label class="checkbox-label">
-                                                <input type="checkbox" name="instruksi_disposisi[]" value="' . htmlspecialchars($option) . '" ' . $checked . '>
-                                                <span>' . htmlspecialchars($option) . '</span>
-                                              </label>';
-                                    }
-                                    ?>
-                                </div>
+                                <label for="tujuan_disposisi">Tujuan Disposisi (Bidang) <span class="required">*</span></label>
+                                <select id="tujuan_disposisi" name="tujuan_disposisi" class="form-control" required>
+                                    <option value="">-- Pilih Bidang Tujuan --</option>
+                                    <?php while ($bidang = mysqli_fetch_assoc($result_bidang)): ?>
+                                        <option value="<?php echo htmlspecialchars($bidang['nama_bidang']); ?>">
+                                            <?php echo htmlspecialchars($bidang['nama_bidang']); ?>
+                                        </option>
+                                    <?php endwhile; ?>
+                                </select>
                             </div>
 
+                            <!-- Instruksi/Isi Disposisi (Textarea) -->
                             <div class="form-group">
-                                <label for="catatan_disposisi">
-                                    <i class="fas fa-comment-alt"></i> Catatan
-                                </label>
-                                <textarea id="catatan_disposisi" name="catatan_disposisi" rows="4"
-                                    placeholder="Masukkan catatan disposisi (opsional)"><?php echo htmlspecialchars($surat['catatan_disposisi'] ?? ''); ?></textarea>
+                                <label for="instruksi_disposisi">Isi Instruksi / Disposisi <span class="required">*</span></label>
+                                <textarea id="instruksi_disposisi" name="instruksi_disposisi" class="form-control" rows="4" required placeholder="Tuliskan instruksi disposisi di sini..."></textarea>
                             </div>
 
-                            <!-- FILE DISPOSISI FIELD -->
+                            <!-- Catatan Disposisi (Textarea) -->
+                            <div class="form-group">
+                                <label for="catatan_disposisi">Catatan Disposisi</label>
+                                <textarea id="catatan_disposisi" name="catatan_disposisi" class="form-control" rows="3" placeholder="Tambahkan catatan jika ada..."></textarea>
+                            </div>
+
+                            <!-- File Disposisi -->
                             <div class="form-group">
                                 <label for="file_disposisi">
-                                    <i class="fas fa-file-pdf"></i> Upload File Disposisi (PDF)
+                                    File Disposisi (PDF Only) <span class="required">*</span>
+                                    <small style="display:block; color:#666; font-weight:normal;">Upload lembar disposisi yang sudah discan</small>
                                 </label>
-                                
-                                <?php if (!empty($surat['file_disposisi'])): ?>
-                                    <div class="file-info-display">
-                                        <div class="file-info-row">
-                                            <div class="file-info-details">
-                                                <i class="fas fa-check-circle"></i>
-                                                <div class="file-info-text">
-                                                    <span class="file-info-label">File saat ini:</span>
-                                                    <span class="file-info-name"><?php echo htmlspecialchars($surat['file_disposisi']); ?></span>
-                                                </div>
-                                            </div>
-                                            <div class="file-info-actions">
-                                                <a href="../uploads/disposisi/<?php echo $surat['file_disposisi']; ?>" target="_blank" class="btn-view-small">
-                                                    <i class="fas fa-eye"></i> Preview
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="file-delete-option">
-                                            <label class="file-delete-label">
-                                                <input type="checkbox" name="delete_file_disposisi" value="1"> Hapus file ini (Centang untuk menghapus/mengganti tanpa upload baru)
-                                            </label>
-                                        </div>
-                                    </div>
-                                <?php endif; ?>
-
-                                <input type="file" id="file_disposisi" name="file_disposisi" accept=".pdf" class="form-control" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px;">
-                                <small class="form-help">
-                                    <i class="fas fa-info-circle"></i> Maksimal ukuran: 10MB. Format: PDF.
-                                </small>
+                                <div class="file-upload-wrapper">
+                                    <input type="file" id="file_disposisi" name="file_disposisi" class="file-upload-input" accept=".pdf" required onchange="updateFileName(this)">
+                                    <label for="file_disposisi" class="file-upload-label">
+                                        <i class="fas fa-cloud-upload-alt"></i>
+                                        <span>Pilih file PDF...</span>
+                                    </label>
+                                    <div class="file-name" id="file-name-display">Belum ada file dipilih</div>
+                                </div>
                             </div>
-
-                            <div class="form-group">
-                                <label for="dilihat_oleh">
-                                    <i class="fas fa-users"></i> Dapat Dilihat Oleh
-                                </label>
-                                <select id="dilihat_oleh" name="dilihat_oleh[]" multiple class="select-multiple">
-                                    <?php
-                                    mysqli_data_seek($result_users, 0);
-                                    while ($user = mysqli_fetch_assoc($result_users)) {
-                                        $selected = in_array($user['nama'], $dilihat_array) ? 'selected' : '';
-                                        echo '<option value="' . htmlspecialchars($user['nama']) . '" ' . $selected . '>'
-                                            . htmlspecialchars($user['nama']) . '</option>';
-                                    }
-                                    ?>
-                                </select>
-                                <small class="form-help">
-                                    <i class="fas fa-info-circle"></i> Dapat dipilih lebih dari 1 (tekan Ctrl untuk pilih multiple)
-                                </small>
-                            </div>
-
                             <div class="form-footer">
                                 <a href="surat-masuk.php" class="btn-secondary">
                                     <i class="fas fa-arrow-left"></i> Kembali
@@ -550,6 +500,56 @@ if (!empty($surat['dilihat_oleh'])) {
                         </form>
                     </div>
                 </div>
+            </div>
+
+                <!-- RIWAYAT DISPOSISI -->
+                <div class="content-box">
+                    <div class="box-header">
+                        <h2><i class="fas fa-history"></i> Riwayat Disposisi</h2>
+                    </div>
+                    <div class="table-container">
+                        <table class="data-table display" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Tujuan</th>
+                                    <th>Isi Disposisi</th>
+                                    <th>Sifat</th>
+                                    <th>Catatan</th>
+                                    <th>File</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php if (mysqli_num_rows($result_history) > 0): ?>
+                                    <?php $no_disp = 1; ?>
+                                    <?php while ($row_disp = mysqli_fetch_assoc($result_history)): ?>
+                                        <tr>
+                                            <td class="text-center"><?php echo $no_disp++; ?></td>
+                                            <td><?php echo htmlspecialchars($row_disp['tujuan_bidang']); ?></td>
+                                            <td><?php echo htmlspecialchars($row_disp['isi_disposisi']); ?></td>
+                                            <td><span class="badge badge-info"><?php echo htmlspecialchars($row_disp['sifat']); ?></span></td>
+                                            <td><?php echo htmlspecialchars($row_disp['catatan']); ?></td>
+                                            <td class="text-center">
+                                                <?php if (!empty($row_disp['file_disposisi'])): ?>
+                                                    <a href="../uploads/disposisi/<?php echo $row_disp['file_disposisi']; ?>" target="_blank" class="btn-action btn-view-small">
+                                                        <i class="fas fa-eye"></i>
+                                                    </a>
+                                                <?php else: ?>
+                                                    -
+                                                <?php endif; ?>
+                                            </td>
+                                        </tr>
+                                    <?php endwhile; ?>
+                                <?php else: ?>
+                                    <tr>
+                                        <td colspan="6" class="text-center">Belum ada riwayat disposisi.</td>
+                                    </tr>
+                                <?php endif; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
             </div>
 
             <footer class="main-footer">

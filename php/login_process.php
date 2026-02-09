@@ -11,7 +11,7 @@ if ($username === '' || $password === '') {
     exit;
 }
 
-$stmt = $conn->prepare("SELECT no, nama, username, password, role FROM user WHERE username = ?");
+$stmt = $conn->prepare("SELECT no, nama, username, password, role, nama_bidang FROM user WHERE username = ?");
 $stmt->bind_param('s', $username);
 $stmt->execute();
 $result = $stmt->get_result();
@@ -50,5 +50,6 @@ $_SESSION['user_id'] = $row['no'];
 $_SESSION['nama'] = $row['nama'];
 $_SESSION['username'] = $row['username'];
 $_SESSION['role'] = $row['role'];
+$_SESSION['nama_bidang'] = $row['nama_bidang'];
 header('Location: pilih_tahun.php');
 exit;

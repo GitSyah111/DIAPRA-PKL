@@ -434,6 +434,16 @@
     color: #dc2626;
 }
 
+.btn-print-disposisi {
+    color: #059669;
+}
+
+.btn-print-disposisi:hover {
+    background-color: #ecfdf5;
+    border-color: #059669;
+    color: #047857;
+}
+
 .btn-disabled {
     background: #f8fafc;
     color: #cbd5e1;
