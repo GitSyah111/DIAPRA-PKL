@@ -240,10 +240,11 @@ ob_start();
             box-sizing: border-box;
         }
 
-        /* Signature Section - Di Luar Kotak Garis */
+        /* Signature Section - Menggunakan float right agar lebih fleksibel */
         .signature-section {
+            float: right;
+            width: 35%; /* Reduced from 40% to move it slightly right */
             margin-top: 15px;
-            margin-left: 500px;
             text-align: left;
             page-break-inside: avoid;
         }
@@ -252,6 +253,7 @@ ob_start();
             margin: 1px 0;
             line-height: 1.3;
             font-size: 13px;
+            white-space: nowrap; /* Prevent name from wrapping */
         }
 
         .signature-space {

@@ -353,11 +353,20 @@
 .action-buttons-wrapper {
     white-space: nowrap;
     display: flex;
-    gap: 6px;
+    gap: 5px;
     justify-content: center;
     align-items: center;
-    min-width: 180px;
-    /* Prevent buttons from being cut off */
+    min-width: 1%;
+    /* Allow table cell to expand */
+    width: auto;
+}
+
+/* Pastikan sel tabel menyesuaikan */
+#suratMasukTable td:last-child,
+#suratKeluarTable td:last-child {
+    white-space: nowrap;
+    width: 1%;
+    /* Shrink to fit content */
 }
 
 .btn-action {

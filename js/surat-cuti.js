@@ -23,6 +23,7 @@ $(document).ready(function () {
                 className: 'dt-button',
                 orientation: 'landscape',
                 pageSize: 'A4',
+                download: 'open',
                 title: 'Laporan Surat Cuti',
                 // Opsi export, exclude kolom no-export
                 exportOptions: {
@@ -33,10 +34,13 @@ $(document).ready(function () {
                     doc.defaultStyle.fontSize = 10;
                     doc.styles.tableHeader.fontSize = 11;
                     doc.styles.tableHeader.alignment = 'center';
+                    doc.styles.tableHeader.fillColor = '#3b82f6'; // Blue header
+                    doc.styles.tableHeader.color = '#ffffff';
+
                     doc.styles.tableBodyOdd.alignment = 'center';
                     doc.styles.tableBodyEven.alignment = 'center';
 
-                    // Layout columns
+                    // Layout columns & Borders
                     var tableNode;
                     for (var i = 0; i < doc.content.length; i++) {
                         if (doc.content[i].table) {
@@ -44,26 +48,65 @@ $(document).ready(function () {
                             break;
                         }
                     }
+
                     if (tableNode) {
-                        tableNode.table.widths = Array(tableNode.table.body[0].length).fill('*');
+                        // Indices: 0: No, 1: Nama/NIP, 2: Pangkat, 3: Jabatan, 4: Jenis Cuti, 5: Lama, 6: Mulai, 7: Sampai, 8: Sisa
+                        // Give more width to Nama (1) and Jabatan (3)
+                        tableNode.table.widths = ['5%', '*', '10%', '*', '10%', '8%', '10%', '10%', '8%'];
+
+                        // Add all borders
+                        tableNode.layout = {
+                            hLineWidth: function (i, node) { return 1; },
+                            vLineWidth: function (i, node) { return 1; },
+                            hLineColor: function (i, node) { return '#d1d5db'; },
+                            vLineColor: function (i, node) { return '#d1d5db'; },
+                            paddingLeft: function (i, node) { return 8; },
+                            paddingRight: function (i, node) { return 8; },
+                            paddingTop: function (i, node) { return 8; },
+                            paddingBottom: function (i, node) { return 8; }
+                        };
                     }
 
-                    // Add Filter Period
+                    // Add Filter Period or Auto Date Range
                     var dari = $('#filterDari').val();
                     var sampai = $('#filterSampai').val();
                     var periodeText = '';
                     function fmt(d) { return d.split('-').reverse().join('/'); }
 
-                    if (dari && sampai) periodeText = 'Periode: ' + fmt(dari) + ' s/d ' + fmt(sampai);
-                    else if (dari) periodeText = 'Periode: Dari ' + fmt(dari);
-                    else if (sampai) periodeText = 'Periode: Sampai ' + fmt(sampai);
+                    if (dari && sampai) {
+                        periodeText = 'Periode: ' + fmt(dari) + ' s/d ' + fmt(sampai);
+                    } else if (dari) {
+                        periodeText = 'Periode: Dari ' + fmt(dari);
+                    } else if (sampai) {
+                        periodeText = 'Periode: Sampai ' + fmt(sampai);
+                    } else {
+                        // Auto-calculate from visible data if no filter
+                        var dates = [];
+                        // Column 6 is Mulai Cuti
+                        tableCuti.column(6, { search: 'applied' }).data().each(function (val) {
+                            var dateStr = val.replace(/<[^>]+>/g, '').trim();
+                            if (dateStr) dates.push(dateStr);
+                        });
+
+                        if (dates.length > 0) {
+                            dates.sort(function (a, b) {
+                                var da = a.split('/').reverse().join('-');
+                                var db = b.split('/').reverse().join('-');
+                                return da < db ? -1 : (da > db ? 1 : 0);
+                            });
+                            var minDate = dates[0];
+                            var maxDate = dates[dates.length - 1];
+                            periodeText = 'Arsip dari tanggal ' + minDate + ' sampai tanggal ' + maxDate;
+                        }
+                    }
 
                     if (periodeText) {
                         doc.content.splice(1, 0, {
                             text: periodeText,
                             alignment: 'center',
-                            margin: [0, 0, 0, 10],
-                            fontSize: 11
+                            margin: [0, 0, 0, 15],
+                            fontSize: 11,
+                            italics: true
                         });
                     }
 
