@@ -277,12 +277,13 @@ $result = mysqli_query($conn, $query);
                                                     <?php endif; ?>
 
                                                     <?php if ($role == 'admin' || $role == 'super_admin'): ?>
-                                                        <?php if ($row['status_disposisi'] == 'Sudah didisposisi' && !empty($row['file_disposisi_final'])): ?>
-                                                            <a href="../uploads/disposisi/<?php echo $row['file_disposisi_final']; ?>" class="btn-action btn-print-disposisi" title="Lihat File Disposisi" target="_blank">
-                                                                <i class="fas fa-print"></i>
-                                                            </a>
-                                                        <?php endif; ?>
-                                                        <a href="disposisi-surat.php?id=<?php echo $row['id']; ?>" class="btn-action btn-disposisi" title="Disposisi">
+                                                        <!-- Tombol Preview Disposisi (PDF Generated) -->
+                                                        <a href="cetak-disposisi-final.php?id=<?php echo $row['id']; ?>" class="btn-action btn-print" title="Preview Disposisi" target="_blank">
+                                                            <i class="fas fa-print"></i>
+                                                        </a>
+
+                                                        <!-- Tombol Unggah/Edit Disposisi -->
+                                                        <a href="disposisi-surat.php?id=<?php echo $row['id']; ?>" class="btn-action btn-disposisi" title="Unggah/Edit Disposisi">
                                                             <i class="fas fa-share-square"></i>
                                                         </a>
                                                     <?php endif; ?>
