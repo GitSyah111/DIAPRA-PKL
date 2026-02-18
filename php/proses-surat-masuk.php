@@ -286,6 +286,18 @@ if (isset($_POST['action']) || isset($_GET['action'])) {
             unlink('../uploads/surat_masuk/' . $file_data['file_surat']);
         }
 
+        // --- TAMBAHAN: Hapus data dan file disposisi yang terkait ---
+        $query_disposisi = "SELECT file_disposisi FROM disposisi WHERE id_surat_masuk = '$id'";
+        $result_disposisi = mysqli_query($conn, $query_disposisi);
+        while ($row_disposisi = mysqli_fetch_assoc($result_disposisi)) {
+            if (!empty($row_disposisi['file_disposisi']) && file_exists('../uploads/disposisi/' . $row_disposisi['file_disposisi'])) {
+                unlink('../uploads/disposisi/' . $row_disposisi['file_disposisi']);
+            }
+        }
+        // Hapus data disposisi dari database
+        mysqli_query($conn, "DELETE FROM disposisi WHERE id_surat_masuk = '$id'");
+        // --- END TAMBAHAN ---
+
         // Hapus dari database
         $query = "DELETE FROM surat_masuk WHERE id = '$id'";
 
