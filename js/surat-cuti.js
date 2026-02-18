@@ -2,7 +2,8 @@
 $(document).ready(function () {
     if ($('#suratCutiTable').length) {
         var tableCuti = $('#suratCutiTable').DataTable({
-            "scrollX": true,
+            responsive: true,
+            // "scrollX": true,
             "autoWidth": false,
             // Konfigurasi dom untuk tombol dan filter
             dom: 'Bfrtip',

@@ -2,7 +2,7 @@
 $(document).ready(function () {
     if ($('#suratKeluarTable').length) {
         var tableSuratKeluar = $('#suratKeluarTable').DataTable({
-            "scrollX": true,
+            // "scrollX": true,
             "autoWidth": false, // Biarkan CSS mengatur lebar
             dom: 'Bfrtip',
             buttons: [
@@ -136,7 +136,7 @@ $(document).ready(function () {
             pageLength: 10,
             lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "Semua"]],
             order: [[0, 'desc']],
-            responsive: false, // Matikan responsive DataTables, gunakan scrollX
+            responsive: true,
             columnDefs: [
                 { orderable: false, targets: -1 } // Kolom aksi tidak bisa di-sort
             ]

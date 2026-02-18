@@ -5,7 +5,8 @@
 $(document).ready(function () {
     // Initialize DataTables
     var table = $('#suratMasukTable').DataTable({
-        "scrollX": true,
+        responsive: true,
+        // "scrollX": true,
         "autoWidth": false, // Biarkan CSS mengatur lebar
         "dom": 'Bfrtip',
         "buttons": [{

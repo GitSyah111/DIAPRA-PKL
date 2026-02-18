@@ -2,7 +2,8 @@
 $(document).ready(function () {
     if ($('#spjUmpegTable').length) {
         var tableSpj = $('#spjUmpegTable').DataTable({
-            "scrollX": true,
+            responsive: true,
+            // "scrollX": true,
             "autoWidth": false,
             dom: 'Bfrtip',
             buttons: [{

@@ -29,6 +29,7 @@ $result = mysqli_query($conn, $query);
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
     <!-- DataTables Buttons CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="../css/dashboard.css">
     <link rel="stylesheet" href="../css/kepala-dinas.css">
@@ -186,7 +187,7 @@ $result = mysqli_query($conn, $query);
                     </div>
 
                     <div class="table-container">
-                        <table id="suratCutiTable" class="data-table display" style="width:100%">
+                        <table id="suratCutiTable" class="data-table display nowrap" style="width:100%">
                             <thead>
                                 <tr>
                                     <th>No</th>
@@ -282,6 +283,7 @@ $result = mysqli_query($conn, $query);
     <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
     <!-- DataTables Print button -->
     <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
 
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
