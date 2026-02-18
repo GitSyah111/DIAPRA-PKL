@@ -407,9 +407,9 @@ if (!empty($surat['dilihat_oleh'])) {
                     <div class="box-header">
                         <h2><i class="fas fa-share-square"></i> Form Disposisi</h2>
                         <div class="header-actions">
-                            <button type="button" class="btn-print" onclick="openPreviewModal()">
+                            <a href="cetak-disposisi-final.php?id=<?php echo $surat['id']; ?>" target="_blank" class="btn-print" style="text-decoration: none;">
                                 <i class="fas fa-print"></i> Cetak Lembar Disposisi
-                            </button>
+                            </a>
                         </div>
                     </div>
                     <?php
@@ -564,86 +564,7 @@ $id_disposisi = $disposisi_data['id'] ?? '';
             return true;
         });
 
-        // =============================================
-        // PERBAIKAN: NAMA FILE DIPANGGIL DARI FILE BARU
-        // =============================================
-        function openPreviewModal() {
-            const modal = document.createElement('div');
-            modal.id = 'previewModal';
-            modal.className = 'preview-modal';
 
-            // =========================================================================
-            // INI ADALAH PERUBAHAN UTAMA
-            // =========================================================================
-            const pdfUrl = "cetak-disposisi-final.php?id=<?php echo $surat['id']; ?>";
-            const downloadUrl = "cetak-disposisi-final.php?id=<?php echo $surat['id']; ?>";
-            // =========================================================================
-
-            modal.innerHTML = `
-                <div class="preview-modal-content">
-                    <div class="preview-modal-header">
-                        <h3><i class="fas fa-file-pdf"></i> Preview Lembar Disposisi</h3>
-                        <button class="preview-modal-close" onclick="closePreviewModal()">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-                    <div class="preview-modal-body">
-                        <div class="preview-loading">
-                            <i class="fas fa-spinner"></i>
-                            <p>Memuat preview...</p>
-                        </div>
-                        <iframe id="pdfPreview" src="${pdfUrl}" frameborder="0"></iframe>
-                    </div>
-                    <div class="preview-modal-footer">
-                        <button class="btn-secondary" onclick="closePreviewModal()">
-                            <i class="fas fa-times"></i> Tutup
-                        </button>
-                        <button class="btn-primary" onclick="printPreview()">
-                            <i class="fas fa-print"></i> Print
-                        </button>
-                        <a href="${downloadUrl}" download class="btn-primary">
-                            <i class="fas fa-download"></i> Download
-                        </a>
-                    </div>
-                </div>
-            `;
-
-            document.body.appendChild(modal);
-
-            // Hide loading when iframe loaded
-            const iframe = document.getElementById('pdfPreview');
-            iframe.onload = function() {
-                document.querySelector('.preview-loading').style.display = 'none';
-            };
-        }
-
-        function closePreviewModal() {
-            const modal = document.getElementById('previewModal');
-            if (modal) {
-                modal.remove();
-            }
-        }
-
-        function printPreview() {
-            const iframe = document.getElementById('pdfPreview');
-            if (iframe) {
-                iframe.contentWindow.print();
-            }
-        }
-
-        // Close modal when clicking outside
-        document.addEventListener('click', function(e) {
-            if (e.target && e.target.id === 'previewModal') {
-                closePreviewModal();
-            }
-        });
-
-        // Close modal with ESC key
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                closePreviewModal();
-            }
-        });
     </script>
 </body>
 

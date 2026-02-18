@@ -222,7 +222,7 @@ $result = mysqli_query($conn, $query);
                                             <td class="text-center action-buttons-cell">
                                                 <!-- Download File Disposisi -->
                                                 <?php if (!empty($row['file_disposisi'])): ?>
-                                                    <a href="../uploads/disposisi/<?php echo $row['file_disposisi']; ?>" class="btn-action btn-view-disposisi" title="Lihat File Disposisi" target="_blank" style="background: #ef4444;">
+                                                    <a href="../uploads/disposisi/<?php echo $row['file_disposisi']; ?>" class="btn-action btn-view-disposisi" title="Lihat File Disposisi" target="_blank">
                                                         <i class="fas fa-file-invoice"></i>
                                                     </a>
                                                 <?php endif; ?>

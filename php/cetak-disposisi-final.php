@@ -243,7 +243,7 @@ ob_start();
         /* Signature Section - Menggunakan float right agar lebih fleksibel */
         .signature-section {
             float: right;
-            width: 35%; /* Reduced from 40% to move it slightly right */
+            width: 30%; /* Reduced to move it more to the right */
             margin-top: 15px;
             text-align: left;
             page-break-inside: avoid;
