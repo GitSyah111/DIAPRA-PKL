@@ -182,10 +182,10 @@ $result = mysqli_query($conn, $query);
                                             </td>
                                             <?php if ($can_edit): ?>
                                             <td class="text-center">
-                                                <button class="btn-action btn-edit" onclick="openEditModal(<?php echo $row['no']; ?>, '<?php echo addslashes($row['nama']); ?>', '<?php echo addslashes($row['username']); ?>', '<?php echo $row['role']; ?>')" title="Edit">
+                                                <button class="btn-kd-action btn-kd-edit" onclick="openEditModal(<?php echo $row['no']; ?>, '<?php echo addslashes($row['nama']); ?>', '<?php echo addslashes($row['username']); ?>', '<?php echo $row['role']; ?>')" title="Edit">
                                                     <i class="fas fa-edit"></i>
                                                 </button>
-                                                <button class="btn-action btn-delete" onclick="confirmDelete(<?php echo $row['no']; ?>)" title="Hapus">
+                                                <button class="btn-kd-action btn-kd-delete" onclick="confirmDelete(<?php echo $row['no']; ?>)" title="Hapus">
                                                     <i class="fas fa-trash"></i>
                                                 </button>
                                             </td>

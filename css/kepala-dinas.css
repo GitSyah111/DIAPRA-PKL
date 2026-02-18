@@ -146,7 +146,7 @@
 }
 
 /* Action Buttons in Table */
-.btn-action {
+.btn-kd-action {
     border: none;
     padding: 8px 12px;
     border-radius: 6px;
@@ -156,23 +156,23 @@
     margin: 0 3px;
 }
 
-.btn-edit {
+.btn-kd-edit {
     background: #f59e0b;
     color: white;
 }
 
-.btn-edit:hover {
+.btn-kd-edit:hover {
     background: #d97706;
     transform: translateY(-1px);
     box-shadow: 0 2px 6px rgba(245, 158, 11, 0.3);
 }
 
-.btn-delete {
+.btn-kd-delete {
     background: #ef4444;
     color: white;
 }
 
-.btn-delete:hover {
+.btn-kd-delete:hover {
     background: #dc2626;
     transform: translateY(-1px);
     box-shadow: 0 2px 6px rgba(239, 68, 68, 0.3);
