@@ -279,7 +279,7 @@ $result = mysqli_query($conn, $query);
 
                                                     <?php if ($role == 'admin' || $role == 'super_admin'): ?>
                                                         <!-- Tombol Preview Disposisi (PDF Generated) -->
-                                                        <a href="cetak-disposisi-final.php?id=<?php echo $row['id']; ?>" class="btn-action btn-print" title="Preview Disposisi" target="_blank">
+                                                        <a href="cetak-disposisi-final.php?id=<?php echo $row['id']; ?>" class="btn-action btn-print-disposisi" title="Preview Disposisi" target="_blank">
                                                             <i class="fas fa-print"></i>
                                                         </a>
 
